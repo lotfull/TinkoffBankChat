@@ -13,10 +13,11 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var lastState: String? = "Launching"
 
     func logFunctionName(string: String = #function) {
-        print(string)
-        
+        print("Application moved from \(lastState!) to \(string)")
+        lastState = string
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
