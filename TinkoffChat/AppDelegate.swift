@@ -16,20 +16,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var lastState: String? = "Launching"
 
     func logFunctionName(string: String = #function) {
-        print("Application moved from \(lastState!) to \(string)")
-        lastState = string
+        let newState = UIApplication.shared.applicationState
+        var newStateString: String
+        switch newState {
+        case .active:
+            newStateString = "Active"
+        case .background:
+            newStateString = "Background"
+        case .inactive:
+            newStateString = "Inactive"
+        }
+        print("Application moved from \(lastState!) to \(newStateString) with method: \(string)")
+        lastState = newStateString
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         logFunctionName()
-        /*
-        window = UIWindow.init(frame: UIScreen.main.bounds) // Задаем виндоу размером с экран
-        if let keyWindow = window {
-            keyWindow.rootViewController = ProfileVC()
-            keyWindow.makeKeyAndVisible() // making our self created window visible
-        }
-        */
-        
         return true
     }
     
