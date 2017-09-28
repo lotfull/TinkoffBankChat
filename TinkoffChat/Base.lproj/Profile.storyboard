@@ -6,6 +6,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -28,55 +29,71 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="khh-9I-z3C">
-                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                                <rect key="frame" x="16" y="20" width="288" height="540"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="glZ-AN-jAq">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="376"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="288" height="312"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GaroldWithPain" translatesAutoresizingMaskIntoConstraints="NO" id="z5k-zC-8zC">
-                                                <rect key="frame" x="16" y="16" width="288" height="288"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder-user" translatesAutoresizingMaskIntoConstraints="NO" id="z5k-zC-8zC">
+                                                <rect key="frame" x="0.0" y="16" width="288" height="288"/>
                                                 <color key="backgroundColor" red="0.56295669079999999" green="0.19187125560000001" blue="0.49553984400000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="z5k-zC-8zC" secondAttribute="height" multiplier="1:1" id="PEl-X9-P5Q"/>
                                                 </constraints>
                                             </imageView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DlL-LQ-546">
+                                                <rect key="frame" x="221.5" y="237.5" width="66.5" height="66.5"/>
+                                                <color key="backgroundColor" red="0.20315837860107422" green="0.38318490982055664" blue="0.76575547456741333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="DlL-LQ-546" secondAttribute="height" multiplier="1:1" id="OHX-uk-MXQ"/>
+                                                </constraints>
+                                                <inset key="imageEdgeInsets" minX="16" minY="16" maxX="16" maxY="16"/>
+                                                <state key="normal" image="slr-camera-2-xxl"/>
+                                                <connections>
+                                                    <action selector="changePhotoAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="flf-pI-u7y"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="z5k-zC-8zC" firstAttribute="leading" secondItem="glZ-AN-jAq" secondAttribute="leading" constant="16" id="EpN-uK-t3v"/>
-                                            <constraint firstAttribute="trailing" secondItem="z5k-zC-8zC" secondAttribute="trailing" constant="16" id="bDo-gx-koA"/>
+                                            <constraint firstItem="z5k-zC-8zC" firstAttribute="leading" secondItem="glZ-AN-jAq" secondAttribute="leading" id="EpN-uK-t3v"/>
+                                            <constraint firstAttribute="trailing" secondItem="DlL-LQ-546" secondAttribute="trailing" id="JOx-mb-MSO"/>
+                                            <constraint firstItem="DlL-LQ-546" firstAttribute="width" secondItem="z5k-zC-8zC" secondAttribute="width" multiplier="66/288" id="N4X-0M-J8X"/>
+                                            <constraint firstAttribute="trailing" secondItem="z5k-zC-8zC" secondAttribute="trailing" id="bDo-gx-koA"/>
+                                            <constraint firstItem="DlL-LQ-546" firstAttribute="height" secondItem="z5k-zC-8zC" secondAttribute="height" multiplier="66/288" id="cs3-s4-zoU"/>
                                             <constraint firstAttribute="bottom" secondItem="z5k-zC-8zC" secondAttribute="bottom" priority="750" constant="8" id="dpk-CJ-XFX"/>
+                                            <constraint firstAttribute="bottom" secondItem="DlL-LQ-546" secondAttribute="bottom" constant="8" id="hUf-AF-sSS"/>
                                             <constraint firstItem="z5k-zC-8zC" firstAttribute="top" secondItem="glZ-AN-jAq" secondAttribute="top" constant="16" id="jRD-66-IMZ"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gkZ-Z1-AqJ">
-                                        <rect key="frame" x="0.0" y="376" width="320" height="128"/>
+                                        <rect key="frame" x="0.0" y="312" width="288" height="184"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yo9-tw-4Oa">
-                                                <rect key="frame" x="16" y="8" width="288" height="24"/>
+                                                <rect key="frame" x="0.0" y="8" width="288" height="24"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ukK-wA-J0p">
-                                                <rect key="frame" x="16" y="40" width="288" height="24"/>
+                                                <rect key="frame" x="0.0" y="40" width="288" height="24"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="Yo9-tw-4Oa" firstAttribute="leading" secondItem="gkZ-Z1-AqJ" secondAttribute="leading" constant="16" id="5IZ-G1-fLd"/>
-                                            <constraint firstAttribute="trailing" secondItem="ukK-wA-J0p" secondAttribute="trailing" constant="16" id="HgY-aC-sw8"/>
-                                            <constraint firstItem="ukK-wA-J0p" firstAttribute="leading" secondItem="gkZ-Z1-AqJ" secondAttribute="leading" constant="16" id="NAO-CD-dqa"/>
-                                            <constraint firstAttribute="trailing" secondItem="Yo9-tw-4Oa" secondAttribute="trailing" constant="16" id="O00-rz-WcF"/>
+                                            <constraint firstItem="Yo9-tw-4Oa" firstAttribute="leading" secondItem="gkZ-Z1-AqJ" secondAttribute="leading" id="5IZ-G1-fLd"/>
+                                            <constraint firstAttribute="trailing" secondItem="ukK-wA-J0p" secondAttribute="trailing" id="HgY-aC-sw8"/>
+                                            <constraint firstItem="ukK-wA-J0p" firstAttribute="leading" secondItem="gkZ-Z1-AqJ" secondAttribute="leading" id="NAO-CD-dqa"/>
+                                            <constraint firstAttribute="trailing" secondItem="Yo9-tw-4Oa" secondAttribute="trailing" id="O00-rz-WcF"/>
                                             <constraint firstItem="Yo9-tw-4Oa" firstAttribute="top" secondItem="gkZ-Z1-AqJ" secondAttribute="top" constant="8" id="Tnt-Sy-CdC"/>
                                             <constraint firstItem="ukK-wA-J0p" firstAttribute="top" secondItem="Yo9-tw-4Oa" secondAttribute="bottom" constant="8" id="X5y-f1-xQq"/>
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="koE-8M-6OH">
-                                        <rect key="frame" x="0.0" y="504" width="320" height="44"/>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                        <rect key="frame" x="0.0" y="496" width="288" height="44"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="M8m-sO-nJ0"/>
                                         </constraints>
@@ -85,7 +102,7 @@
                                             <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                         </state>
                                         <connections>
-                                            <action selector="editButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="A8h-dD-YVT"/>
+                                            <action selector="editProfileButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7ce-y2-mfx"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -93,15 +110,17 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="khh-9I-z3C" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="DY5-Hw-gDe"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="khh-9I-z3C" secondAttribute="bottom" id="Q6G-TN-jmA"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="khh-9I-z3C" secondAttribute="trailing" id="YNd-HN-OiV"/>
+                            <constraint firstItem="khh-9I-z3C" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="DY5-Hw-gDe"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="khh-9I-z3C" secondAttribute="bottom" constant="8" id="Q6G-TN-jmA"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="khh-9I-z3C" secondAttribute="trailing" constant="16" id="YNd-HN-OiV"/>
                             <constraint firstItem="khh-9I-z3C" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="yeD-Ll-WYa"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="changePhotoButton" destination="DlL-LQ-546" id="Yxx-Fg-OFu"/>
                         <outlet property="definitionLabel" destination="ukK-wA-J0p" id="Z2p-Gt-F98"/>
+                        <outlet property="editProfileButton" destination="koE-8M-6OH" id="LLf-kl-Ida"/>
                         <outlet property="nameLabel" destination="Yo9-tw-4Oa" id="7LE-1p-mE0"/>
                         <outlet property="photoImageView" destination="z5k-zC-8zC" id="tXO-zm-qGM"/>
                     </connections>
@@ -112,6 +131,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="GaroldWithPain" width="512" height="512"/>
+        <image name="placeholder-user" width="600" height="600"/>
+        <image name="slr-camera-2-xxl" width="256" height="256"/>
     </resources>
 </document>
