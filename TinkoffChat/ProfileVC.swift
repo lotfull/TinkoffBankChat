@@ -26,26 +26,37 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     override func viewDidLoad() {
         super.viewDidLoad()
         logFunctionName()
+        
         updateUI()
         print("*** frame: ", editProfileButton.frame, "***") // frame here is scaled for iphone SE(or what device in storyboard)
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         print("*** frame: ", editProfileButton.frame, "***") // frame here is scaled for iphone 8(or what device in simulator)
     }
-    
     override func viewWillAppear(_ animated: Bool) {
         let cornerRadius = (changePhotoButton.frame.height) / 2
         changePhotoButton.layer.cornerRadius = cornerRadius
         photoImageView.layer.cornerRadius = cornerRadius
     }
-    
     func updateUI() {
+        // encoding
+        
+        //UserDefaults.standard.set(false, forKey: isProfileImageLoaded)
+        
+        if !UserDefaults.standard.bool(forKey: isProfileImageLoaded) {
+            let image = UIImage(named: "GaroldWithPain.png")
+            let imageData: NSData = UIImageJPEGRepresentation(image!, 1.0)! as NSData
+            UserDefaults.standard.set(imageData, forKey: profileImageKey)
+        }
+        // Decode
+        let data = UserDefaults.standard.object(forKey: profileImageKey) as! NSData
+        let image = UIImage(data: data as Data)
+        photoImageView.image = image
+        
         photoImageView.clipsToBounds = true
         editProfileButton.layer.borderWidth = 1.0
         editProfileButton.layer.cornerRadius = 12.0
     }
-    
     func logFunctionName(method: String = #function) {
         print("Completed ProfileVC.\(lastMethod)\nStarted ProfileVC.\(method)")
         lastMethod = method
@@ -53,13 +64,10 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     
     @IBAction func changePhotoAction(_ sender: Any) {
         print("changePhotoAction")
-        
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.allowsEditing = false
-
         let chooseActionSheet = UIAlertController(title: "Library or Camera?", message: "Choose a photo from Library or take new photo", preferredStyle: .actionSheet)
-        
         chooseActionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (action: UIAlertAction) in
             if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
                 imagePickerController.sourceType = .photoLibrary
@@ -85,31 +93,47 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             photoImageView.image = image
+            let imageData: NSData = UIImageJPEGRepresentation(image, 1.0)! as NSData//UIImageJPEGRepresentation(image)! as NSData
+            UserDefaults.standard.set(imageData, forKey: profileImageKey)
+            UserDefaults.standard.set(true, forKey: isProfileImageLoaded)
         } else {
             // Error message here
         }
         picker.dismiss(animated: true, completion: nil)
     }
-    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-    
+    let isProfileImageLoaded = "isProfileImageLoaded"
+    let profileImageKey = "profileImage"
+    var lastMethod: String = "Opening VC"
     @IBOutlet weak var changePhotoButton: UIButton!
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var definitionLabel: UILabel!
     @IBOutlet weak var editProfileButton: UIButton!
     @IBAction func editProfileButtonPressed(_ sender: Any) {
-        guard let button = sender as? UIButton else {
-            return
-        }
-        button.titleLabel?.text = "11"
-        
-        // let button: UIButton = (sender as? UIButton) ?? UIButton()
     }
     
-    var lastMethod: String = "Opening VC"
 
+    
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
