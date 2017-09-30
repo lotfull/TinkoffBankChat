@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9181B4941F801D160088970D /* GaroldWithPain.png in Resources */ = {isa = PBXBuildFile; fileRef = 9181B4931F801D160088970D /* GaroldWithPain.png */; };
+		9181B4961F8026A70088970D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9181B4951F8026A70088970D /* README.md */; };
 		91CDAEC71F7C0FA300F3DCB6 /* Заметки in Resources */ = {isa = PBXBuildFile; fileRef = 91CDAEC61F7C0FA300F3DCB6 /* Заметки */; };
 		91D776FD1F72CC3B007573E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D776FC1F72CC3B007573E1 /* AppDelegate.swift */; };
 		91D776FF1F72CC3B007573E1 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D776FE1F72CC3B007573E1 /* ProfileVC.swift */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		9181B4931F801D160088970D /* GaroldWithPain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GaroldWithPain.png; sourceTree = "<group>"; };
+		9181B4951F8026A70088970D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		91CDAEC61F7C0FA300F3DCB6 /* Заметки */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Заметки"; sourceTree = "<group>"; };
 		91D776F91F72CC3B007573E1 /* TinkoffChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinkoffChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D776FC1F72CC3B007573E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +46,7 @@
 		91D776F01F72CC3B007573E1 = {
 			isa = PBXGroup;
 			children = (
+				9181B4951F8026A70088970D /* README.md */,
 				91D776FB1F72CC3B007573E1 /* TinkoffChat */,
 				91D776FA1F72CC3B007573E1 /* Products */,
 			);
@@ -132,6 +135,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9181B4961F8026A70088970D /* README.md in Resources */,
 				91D7770A1F72CC3B007573E1 /* LaunchScreen.storyboard in Resources */,
 				91D777071F72CC3B007573E1 /* Assets.xcassets in Resources */,
 				9181B4941F801D160088970D /* GaroldWithPain.png in Resources */,
