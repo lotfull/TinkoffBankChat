@@ -26,6 +26,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     override func viewDidLoad() {
         super.viewDidLoad()
         logFunctionName()
+        
         updateUI()
         print("*** frame: ", editProfileButton.frame, "***") // frame here is scaled for iphone SE(or what device in storyboard)
     }
@@ -38,16 +39,23 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         photoImageView.layer.cornerRadius = cornerRadius
     }
     func updateUI() {
+        // encoding
+        
+        //UserDefaults.standard.set(false, forKey: isProfileImageLoaded)
+        
+        if !UserDefaults.standard.bool(forKey: isProfileImageLoaded) {
+            let image = UIImage(named: "GaroldWithPain.png")
+            let imageData: NSData = UIImageJPEGRepresentation(image!, 1.0)! as NSData
+            UserDefaults.standard.set(imageData, forKey: profileImageKey)
+        }
+        // Decode
+        let data = UserDefaults.standard.object(forKey: profileImageKey) as! NSData
+        let image = UIImage(data: data as Data)
+        photoImageView.image = image
+        
         photoImageView.clipsToBounds = true
         editProfileButton.layer.borderWidth = 1.0
         editProfileButton.layer.cornerRadius = 12.0
-        if let image = loadImageFromPath(path: profileImagePath + ".jpg") {
-            print("loaded jpg")
-            photoImageView.image = image
-        } else if let image = loadImageFromPath(path: profileImagePath + ".png") {
-            print("loaded png")
-            photoImageView.image = image
-        }
     }
     func logFunctionName(method: String = #function) {
         print("Completed ProfileVC.\(lastMethod)\nStarted ProfileVC.\(method)")
@@ -85,7 +93,9 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             photoImageView.image = image
-            saveImage(image: image, path: profileImagePath) ? print("image saved") : print("image not saved")
+            let imageData: NSData = UIImageJPEGRepresentation(image, 1.0)! as NSData//UIImageJPEGRepresentation(image)! as NSData
+            UserDefaults.standard.set(imageData, forKey: profileImageKey)
+            UserDefaults.standard.set(true, forKey: isProfileImageLoaded)
         } else {
             // Error message here
         }
@@ -94,9 +104,8 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-    
-    
-    let profileImagePath = "profileImage"
+    let isProfileImageLoaded = "isProfileImageLoaded"
+    let profileImageKey = "profileImage"
     var lastMethod: String = "Opening VC"
     @IBOutlet weak var changePhotoButton: UIButton!
     @IBOutlet weak var photoImageView: UIImageView!
@@ -107,61 +116,24 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     }
     
 
-   /*
-    let image = UIImage(named: "myImage")
-    let pngImage = UIImagePNGRepresentation(image)
-    
-    NSUserDefaults.standardUserDefaults().setObject(pngImage, forKey: "image")
-    and to retrieve the image:
-    
-    var retrievedImage = NSUserDefaults.standardUserDefaults().objectForKey("image") as! AnyObject
-    Then, to display the image:
-    
-    imageView.image = UIImage(data: retrievedImage as! NSData)
- */
-    
-    
-    
-    // This is how to store an image to a file (much better):
-    func saveImage (image: UIImage, path: String ) -> Bool{
-        if let pngImageData = UIImagePNGRepresentation(image) {
-            do {
-                try pngImageData.write(to: URL(fileURLWithPath: profileImagePath + ".png"))
-                return true
-            } catch {
-                return false
-            }
-            //let result = pngImageData.write(to: URL(fileURLWithPath: profileImagePath + ".png"))
-        } else if let jpgImageData = UIImageJPEGRepresentation(image, 1.0) {
-                do {
-                    try jpgImageData.write(to: URL(fileURLWithPath: profileImagePath + ".jpg"))
-                    return true
-                } catch {
-                    return false
-                }
-        }
-        return false
-    }
-    
-    //You would call it like this:
-    
-    //Then, to retrieve the image, use this function:
-    
-    func loadImageFromPath(path: String) -> UIImage? {
-        let image = UIImage(contentsOfFile: path)
-        if image == nil {
-            print("missing image at: \(path)")
-        }
-        print("Loading image from path: \(path)") // this is just for you to see the path in case you want to go to the directory, using Finder.
-        return image
-    }
-    //You can call it like this:
-    
-    // For more details, take a look at http://helpmecodeswift.com/image-manipulation/saving-loading-images
-    
-    
-    
     
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
