@@ -34,7 +34,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         print("*** frame: ", editProfileButton.frame, "***") // frame here is scaled for iphone 8(or what device in simulator)
     }
     override func viewWillAppear(_ animated: Bool) {
-        let cornerRadius = (changePhotoButton.frame.height) / 2
+        let cornerRadius = (changePhotoButton.frame.height) / 2 + 8
         changePhotoButton.layer.cornerRadius = cornerRadius
         photoImageView.layer.cornerRadius = cornerRadius
     }
