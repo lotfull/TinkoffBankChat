@@ -8,12 +8,18 @@
 
 import UIKit
 
-class InboxMessageTVCell: UITableViewCell {
+protocol MessageCellConfiguration: class {
+    var text: String? {get set}
+}
+
+class MessageTVCell: UITableViewCell {
+    
+    weak var delegate: MessageCellConfiguration?
 
     @IBOutlet weak var messageText: UILabel!
     
-    func configure(withText text: String?) {
-        messageText.text = text
+    func configure() {
+        messageText.text = delegate?.text
     }
     
     override func awakeFromNib() {

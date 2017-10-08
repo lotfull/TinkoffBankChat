@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ConversationViewController: UITableViewController {
+class ConversationViewController: UITableViewController, MessageCellConfiguration {
 
     let inboxMessageTVCellName = "InboxMessageTVCell"
     let outboxMessageTVCellName = "OutboxMessageTVCell"
@@ -46,17 +46,21 @@ class ConversationViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        text = messages[indexPath.row].text
         if messages[indexPath.row].isInbox {
-            let cell = tableView.dequeueReusableCell(withIdentifier: inboxMessageTVCellName, for: indexPath) as! InboxMessageTVCell
-            cell.configure(withText: messages[indexPath.row].text)
+            let cell = tableView.dequeueReusableCell(withIdentifier: inboxMessageTVCellName, for: indexPath) as! MessageTVCell
+            cell.delegate = self
+            cell.configure()
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: outboxMessageTVCellName, for: indexPath) as! OutboxMessageTVCell
-            cell.configure(withText: messages[indexPath.row].text)
+            let cell = tableView.dequeueReusableCell(withIdentifier: outboxMessageTVCellName, for: indexPath) as! MessageTVCell
+            cell.delegate = self
+            cell.configure()
             return cell
         }
     }
 
+    var text: String?
     var messages: [Message]!
     var chat: Chat!
     var managedObjectContext: NSManagedObjectContext!

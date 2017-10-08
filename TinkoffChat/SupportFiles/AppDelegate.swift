@@ -37,15 +37,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let conversationListVC = rootNavigationController.topViewController as? ConversationsListViewController {
             conversationListVC.managedObjectContext = managedObjectContext
             
+            clearAllData()
             for i: Bool in [false, true] {
                 for j: Bool in [false, true] {
                     for k: Bool in [false, false, true] {
                         for online: Bool in [false, true] {
                             for hasUnreadMessages: Bool in [false, true] {
                                 let chat = Chat(context: managedObjectContext)
-                                chat.date = i ? NSDate() : NSDate(timeIntervalSinceReferenceDate: TimeInterval(arc4random_uniform(23456789)))
-                                chat.name = j ? nil : "name \(chat.hash)"
-                                chat.message = k ? nil : "message \(chat.hash)"
+                                chat.date = i ? NSDate() : NSDate(timeIntervalSinceNow: -TimeInterval(arc4random_uniform(234567)))
+                                chat.name = j && chat.hash % 10 == 0 ? nil : "Petr \(chat.hash % 10)"
+                                chat.message = k ? nil : "message \(chat.hashValue % 10)"
                                 chat.online = online
                                 chat.hasUnreadMessages = hasUnreadMessages
                             }
@@ -92,6 +93,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.saveContext()
     }
 
+    func clearAllData() {
+        let fetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Chat")
+        let request = NSBatchDeleteRequest(fetchRequest: fetch)
+        do {
+            try managedObjectContext.execute(request)
+            try managedObjectContext.save()
+        } catch {
+            print ("There was an error")
+        }
+    }
+    
     lazy var managedObjectContext: NSManagedObjectContext =
         self.persistentContainer.viewContext
     
