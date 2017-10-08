@@ -10,6 +10,11 @@ import UIKit
 
 class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
+
+    @IBAction func dismissButtonPressed(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         if editProfileButton != nil {
             print("***", editProfileButton.frame, #function)
@@ -25,6 +30,8 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         logFunctionName()
         
         updateUI()
