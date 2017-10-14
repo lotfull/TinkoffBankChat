@@ -154,20 +154,39 @@
                                             <constraint firstItem="ukK-wA-J0p" firstAttribute="top" secondItem="Yo9-tw-4Oa" secondAttribute="bottom" constant="8" id="X5y-f1-xQq"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="koE-8M-6OH">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="X6Z-HR-8lj">
                                         <rect key="frame" x="0.0" y="444" width="288" height="44"/>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="M8m-sO-nJ0"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="22"/>
-                                        <state key="normal" title="Редактировать">
-                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="editProfileButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7ce-y2-mfx"/>
-                                        </connections>
-                                    </button>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="koE-8M-6OH">
+                                                <rect key="frame" x="0.0" y="0.0" width="136" height="44"/>
+                                                <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="44" id="M8m-sO-nJ0"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="22"/>
+                                                <state key="normal" title="GCD">
+                                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="editProfileWithGCD:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sLD-gE-yiS"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e29-Oj-Yy8">
+                                                <rect key="frame" x="152" y="0.0" width="136" height="44"/>
+                                                <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="44" id="KsD-Jp-nR6"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="22"/>
+                                                <state key="normal" title="Operation">
+                                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="editProfileWithOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="IcO-Xh-A2J"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -190,14 +209,15 @@
                     <connections>
                         <outlet property="changePhotoButton" destination="DlL-LQ-546" id="Yxx-Fg-OFu"/>
                         <outlet property="definitionLabel" destination="ukK-wA-J0p" id="Z2p-Gt-F98"/>
-                        <outlet property="editProfileButton" destination="koE-8M-6OH" id="LLf-kl-Ida"/>
+                        <outlet property="editProfileWithGCDButton" destination="koE-8M-6OH" id="ghE-Ri-s05"/>
+                        <outlet property="editProfileWithOperationButton" destination="e29-Oj-Yy8" id="11I-vx-obP"/>
                         <outlet property="nameLabel" destination="Yo9-tw-4Oa" id="7LE-1p-mE0"/>
                         <outlet property="photoImageView" destination="z5k-zC-8zC" id="tXO-zm-qGM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2002.5" y="53.87323943661972"/>
+            <point key="canvasLocation" x="1633" y="54"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PHO-rk-rnR">
@@ -215,7 +235,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Prh-XD-39c" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1253" y="54"/>
+            <point key="canvasLocation" x="951" y="54"/>
         </scene>
     </scenes>
     <resources>
