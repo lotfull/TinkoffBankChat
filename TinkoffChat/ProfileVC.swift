@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol GCDDelegate: class {
+    func saveObjects(_ objects: [Any?], toFile: String) -> Bool
+}
 
+protocol OperationDelegate: class {
+    func saveObjects(_ objects: [Any?], toFile: String) -> Bool
+}
 
 struct Profile {
     var name: String
@@ -22,8 +28,12 @@ struct Profile {
     }
 }
 
-class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate {
+class op: Operation {
+    
+}
 
+class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate {
+    
     // MARK: Main funcs
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,9 +41,19 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         updateUI()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardUp(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDown(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        newChanges = false
     }
     
     @objc func keyboardUp(notification: Notification) {
+        show = 1.0
+        var userInfo = notification.userInfo!
+        let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let animationDurarion = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
+        UIView.animate(withDuration: animationDurarion, animations: { () -> Void in
+            self.view.bounds.origin.y += (keyboardFrame.height - self.editProfileWithGCDButton.bounds.height * 3 )
+        })
+        
+        /*
         if keyboardSize == nil {
             // TODO: Починить ебаный keyboardSize, чтобы блять не было в значении нуля.
             keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue
@@ -41,15 +61,23 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         print(keyboardSize!)
         self.view.frame.origin.y = -keyboardSize!.height
         print(self.view.frame.origin.y)
-        print("**********")
+        print("**********")*/
     }
     
     @objc func keyboardDown(notification: Notification) {
-        self.view.frame.origin.y = 0
+        show = -1.0
+        var userInfo = notification.userInfo!
+        let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let animationDurarion = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
+        UIView.animate(withDuration: animationDurarion, animations: { () -> Void in
+            self.view.bounds.origin.y -= (keyboardFrame.height - self.editProfileWithGCDButton.bounds.height * 3 )
+        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let cornerRadius = (changePhotoButton.bounds.size.width) / 2 // + 4
+        if cornerRadius == 0 {
+            cornerRadius = (changePhotoButton.bounds.size.width) / 2 // + 4
+        }
         changePhotoButton.layer.cornerRadius = cornerRadius
         photoImageView.layer.cornerRadius = cornerRadius
     }
@@ -81,6 +109,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             photoImageView.image = image
+            somethingChanged()
         }
         picker.dismiss(animated: true, completion: nil)
     }
@@ -143,7 +172,7 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         chooseActionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(chooseActionSheet, animated: true, completion: nil)
     }
-    @IBAction func somethingChanged(_ sender: Any) {
+    @IBAction func somethingChanged() {
         if !newChanges {
             newChanges = true
             editProfileWithGCDButton.isEnabled = true
@@ -153,50 +182,37 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     // TODO: Move View when keyboard show
     @IBAction func editProfileWithGCD(_ sender: Any?) {
         activityIndicator.startAnimating()
-        let queue = DispatchQueue(label: "editProfileWithGCD.queue")
         let image = self.photoImageView.image as Any?
         let name = self.nameTextField.text as Any?
         let info = self.infoTextField.text as Any?
-        queue.async {
-            self.objects = [Any]()
-            self.objects = [image, name, info]
-            if NSKeyedArchiver.archiveRootObject(self.objects, toFile: self.filePath) {
-                DispatchQueue.main.async {
-                    self.activityIndicator.stopAnimating()
-                    self.activityIndicator.isHidden = true
-                    self.newChanges = false
-                    self.editProfileWithGCDButton.isEnabled = false
-                    self.editProfileWithOperationButton.isEnabled = false
-                }
-                let alert = UIAlertController(title: "Данные сохранены", message: "", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
-                    alert.dismiss(animated: true, completion: nil)
-                }))
-                DispatchQueue.main.async {
-                    self.present(alert, animated: true, completion: nil)
-                }
-            } else {
-                DispatchQueue.main.async {
-                        self.activityIndicator.stopAnimating()
-                        self.activityIndicator.isHidden = true
-                }
-                let alert = UIAlertController(title: "Ошибка", message: "Не удалось сохранить данные", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-                    alert.dismiss(animated: true, completion: nil)
-                }))
-                alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { (action) in
-                    alert.dismiss(animated: true, completion: nil)
-                    self.editProfileWithGCD(nil)
-                }))
-                self.present(alert, animated: true, completion: nil)
-            }
+        let objects = [image, name, info] as [Any?]
+        if instanceGCD.saveObjects(objects, toFile: filePath) {
+            activityIndicator.stopAnimating()
+            activityIndicator.isHidden = true
+            newChanges = false
+            editProfileWithGCDButton.isEnabled = false
+            editProfileWithOperationButton.isEnabled = false
+            let alert = UIAlertController(title: "Данные сохранены", message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
+                alert.dismiss(animated: true, completion: nil)
+            }))
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: "Ошибка", message: "Не удалось сохранить данные", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                alert.dismiss(animated: true, completion: nil)
+            }))
+            alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { (action) in
+                alert.dismiss(animated: true, completion: nil)
+                self.editProfileWithGCD(nil)
+            }))
+            self.present(alert, animated: true, completion: nil)
         }
         
     }
     @IBAction func editProfileWithOperation(_ sender: Any) {
-        // TODO: save_data_Operation
-        activityIndicator.startAnimating()
-        //save_data()
+        //instanceOperation.
+        editProfileWithGCD(self)
     }
     
     // MARK: @IBOutlets
@@ -217,7 +233,11 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         return (url.appendingPathComponent("objectFile")?.path)!
     }
     var lastMethod: String = "Opening VC"
+    var instanceGCD = GCDDataManager()
+    //var instanceOperation = OperationDataManager()
     var keyboardSize: CGRect? = nil
+    var show: CGFloat = 1.0
+    var cornerRadius: CGFloat = 0.0
     var activeTextField: UITextField!
     let isProfileImageLoaded = "isProfileImageLoaded"
     let isProfileNameLoaded = "isProfileNameLoaded"
@@ -226,7 +246,6 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     let profileInfoKey = "profileInfo"
     let profileImageKey = "profileImage"
     let photo = 0, name = 1, info = 2
-    
 }
 
 

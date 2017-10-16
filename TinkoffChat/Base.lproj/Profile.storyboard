@@ -138,7 +138,7 @@
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
                                                 <textInputTraits key="textInputTraits"/>
                                                 <connections>
-                                                    <action selector="somethingChanged:" destination="BYZ-38-t0r" eventType="editingChanged" id="iSL-Zt-xjR"/>
+                                                    <action selector="somethingChanged" destination="BYZ-38-t0r" eventType="valueChanged" id="Qe9-I8-6VK"/>
                                                 </connections>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Info" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0bj-Dr-S1y">
@@ -147,7 +147,7 @@
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
                                                 <textInputTraits key="textInputTraits"/>
                                                 <connections>
-                                                    <action selector="somethingChanged:" destination="BYZ-38-t0r" eventType="editingChanged" id="4z9-f5-oCw"/>
+                                                    <action selector="somethingChanged" destination="BYZ-38-t0r" eventType="valueChanged" id="GLN-Gi-9g5"/>
                                                 </connections>
                                             </textField>
                                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="v6R-Of-Onm">
