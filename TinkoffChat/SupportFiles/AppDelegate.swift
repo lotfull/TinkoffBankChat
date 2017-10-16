@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         for online: Bool in [false, true] {
                             for hasUnreadMessages: Bool in [false, true] {
                                 let chat = Chat(context: managedObjectContext)
-                                chat.date = i ? NSDate() : NSDate(timeIntervalSinceNow: -TimeInterval(arc4random_uniform(234567)))
+                                chat.date = i ? NSDate() : NSDate(timeIntervalSinceNow: TimeInterval(arc4random_uniform(234567)))
                                 chat.name = j && chat.hash % 10 == 0 ? nil : "Petr \(chat.hash % 10)"
                                 chat.message = k ? nil : "message \(chat.hashValue % 10)"
                                 chat.online = online
