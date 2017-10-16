@@ -47,7 +47,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zjd-pr-obw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-641" y="54"/>
+            <point key="canvasLocation" x="-572" y="54"/>
         </scene>
         <!--Name-->
         <scene sceneID="mf2-5E-xsx">
@@ -65,7 +65,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a71-jc-exn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="258.75" y="53.87323943661972"/>
+            <point key="canvasLocation" x="279" y="-402"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bu8-Uk-NRY">
@@ -81,7 +81,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="urI-Dx-SiL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1449" y="54"/>
+            <point key="canvasLocation" x="-1294" y="54"/>
         </scene>
         <!--Профиль-->
         <scene sceneID="tne-QT-ifu">
@@ -132,26 +132,37 @@
                                     <view contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gkZ-Z1-AqJ">
                                         <rect key="frame" x="0.0" y="312" width="288" height="132"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Harold" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yo9-tw-4Oa">
-                                                <rect key="frame" x="0.0" y="8" width="288" height="24"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Name" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1EQ-5O-dCt">
+                                                <rect key="frame" x="0.0" y="8" width="288" height="30"/>
+                                                <nil key="textColor"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <action selector="somethingChanged:" destination="BYZ-38-t0r" eventType="editingChanged" id="iSL-Zt-xjR"/>
+                                                </connections>
+                                            </textField>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Info" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0bj-Dr-S1y">
+                                                <rect key="frame" x="0.0" y="46" width="288" height="30"/>
                                                 <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Hide The Pain " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ukK-wA-J0p">
-                                                <rect key="frame" x="0.0" y="40" width="288" height="24"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
+                                                <textInputTraits key="textInputTraits"/>
+                                                <connections>
+                                                    <action selector="somethingChanged:" destination="BYZ-38-t0r" eventType="editingChanged" id="4z9-f5-oCw"/>
+                                                </connections>
+                                            </textField>
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="v6R-Of-Onm">
+                                                <rect key="frame" x="134" y="92" width="20" height="20"/>
+                                            </activityIndicatorView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="Yo9-tw-4Oa" firstAttribute="leading" secondItem="gkZ-Z1-AqJ" secondAttribute="leading" id="5IZ-G1-fLd"/>
-                                            <constraint firstAttribute="trailing" secondItem="ukK-wA-J0p" secondAttribute="trailing" id="HgY-aC-sw8"/>
-                                            <constraint firstItem="ukK-wA-J0p" firstAttribute="leading" secondItem="gkZ-Z1-AqJ" secondAttribute="leading" id="NAO-CD-dqa"/>
-                                            <constraint firstAttribute="trailing" secondItem="Yo9-tw-4Oa" secondAttribute="trailing" id="O00-rz-WcF"/>
-                                            <constraint firstItem="Yo9-tw-4Oa" firstAttribute="top" secondItem="gkZ-Z1-AqJ" secondAttribute="top" constant="8" id="Tnt-Sy-CdC"/>
-                                            <constraint firstItem="ukK-wA-J0p" firstAttribute="top" secondItem="Yo9-tw-4Oa" secondAttribute="bottom" constant="8" id="X5y-f1-xQq"/>
+                                            <constraint firstItem="0bj-Dr-S1y" firstAttribute="leading" secondItem="gkZ-Z1-AqJ" secondAttribute="leading" id="8LD-n8-6os"/>
+                                            <constraint firstItem="1EQ-5O-dCt" firstAttribute="leading" secondItem="gkZ-Z1-AqJ" secondAttribute="leading" id="MAr-n9-x2g"/>
+                                            <constraint firstItem="0bj-Dr-S1y" firstAttribute="top" secondItem="1EQ-5O-dCt" secondAttribute="bottom" constant="8" id="Wua-7x-QbM"/>
+                                            <constraint firstItem="v6R-Of-Onm" firstAttribute="centerX" secondItem="gkZ-Z1-AqJ" secondAttribute="centerX" id="Xt2-PF-bhr"/>
+                                            <constraint firstItem="1EQ-5O-dCt" firstAttribute="top" secondItem="gkZ-Z1-AqJ" secondAttribute="top" constant="8" id="eE4-2x-Dpc"/>
+                                            <constraint firstAttribute="trailing" secondItem="1EQ-5O-dCt" secondAttribute="trailing" id="eEW-2m-Ygr"/>
+                                            <constraint firstAttribute="trailing" secondItem="0bj-Dr-S1y" secondAttribute="trailing" id="kH7-L3-wWq"/>
+                                            <constraint firstAttribute="bottom" secondItem="v6R-Of-Onm" secondAttribute="bottom" constant="20" id="uSo-NK-enS"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="X6Z-HR-8lj">
@@ -207,17 +218,18 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="v6R-Of-Onm" id="P9c-b4-lzy"/>
                         <outlet property="changePhotoButton" destination="DlL-LQ-546" id="Yxx-Fg-OFu"/>
-                        <outlet property="definitionLabel" destination="ukK-wA-J0p" id="Z2p-Gt-F98"/>
                         <outlet property="editProfileWithGCDButton" destination="koE-8M-6OH" id="ghE-Ri-s05"/>
                         <outlet property="editProfileWithOperationButton" destination="e29-Oj-Yy8" id="11I-vx-obP"/>
-                        <outlet property="nameLabel" destination="Yo9-tw-4Oa" id="7LE-1p-mE0"/>
+                        <outlet property="infoTextField" destination="0bj-Dr-S1y" id="F3B-ua-PBd"/>
+                        <outlet property="nameTextField" destination="1EQ-5O-dCt" id="fLK-FO-eve"/>
                         <outlet property="photoImageView" destination="z5k-zC-8zC" id="tXO-zm-qGM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1633" y="54"/>
+            <point key="canvasLocation" x="994" y="300"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PHO-rk-rnR">
@@ -235,7 +247,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Prh-XD-39c" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="951" y="54"/>
+            <point key="canvasLocation" x="278" y="300"/>
         </scene>
     </scenes>
     <resources>
