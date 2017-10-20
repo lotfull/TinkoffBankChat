@@ -1,5 +1,5 @@
 //
-//  InboxMessageTVCell.swift
+//  InboxMessageCell.swift
 //  TinkoffChat
 //
 //  Created by Kam Lotfull on 07.10.17.
@@ -12,7 +12,7 @@ protocol MessageCellConfiguration: class {
     var text: String? {get set}
 }
 
-class MessageTVCell: UITableViewCell {
+class MessageCell: UITableViewCell {
     
     weak var delegate: MessageCellConfiguration?
 

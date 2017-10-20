@@ -16,28 +16,28 @@ class ConversationsListViewController: UITableViewController, ConversationCellCo
     var date: Date?
     var online = false
     var hasUnreadMessages = false
-    let conversationsTableViewCellName = "ConversationsTableViewCell"
-    let conversationsTableViewCellID = "ConversationsTableViewCell"
+    let conversationsTableViewCellName = "ConversationCell"
+    let conversationsTableViewCellID = "ConversationCell"
 
     override func viewDidLoad() {
         super.viewDidLoad()
         let nib = UINib(nibName: conversationsTableViewCellName, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: conversationsTableViewCellID)
-        let chatsFetchRequest = NSFetchRequest<Chat>()
-        chatsFetchRequest.entity = Chat.entity()
-        let sortDescriptor1 = NSSortDescriptor(key: "date", ascending: false)
-        chatsFetchRequest.sortDescriptors = [sortDescriptor1]
-        do {
-            chats = try managedObjectContext.fetch(chatsFetchRequest)
-        } catch {
-            fatalError("\(error)")
-        }
-        onlineChats = chats.filter({ (chat:Chat) -> Bool in
-            return chat.online
-        })
-        historyChats = chats.filter({ (chat:Chat) -> Bool in
-            return chat.message != nil && !chat.online
-        })
+//        let chatsFetchRequest = NSFetchRequest<Chat>()
+//        chatsFetchRequest.entity = Chat.entity()
+//        let sortDescriptor1 = NSSortDescriptor(key: "date", ascending: false)
+//        chatsFetchRequest.sortDescriptors = [sortDescriptor1]
+//        do {
+//            chats = try managedObjectContext.fetch(chatsFetchRequest)
+//        } catch {
+//            fatalError("\(error)")
+//        }
+//        onlineChats = chats.filter({ (chat:Chat) -> Bool in
+//            return chat.online
+//        })
+//        historyChats = chats.filter({ (chat:Chat) -> Bool in
+//            return chat.message != nil && !chat.online
+//        })
     }
 
     // MARK: - Table view data source
@@ -77,11 +77,11 @@ class ConversationsListViewController: UITableViewController, ConversationCellCo
             print("error num of section")
         }
         name = chat.name
-        message = chat.message
-        date = chat.date as Date?
-        online = chat.online
+//        message = chat.message
+//        date = chat.date as Date?
+//        online = chat.online
         hasUnreadMessages = chat.hasUnreadMessages
-        let cell = tableView.dequeueReusableCell(withIdentifier: conversationsTableViewCellID, for: indexPath) as! ConversationsTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: conversationsTableViewCellID, for: indexPath) as! ConversationCell
         cell.cellDelegate = self
         cell.configure()
         return cell
@@ -108,12 +108,10 @@ class ConversationsListViewController: UITableViewController, ConversationCellCo
         if segue.identifier == conversationViewControllerID,
             let conversationVC = segue.destination as? ConversationViewController {
             conversationVC.chat = selectedChat
-            conversationVC.managedObjectContext = managedObjectContext
         }
     }
     
     var selectedChat: Chat!
-    var managedObjectContext: NSManagedObjectContext!
     var chats: [Chat]!
     var onlineChats: [Chat]!
     var historyChats: [Chat]!

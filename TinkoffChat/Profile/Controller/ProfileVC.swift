@@ -16,17 +16,7 @@ protocol OperationDelegate: class {
     func saveObjects(_ objects: [Any?], toFile: String) -> Bool
 }
 
-struct Profile {
-    var name: String
-    var info: String
-    var image: UIImage?
-    
-    init(name: String, info: String, image: UIImage? = nil) {
-        self.name = name
-        self.info = info
-        self.image = image
-    }
-}
+
 
 class op: Operation {
     

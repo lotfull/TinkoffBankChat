@@ -1,5 +1,5 @@
 //
-//  ConversationsTableViewCell.swift
+//  ConversationCell.swift
 //  TinkoffChat
 //
 //  Created by Kam Lotfull on 05.10.17.
@@ -16,7 +16,7 @@ protocol ConversationCellConfiguration: class {
     var hasUnreadMessages: Bool {get set}
 }
 
-class ConversationsTableViewCell: UITableViewCell {
+class ConversationCell: UITableViewCell {
     
     weak var cellDelegate: ConversationCellConfiguration?
     
