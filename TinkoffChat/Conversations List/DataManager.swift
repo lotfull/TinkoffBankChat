@@ -58,7 +58,7 @@ class DataManager {
         var chats = [String: Chat]()
         for (i, name) in names.enumerated() {
             let hasUnreadMessages = arc4random_uniform(1) == 0
-            let lastMessageDate = Date(timeIntervalSinceNow: TimeInterval(arc4random_uniform(234567)))
+            let lastMessageDate = Date(timeIntervalSinceNow: TimeInterval(arc4random_uniform(84567)))
             let chatId = String(i)
             let chat = Chat(id: chatId, name: name, messages: standardMessages, isOnline: online, hasUnreadMessages: hasUnreadMessages, lastMessageDate: lastMessageDate)
             chats[chatId] = chat

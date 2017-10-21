@@ -8,6 +8,14 @@
 
 import UIKit
 
+class ConversationsListDelegate: NSObject {
+    
+}
+
+extension ConversationsListDelegate: UITableViewDelegate {
+    
+}
+
 class ConversationsListDataSource: NSObject {
     private var onlineChats: [Chat]
     private var offlineChats: [Chat]

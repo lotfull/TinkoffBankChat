@@ -30,7 +30,7 @@
 		91D777021F72CC3B007573E1 /* ConversationsList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91D777001F72CC3B007573E1 /* ConversationsList.storyboard */; };
 		91D777071F72CC3B007573E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91D777061F72CC3B007573E1 /* Assets.xcassets */; };
 		91D7770A1F72CC3B007573E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91D777081F72CC3B007573E1 /* LaunchScreen.storyboard */; };
-		91F9DD371F868B1F0085ABF7 /* ConversationsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F9DD351F868B1F0085ABF7 /* ConversationsCell.swift */; };
+		91F9DD371F868B1F0085ABF7 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F9DD351F868B1F0085ABF7 /* ConversationCell.swift */; };
 		91F9DD381F868B200085ABF7 /* ConversationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 91F9DD361F868B1F0085ABF7 /* ConversationCell.xib */; };
 /* End PBXBuildFile section */
 
@@ -60,7 +60,7 @@
 		91D777061F72CC3B007573E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91D777091F72CC3B007573E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91D7770B1F72CC3B007573E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		91F9DD351F868B1F0085ABF7 /* ConversationsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsCell.swift; sourceTree = "<group>"; };
+		91F9DD351F868B1F0085ABF7 /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
 		91F9DD361F868B1F0085ABF7 /* ConversationCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConversationCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,7 +80,7 @@
 			children = (
 				91D777001F72CC3B007573E1 /* ConversationsList.storyboard */,
 				916836221F9B8E970095A427 /* ConversationsListDataSource.swift */,
-				91F9DD351F868B1F0085ABF7 /* ConversationsCell.swift */,
+				91F9DD351F868B1F0085ABF7 /* ConversationCell.swift */,
 				918CF85F1F8688BE000F4235 /* ConversationsListViewController.swift */,
 				91F9DD361F868B1F0085ABF7 /* ConversationCell.xib */,
 				916836161F9A29790095A427 /* Chat.swift */,
@@ -285,7 +285,7 @@
 				91D776FD1F72CC3B007573E1 /* AppDelegate.swift in Sources */,
 				919650DF1F94FD8300282F13 /* GCDDataManager.swift in Sources */,
 				9166B47E1F8972660081D4A9 /* ConversationViewController.swift in Sources */,
-				91F9DD371F868B1F0085ABF7 /* ConversationsCell.swift in Sources */,
+				91F9DD371F868B1F0085ABF7 /* ConversationCell.swift in Sources */,
 				916836211F9B89260095A427 /* ConversationDataSource.swift in Sources */,
 				916836171F9A29790095A427 /* Chat.swift in Sources */,
 				916836151F9A29650095A427 /* Message.swift in Sources */,

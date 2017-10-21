@@ -68,7 +68,7 @@ class ConversationCell: UITableViewCell, ConversationCellConfiguration {
     }
     
     class var identifier: String {
-        return String(describing: self)
+        return "ConversationCell"
     }
     
     weak var cellDelegate: ConversationCellConfiguration?

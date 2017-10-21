@@ -21,9 +21,9 @@ class ConversationViewController: UIViewController {
         super.viewDidLoad()
         
         // register xib
-        let inboxNib = UINib(nibName: "InboxCell.xib", bundle: nil)
+        let inboxNib = UINib(nibName: "InboxCell", bundle: nil)
         tableView.register(inboxNib, forCellReuseIdentifier: dataSource.inboxCell)
-        let outboxNib = UINib(nibName: "OutboxCell.xib", bundle: nil)
+        let outboxNib = UINib(nibName: "OutboxCell", bundle: nil)
         tableView.register(outboxNib, forCellReuseIdentifier: dataSource.outboxCell)
         
         tableView.dataSource = dataSource

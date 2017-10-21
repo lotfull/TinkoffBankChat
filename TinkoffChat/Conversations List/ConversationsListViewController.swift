@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ConversationsListViewController: UIViewController {
+class ConversationsListViewController: UIViewController, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -31,6 +31,10 @@ class ConversationsListViewController: UIViewController {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "ChatPressed", sender: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
