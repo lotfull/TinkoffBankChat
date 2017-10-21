@@ -19,7 +19,7 @@ class DataManager {
     
     weak var delegate: DataManagerDelegate?
     
-    func Update(_ chat: Chat) {
+    func update(_ chat: Chat) {
         if chat.isOnline {
             onlineChats[chat.id] = chat
         } else {
@@ -45,26 +45,24 @@ class DataManager {
         "Soila Hillard"
     ]
 
-    let defaultText1 = "L"
-    let defaultText30 = "Lorem ipsum dolor sit posuere."
-    let defaultText300 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et nunc ac lorem fringilla iaculis sed eget mauris. Nulla ut libero ac arcu facilisis faucibus ut id elit. Vivamus quam velit, vehicula vitae lobortis eu, maximus quis elit. Morbi ut nulla maximus mi condimentum tempor viverra fusce."
-    
     private let standardMessages: [Message] = [
-        Message(type: .inbox, text: defaultText1),
-        Message(type: .inbox, text: defaultText30),
-        Message(type: .inbox, text: defaultText300),
-        Message(type: .outbox, text: defaultText1),
-        Message(type: .outbox, text: defaultText30),
-        Message(type: .outbox, text: defaultText300)
+        Message(type: .inbox, text: ")"),
+        Message(type: .inbox, text: "Lorem ipsum dolor sit posuere."),
+        Message(type: .inbox, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et nunc ac lorem fringilla iaculis sed eget mauris. Nulla ut libero ac arcu facilisis faucibus ut id elit. Vivamus quam velit, vehicula vitae lobortis eu, maximus quis elit. Morbi ut nulla maximus mi condimentum tempor viverra fusce."),
+        Message(type: .outbox, text: ")"),
+        Message(type: .outbox, text: "Lorem ipsum dolor sit posuere."),
+        Message(type: .outbox, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et nunc ac lorem fringilla iaculis sed eget mauris. Nulla ut libero ac arcu facilisis faucibus ut id elit. Vivamus quam velit, vehicula vitae lobortis eu, maximus quis elit. Morbi ut nulla maximus mi condimentum tempor viverra fusce.")
     ]
     
     func generateChats(online: Bool) -> [String: Chat] {
         var chats = [String: Chat]()
         for (i, name) in names.enumerated() {
             let hasUnreadMessages = arc4random_uniform(1) == 0
-            let lastMessageDate = NSDate(timeIntervalSinceNow: TimeInterval(arc4random_uniform(234567)))
-            let chat = Chat(id: String(i), name: name, messages: standardMessages, isOnline: online, hasUnreadMessages: hasUnreadMessages, lastMessageDate: lastMessageDate)
+            let lastMessageDate = Date(timeIntervalSinceNow: TimeInterval(arc4random_uniform(234567)))
+            let chatId = String(i)
+            let chat = Chat(id: chatId, name: name, messages: standardMessages, isOnline: online, hasUnreadMessages: hasUnreadMessages, lastMessageDate: lastMessageDate)
+            chats[chatId] = chat
         }
-        
+        return chats
     }
 }
