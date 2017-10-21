@@ -13,7 +13,9 @@ struct Profile {
     let info: String
     let image: UIImage
     
-    
+    func copyWithChanged(name: String? = nil, info: String? = nil, image: UIImage? = nil) -> Profile {
+        return Profile(name: name ?? self.name, info: info ?? self.info, image: image ?? self.image)
+    }
 }
 
 extension Profile: Equatable {

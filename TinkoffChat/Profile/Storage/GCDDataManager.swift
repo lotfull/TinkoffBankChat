@@ -7,9 +7,19 @@
 //
 
 import Foundation
-import UIKit
 
-class GCDDataManager: GCDDelegate {
+class GCDDataManager: ProfileDelegate {
+    func loadProfile(completion: @escaping (Profile?, Error?) -> Void) {
+        
+    }
+    
+    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) -> Bool {
+        
+    }
+    
+    private let serialQueue = DispatchQueue(label: "com.lotfull.gcdDataManagerQueue")
+    private let dataStorage = FileStorage()
+    
     let queue = DispatchQueue(label: "editProfileWithGCD.queue")
     func saveObjects(_ objects: [Any?], toFile: String) -> Bool {
         return NSKeyedArchiver.archiveRootObject(objects, toFile: toFile)

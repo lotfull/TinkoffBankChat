@@ -8,121 +8,70 @@
 
 import UIKit
 
-protocol GCDDelegate: class {
-    func saveObjects(_ objects: [Any?], toFile: String) -> Bool
+protocol ProfileDelegate: class {
+    func loadProfile(completion: @escaping (Profile?, Error?) -> Void)
+    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) -> Bool
 }
 
-protocol OperationDelegate: class {
-    func saveObjects(_ objects: [Any?], toFile: String) -> Bool
-}
-
-
-
-class op: Operation {
-    
-}
-
-class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate {
+class ProfileViewController: UIViewController {
     
     // MARK: Main funcs
     override func viewDidLoad() {
         super.viewDidLoad()
-        logFunctionName()
+        loadProfile()
         updateUI()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardUp(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDown(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         newChanges = false
     }
     
-    @objc func keyboardUp(notification: Notification) {
-        show = 1.0
-        var userInfo = notification.userInfo!
-        let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        let animationDurarion = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
-        UIView.animate(withDuration: animationDurarion, animations: { () -> Void in
-            self.view.bounds.origin.y += (keyboardFrame.height - self.editProfileWithGCDButton.bounds.height * 3 )
-        })
-        
-        /*
-        if keyboardSize == nil {
-            // TODO: Починить ебаный keyboardSize, чтобы блять не было в значении нуля.
-            keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue
-        }
-        print(keyboardSize!)
-        self.view.frame.origin.y = -keyboardSize!.height
-        print(self.view.frame.origin.y)
-        print("**********")*/
-    }
-    
-    @objc func keyboardDown(notification: Notification) {
-        show = -1.0
-        var userInfo = notification.userInfo!
-        let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        let animationDurarion = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
-        UIView.animate(withDuration: animationDurarion, animations: { () -> Void in
-            self.view.bounds.origin.y -= (keyboardFrame.height - self.editProfileWithGCDButton.bounds.height * 3 )
-        })
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         if cornerRadius == 0 {
-            cornerRadius = (changePhotoButton.bounds.size.width) / 2 // + 4
+            cornerRadius = (changeImageButton.bounds.size.width) / 2 // + 4
         }
-        changePhotoButton.layer.cornerRadius = cornerRadius
-        photoImageView.layer.cornerRadius = cornerRadius
+        changeImageButton.layer.cornerRadius = cornerRadius
+        imageImageView.layer.cornerRadius = cornerRadius
     }
+    
+    func loadProfile() {
+        activityIndicator.startAnimating()
+        managerGCD.loadProfile { (profile, error) in
+            
+        }
+    }
+    
     func updateUI() {
         // TODO: Get_Data_from_file
-        if let array = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? [Any?] {
-            objects = array
-            if let photo = objects[photo] as? UIImage?,
-                let name = objects[name] as? String?,
-                let info = objects[info] as? String? {
-                photoImageView.image = photo
-                nameTextField.text = name
-                infoTextField.text = info
-            }
-        }
+//        if let array = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? [Any?] {
+//            profile = array
+//            if let image = profile[image] as? UIImage?,
+//                let name = profile[name] as? String?,
+//                let info = profile[info] as? String? {
+//                imageImageView.image = image
+//                nameTextField.text = name
+//                infoTextField.text = info
+//            }
+//        }
 
-        photoImageView.clipsToBounds = true
+        imageImageView.clipsToBounds = true
         editProfileWithGCDButton.layer.borderWidth = 1.0
         editProfileWithGCDButton.layer.cornerRadius = 12.0
         editProfileWithOperationButton.layer.borderWidth = 1.0
         editProfileWithOperationButton.layer.cornerRadius = 12.0
     }
-    func logFunctionName(method: String = #function) {
-        print("Completed ProfileVC.\(lastMethod)\nStarted ProfileVC.\(method)")
-        lastMethod = method
-    }
     
     // MARK: Image funcs
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            photoImageView.image = image
-            somethingChanged()
-        }
-        picker.dismiss(animated: true, completion: nil)
-    }
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-    }
+    
     
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
     }
     func insertNewObject(sender: Any?) {
-        NSKeyedArchiver.archiveRootObject(objects, toFile: filePath)
+        NSKeyedArchiver.archiveRootObject(profile, toFile: filePath)
     }
     
-    // MARK: @TextField funcs
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        activeTextField = textField
-    }
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -137,18 +86,19 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     @IBAction func dismissButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
-    @IBAction func changePhotoAction(_ sender: Any) {
-        print("changePhotoAction")
+    
+    @IBAction func changeImageAction(_ sender: Any) {
+        print("changeImageAction")
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.allowsEditing = false
-        let chooseActionSheet = UIAlertController(title: "Library or Camera?", message: "Choose a photo from Library or take new photo", preferredStyle: .actionSheet)
-        chooseActionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (action: UIAlertAction) in
-            if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-                imagePickerController.sourceType = .photoLibrary
+        let chooseActionSheet = UIAlertController(title: "Library or Camera?", message: "Choose a image from Library or take new image", preferredStyle: .actionSheet)
+        chooseActionSheet.addAction(UIAlertAction(title: "Image Library", style: .default, handler: { (action: UIAlertAction) in
+            if UIImagePickerController.isSourceTypeAvailable(.imageLibrary) {
+                imagePickerController.sourceType = .imageLibrary
                 self.present(imagePickerController, animated: true, completion: nil)
             } else {
-                print("Photo Library not available")
+                print("Image Library not available")
             }
         }))
         chooseActionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action: UIAlertAction) in
@@ -162,6 +112,8 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         chooseActionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(chooseActionSheet, animated: true, completion: nil)
     }
+    
+    
     @IBAction func somethingChanged() {
         if !newChanges {
             newChanges = true
@@ -169,14 +121,15 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
             editProfileWithOperationButton.isEnabled = true
         }
     }
+    
     // TODO: Move View when keyboard show
     @IBAction func editProfileWithGCD(_ sender: Any?) {
         activityIndicator.startAnimating()
-        let image = self.photoImageView.image as Any?
+        let image = self.imageImageView.image as Any?
         let name = self.nameTextField.text as Any?
         let info = self.infoTextField.text as Any?
-        let objects = [image, name, info] as [Any?]
-        if instanceGCD.saveObjects(objects, toFile: filePath) {
+        
+        if managerGCD.saveProfile([image, name, info], completion: nil) {
             activityIndicator.stopAnimating()
             activityIndicator.isHidden = true
             newChanges = false
@@ -206,8 +159,8 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     }
     
     // MARK: @IBOutlets
-    @IBOutlet weak var changePhotoButton: UIButton!
-    @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var changeImageButton: UIButton!
+    @IBOutlet weak var imageImageView: UIImageView!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var infoTextField: UITextField!
     @IBOutlet weak var editProfileWithGCDButton: UIButton!
@@ -215,7 +168,21 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     // MARK: Vars and Lets
-    var objects = [Any?]()
+    private var profile: Profile!
+    private var changedProfile: Profile! {
+        didSet {
+            saveButtonsEnableIf(changedProfile != profile)
+            updateUI()
+        }
+    }
+    private let managerGCD = GCDDataManager()
+    private let managerOperation = OperationDataManager()
+
+    private func saveButtonsEnableIf(_ bool: Bool) {
+        editProfileWithGCDButton.isEnabled = bool
+        editProfileWithOperationButton.isEnabled = bool
+    }
+    
     var newChanges = false
     var filePath: String {
         let manager = FileManager.default
@@ -223,22 +190,79 @@ class ProfileVC: UIViewController, UINavigationControllerDelegate, UIImagePicker
         return (url.appendingPathComponent("objectFile")?.path)!
     }
     var lastMethod: String = "Opening VC"
-    var instanceGCD = GCDDataManager()
-    //var instanceOperation = OperationDataManager()
     var keyboardSize: CGRect? = nil
     var show: CGFloat = 1.0
     var cornerRadius: CGFloat = 0.0
-    var activeTextField: UITextField!
+    var activeTextField: UITextField?
+    
     let isProfileImageLoaded = "isProfileImageLoaded"
     let isProfileNameLoaded = "isProfileNameLoaded"
     let isProfileInfoLoaded = "isProfileInfoLoaded"
     let profileNameKey = "profileName"
     let profileInfoKey = "profileInfo"
     let profileImageKey = "profileImage"
-    let photo = 0, name = 1, info = 2
+    let image = 0, name = 1, info = 2
 }
 
+extension ProfileViewController {
+    @objc func keyboardUp(notification: Notification) {
+        show = 1.0
+        var userInfo = notification.userInfo!
+        let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let animationDurarion = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
+        UIView.animate(withDuration: animationDurarion, animations: { () -> Void in
+            self.view.bounds.origin.y += (keyboardFrame.height - self.editProfileWithGCDButton.bounds.height * 3 )
+        })
+    }
+    
+    @objc func keyboardDown(notification: Notification) {
+        show = -1.0
+        var userInfo = notification.userInfo!
+        let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let animationDurarion = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
+        UIView.animate(withDuration: animationDurarion, animations: { () -> Void in
+            self.view.bounds.origin.y -= (keyboardFrame.height - self.editProfileWithGCDButton.bounds.height * 3 )
+        })
+    }
+}
 
+extension ProfileViewController: UIImagePickerControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            imageImageView.image = image
+            somethingChanged()
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension ProfileViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        activeTextField = textField
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let text = textField.text {
+            if activeTextField == nameTextField {
+                changedProfile = changedProfile.copyWithChanged(name: text)
+            } else {
+                changedProfile = changedProfile.copyWithChanged(info: text)
+            }
+        }
+        activeTextField = nil
+    }
+}
+
+extension ProfileViewController: UINavigationControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+}
 
 
 
