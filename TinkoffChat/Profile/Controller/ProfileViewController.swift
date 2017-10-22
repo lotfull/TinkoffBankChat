@@ -203,7 +203,8 @@ extension ProfileViewController {
             let activeFrame = activeTextField!.convert(activeTextField!.bounds, to: scrollView)
             let activeTextFieldBottomLeftPoint = CGPoint(x: activeFrame.minX, y: activeFrame.maxY)
             if !viewFrame.contains(activeTextFieldBottomLeftPoint) {
-                scrollView.scrollRectToVisible(activeFrame, animated: true)
+                //TODO: scrollRectToVisible Animated?
+                scrollView.scrollRectToVisible(activeFrame, animated: false)
             }
         }
     }
