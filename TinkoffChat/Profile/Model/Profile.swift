@@ -9,12 +9,12 @@
 import UIKit
 
 struct Profile {
-    let name: String
+    let name: String?
     let info: String?
     let image: UIImage?
     
     static func generate() -> Profile {
-        return Profile(name: "Harold", info: "Hide The Pain", image: nil)
+        return Profile(name: "Без имени", info: "Без инфо", image: nil)
     }
     
     func copyWithChanged(name: String? = nil, info: String? = nil, image: UIImage? = nil) -> Profile {

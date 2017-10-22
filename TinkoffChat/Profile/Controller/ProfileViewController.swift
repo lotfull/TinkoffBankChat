@@ -18,9 +18,12 @@ class ProfileViewController: UIViewController {
     // MARK: Main funcs
     override func viewDidLoad() {
         super.viewDidLoad()
+        nameTextField.delegate = self
+        infoTextField.delegate = self
         loadProfile()
         updateUI(true)
         addNotifications()
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,13 +43,12 @@ class ProfileViewController: UIViewController {
             editProfileWithOperationButton.layer.cornerRadius = 12.0
         }
         imageImageView.image = changedProfile.image ?? #imageLiteral(resourceName: "placeholder-user")
-        nameTextField.text = changedProfile.name
-        infoTextField.text = changedProfile.info ?? ""
+        nameTextField.text = changedProfile.name ?? "Без Имени"
+        infoTextField.text = changedProfile.info ?? "Без Описания"
     }
     
     private func addNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardUp(notification:)), name: .UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDown(notification:)), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
     
     private func enableButtonsIf(_ bool: Bool) {
@@ -55,9 +57,9 @@ class ProfileViewController: UIViewController {
         editProfileWithGCDButton.backgroundColor = bool ? .white : .black
         editProfileWithOperationButton.backgroundColor = bool ? .white : .black
     }
+
     // MARK: - @IBActions
-    
-    @IBAction private func dismissKeyboard(_ recognizer: UITapGestureRecognizer) {
+    @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
     
@@ -113,7 +115,11 @@ class ProfileViewController: UIViewController {
     }
     
     private func saveProfile(with profileManager: ProfileManager) {
+        
+        nameTextField.endEditing(true)
+        infoTextField.endEditing(true)
         activityIndicator.startAnimating()
+        enableButtonsIf(false)
         profileManager.saveProfile(changedProfile, completion: { [unowned self] saved, error  in
             self.activityIndicator.stopAnimating()
             self.activityIndicator.isHidden = true
@@ -154,8 +160,8 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var editProfileWithGCDButton: UIButton!
     @IBOutlet weak var editProfileWithOperationButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var scrollView: UIScrollView!
-    
+    @IBOutlet weak var contentTopConstraint: NSLayoutConstraint!
+
     // MARK: - Vars and Lets
     private var profile: Profile!
     private var changedProfile: Profile! {
@@ -166,8 +172,6 @@ class ProfileViewController: UIViewController {
     }
     private let managerGCD = GCDDataManager()
     private let managerOperation = OperationDataManager()
-
-    
     
     var filePath: String {
         let manager = FileManager.default
@@ -175,7 +179,7 @@ class ProfileViewController: UIViewController {
         return (url.appendingPathComponent("objectFile")?.path)!
     }
     var cornerRadius: CGFloat = 0.0
-    var activeTextField: UITextField?
+    //var activeTextField: UITextField?
     
     let isProfileImageLoaded = "isProfileImageLoaded"
     let isProfileNameLoaded = "isProfileNameLoaded"
@@ -184,34 +188,55 @@ class ProfileViewController: UIViewController {
     let profileInfoKey = "profileInfo"
     let profileImageKey = "profileImage"
     let image = 0, name = 1, info = 2
+    
+    
 }
 
 // MARK: - Extensions
-extension ProfileViewController {
-    
-    @objc private func keyboardUp(notification: Notification) {
-        var userInfo = notification.userInfo!
-        let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        
-        let verticalSpace = view.frame.height / 10
-        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.height + verticalSpace, right: 0)
-        scrollView.contentInset = contentInsets
-        scrollView.scrollIndicatorInsets = contentInsets
-        var viewFrame = view.frame
-        viewFrame.size.height -= keyboardFrame.height
-        if self.activeTextField != nil {
-            let activeFrame = activeTextField!.convert(activeTextField!.bounds, to: scrollView)
-            let activeTextFieldBottomLeftPoint = CGPoint(x: activeFrame.minX, y: activeFrame.maxY)
-            if !viewFrame.contains(activeTextFieldBottomLeftPoint) {
-                //TODO: scrollRectToVisible Animated?
-                scrollView.scrollRectToVisible(activeFrame, animated: false)
+extension ProfileViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        if textField == nameTextField {
+            changedProfile = changedProfile.copyWithChanged(name: textField.text)
+        } else if textField == infoTextField {
+            changedProfile = changedProfile.copyWithChanged(info: textField.text)
+        }
+        textField.resignFirstResponder()
+        return true
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let text = textField.text {
+            if textField == nameTextField {
+                changedProfile = changedProfile.copyWithChanged(name: text)
+            } else if textField == infoTextField {
+                changedProfile = changedProfile.copyWithChanged(info: text)
             }
         }
     }
     
-    @objc func keyboardDown(notification: Notification) {
-        scrollView.contentInset = .zero
-        scrollView.scrollIndicatorInsets = .zero
+}
+
+extension ProfileViewController {
+    @objc private func keyboardNotification(notification: Notification) {
+        if let userInfo = notification.userInfo {
+            let endFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+            let duration:TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
+            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
+            let animationCurve:UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
+            if (endFrame?.origin.y)! >= UIScreen.main.bounds.size.height {
+                self.contentTopConstraint?.constant = 0.0
+            } else {
+                if let keyboardHeignt = endFrame?.size.height {
+                    self.contentTopConstraint?.constant = -keyboardHeignt/2.0
+                }
+            }
+            UIView.animate(withDuration: duration,
+                           delay: 0,
+                           options: animationCurve,
+                           animations: { self.view.layoutIfNeeded() },
+                           completion: nil)
+        }
     }
 }
 
@@ -223,28 +248,6 @@ extension ProfileViewController: UIImagePickerControllerDelegate {
         }
         changedProfile = changedProfile.copyWithChanged(image: image)
         dismiss(animated: true, completion: nil)
-    }
-}
-
-extension ProfileViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        activeTextField = textField
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if let text = textField.text {
-            if activeTextField == textField {
-                changedProfile = changedProfile.copyWithChanged(name: text)
-            } else {
-                changedProfile = changedProfile.copyWithChanged(info: text)
-            }
-        }
-        activeTextField = nil
     }
 }
 

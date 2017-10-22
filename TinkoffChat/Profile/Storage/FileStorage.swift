@@ -20,7 +20,7 @@ class FileStorage {
     
     func save(_ profile: Profile) -> Bool {
         let image = profile.image //as Any?
-        let name = "Yo!"//profile.name //as Any?
+        let name = profile.name //as Any?
         let info = profile.info// as Any?
         let objects: [Any?] = [image, name, info] as [Any?]
         let answer = NSKeyedArchiver.archiveRootObject(objects, toFile: filePath)
