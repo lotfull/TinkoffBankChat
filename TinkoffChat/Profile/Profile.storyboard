@@ -173,6 +173,9 @@
                             <constraint firstItem="B7t-4h-T55" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="yqz-Gt-1ZW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="4pn-k8-tTn" appends="YES" id="DOG-Ke-40d"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Профиль" id="zOs-0X-v96">
                         <barButtonItem key="leftBarButtonItem" systemItem="stop" id="oqm-Dz-c5W">

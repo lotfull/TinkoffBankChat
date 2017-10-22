@@ -79,6 +79,6 @@ class ConversationCell: UITableViewCell, ConversationCellConfiguration {
     
     private let noMessagesText = "No messages yet"
     private let dateFormatter = DateFormatter()
-    private let onlineBackgroundColor = UIColor(red: 1.0, green: 1.0, blue: 0.0, alpha: 0.15)
+    private let onlineBackgroundColor = UIColor(red: 1.0, green: 1.0, blue: 0.0, alpha: 0.05)
     
 }

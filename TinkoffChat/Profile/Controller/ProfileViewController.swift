@@ -20,6 +20,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         loadProfile()
         updateUI(true)
+        addNotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -43,13 +44,22 @@ class ProfileViewController: UIViewController {
         infoTextField.text = changedProfile.info ?? ""
     }
     
+    private func addNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardUp(notification:)), name: .UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDown(notification:)), name: .UIKeyboardWillHide, object: nil)
+    }
+    
+    private func enableButtonsIf(_ bool: Bool) {
+        editProfileWithGCDButton.isEnabled = bool
+        editProfileWithOperationButton.isEnabled = bool
+        editProfileWithGCDButton.backgroundColor = bool ? .white : .black
+        editProfileWithOperationButton.backgroundColor = bool ? .white : .black
+    }
     // MARK: - @IBActions
     
     @IBAction private func dismissKeyboard(_ recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
-    
-    
     
     @IBAction func dismissButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -150,17 +160,14 @@ class ProfileViewController: UIViewController {
     private var profile: Profile!
     private var changedProfile: Profile! {
         didSet {
-            saveButtonsEnableIf(changedProfile != profile)
+            enableButtonsIf(changedProfile != profile)
             updateUI()
         }
     }
     private let managerGCD = GCDDataManager()
     private let managerOperation = OperationDataManager()
 
-    private func saveButtonsEnableIf(_ bool: Bool) {
-        editProfileWithGCDButton.isEnabled = bool
-        editProfileWithOperationButton.isEnabled = bool
-    }
+    
     
     var filePath: String {
         let manager = FileManager.default
@@ -181,9 +188,8 @@ class ProfileViewController: UIViewController {
 
 // MARK: - Extensions
 extension ProfileViewController {
+    
     @objc private func keyboardUp(notification: Notification) {
-        
-        //show = 1.0
         var userInfo = notification.userInfo!
         let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
@@ -191,11 +197,12 @@ extension ProfileViewController {
         let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.height + verticalSpace, right: 0)
         scrollView.contentInset = contentInsets
         scrollView.scrollIndicatorInsets = contentInsets
-        view.frame.size.height -= keyboardFrame.height
+        var viewFrame = view.frame
+        viewFrame.size.height -= keyboardFrame.height
         if self.activeTextField != nil {
             let activeFrame = activeTextField!.convert(activeTextField!.bounds, to: scrollView)
             let activeTextFieldBottomLeftPoint = CGPoint(x: activeFrame.minX, y: activeFrame.maxY)
-            if !view.frame.contains(activeTextFieldBottomLeftPoint) {
+            if !viewFrame.contains(activeTextFieldBottomLeftPoint) {
                 scrollView.scrollRectToVisible(activeFrame, animated: true)
             }
         }
@@ -230,7 +237,7 @@ extension ProfileViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let text = textField.text {
-            if activeTextField == nameTextField {
+            if activeTextField == textField {
                 changedProfile = changedProfile.copyWithChanged(name: text)
             } else {
                 changedProfile = changedProfile.copyWithChanged(info: text)

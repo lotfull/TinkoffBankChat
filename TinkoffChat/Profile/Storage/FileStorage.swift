@@ -18,10 +18,6 @@ class FileStorage {
     var cornerRadius: CGFloat = 0.0
     var activeTextField: UITextField?
     
-//    private func serialize(_ profile: Profile) -> [String: Any] {
-//
-//    }
-    
     func save(_ profile: Profile) -> Bool {
         let image = profile.image //as Any?
         let name = "Yo!"//profile.name //as Any?
@@ -42,25 +38,6 @@ class FileStorage {
         }
         return nil
     }
-    
-    
-//    let objects = [image, name, info] as [Any?]
-    
-//    if let array = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? [Any?] {
-//        objects = array
-//        if let photo = objects[photo] as? UIImage?,
-//            let name = objects[name] as? String?,
-//            let info = objects[info] as? String? {
-//            photoImageView.image = photo
-//            nameTextField.text = name
-//            infoTextField.text = info
-//        }
-//    }
-    
-//    // MARK: - API
-//    func saveProfile(_ profile: Profile) throws {
-//        let dataDic
-//    }
     
     // MARK: - Vars
     private var filePath: String {
