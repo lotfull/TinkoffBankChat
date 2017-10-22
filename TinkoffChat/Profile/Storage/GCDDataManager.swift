@@ -8,17 +8,41 @@
 
 import Foundation
 
-class GCDDataManager: ProfileDelegate {
+class GCDDataManager: ProfileManager {
     func loadProfile(completion: @escaping (Profile?, Error?) -> Void) {
-        
+        serialQueue.async {
+            if let profile = self.fileStorage.loadProfile() {
+                DispatchQueue.main.async {
+                    completion(profile, nil)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    completion(nil, Errors.profileNotLoaded)
+                }
+            }
+        }
     }
     
-    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) -> Bool {
-        
+    enum Errors: Error {
+        case profileNotLoaded
+    }
+    
+    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) {
+        serialQueue.async {
+            if self.fileStorage.save(profile) {
+                DispatchQueue.main.async {
+                    completion(true, nil)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    completion(false, nil)
+                }
+            }
+        }
     }
     
     private let serialQueue = DispatchQueue(label: "com.lotfull.gcdDataManagerQueue")
-    private let dataStorage = FileStorage()
+    private let fileStorage = FileStorage()
     
     let queue = DispatchQueue(label: "editProfileWithGCD.queue")
     func saveObjects(_ objects: [Any?], toFile: String) -> Bool {

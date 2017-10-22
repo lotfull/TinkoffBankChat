@@ -57,7 +57,7 @@
                                                                 <inset key="contentEdgeInsets" minX="16" minY="16" maxX="16" maxY="16"/>
                                                                 <state key="normal" image="slr-camera-2-xxl"/>
                                                                 <connections>
-                                                                    <action selector="changePhotoAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="flf-pI-u7y"/>
+                                                                    <action selector="changeImageAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ivP-hc-6zg"/>
                                                                 </connections>
                                                             </button>
                                                         </subviews>
@@ -184,17 +184,20 @@
                     <connections>
                         <outlet property="activityIndicator" destination="v6R-Of-Onm" id="P9c-b4-lzy"/>
                         <outlet property="changeImageButton" destination="DlL-LQ-546" id="ICE-rj-nTg"/>
-                        <outlet property="changePhotoButton" destination="DlL-LQ-546" id="Yxx-Fg-OFu"/>
                         <outlet property="editProfileWithGCDButton" destination="koE-8M-6OH" id="ghE-Ri-s05"/>
                         <outlet property="editProfileWithOperationButton" destination="e29-Oj-Yy8" id="11I-vx-obP"/>
                         <outlet property="imageImageView" destination="z5k-zC-8zC" id="URB-y6-HTh"/>
                         <outlet property="infoTextField" destination="0bj-Dr-S1y" id="F3B-ua-PBd"/>
                         <outlet property="nameTextField" destination="1EQ-5O-dCt" id="fLK-FO-eve"/>
-                        <outlet property="photoImageView" destination="z5k-zC-8zC" id="tXO-zm-qGM"/>
+                        <outlet property="scrollView" destination="B7t-4h-T55" id="l6Z-wa-H7y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="4pn-k8-tTn"/>
+                <tapGestureRecognizer id="4pn-k8-tTn">
+                    <connections>
+                        <action selector="dismissKeyboard:" destination="BYZ-38-t0r" id="JS1-Bn-MSD"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1530" y="299"/>
         </scene>

@@ -1,4 +1,4 @@
-FileStorage//
+//
 //  File.swift
 //  TinkoffChat
 //
@@ -18,9 +18,31 @@ class FileStorage {
     var cornerRadius: CGFloat = 0.0
     var activeTextField: UITextField?
     
-    private func serialize(_ profile: Profile) -> [String: Any] {
-        
+//    private func serialize(_ profile: Profile) -> [String: Any] {
+//
+//    }
+    
+    func save(_ profile: Profile) -> Bool {
+        let image = profile.image //as Any?
+        let name = "Yo!"//profile.name //as Any?
+        let info = profile.info// as Any?
+        let objects: [Any?] = [image, name, info] as [Any?]
+        let answer = NSKeyedArchiver.archiveRootObject(objects, toFile: filePath)
+        print("******* \(answer) *******")
+        return answer
     }
+    
+    func loadProfile() -> Profile? {
+        if let objects = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? [Any?] {
+            if let image = objects[0] as? UIImage?,
+                let name = objects[1] as? String,
+                let info = objects[2] as? String? {
+                return Profile(name: name, info: info, image: image)
+            }
+        }
+        return nil
+    }
+    
     
 //    let objects = [image, name, info] as [Any?]
     
@@ -46,7 +68,6 @@ class FileStorage {
         let url = manager.urls(for: .documentDirectory, in: .userDomainMask).first! as NSURL
         return (url.appendingPathComponent(FileStorage.fileName)?.path)!
     }
-    private let fileManager = FileManager.default
     private static let fileName = "profileData"
     private static let profileNameKey = "profileName"
     private static let profileInfoKey = "profileInfo"

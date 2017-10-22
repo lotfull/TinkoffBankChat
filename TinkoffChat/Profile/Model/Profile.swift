@@ -10,8 +10,12 @@ import UIKit
 
 struct Profile {
     let name: String
-    let info: String
-    let image: UIImage
+    let info: String?
+    let image: UIImage?
+    
+    static func generate() -> Profile {
+        return Profile(name: "Harold", info: "Hide The Pain", image: nil)
+    }
     
     func copyWithChanged(name: String? = nil, info: String? = nil, image: UIImage? = nil) -> Profile {
         return Profile(name: name ?? self.name, info: info ?? self.info, image: image ?? self.image)

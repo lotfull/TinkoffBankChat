@@ -8,9 +8,9 @@
 
 import UIKit
 
-protocol ProfileDelegate: class {
+protocol ProfileManager: class {
     func loadProfile(completion: @escaping (Profile?, Error?) -> Void)
-    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) -> Bool
+    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void)
 }
 
 class ProfileViewController: UIViewController {
@@ -19,10 +19,7 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadProfile()
-        updateUI()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardUp(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDown(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        newChanges = false
+        updateUI(true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -33,56 +30,27 @@ class ProfileViewController: UIViewController {
         imageImageView.layer.cornerRadius = cornerRadius
     }
     
-    func loadProfile() {
-        activityIndicator.startAnimating()
-        managerGCD.loadProfile { (profile, error) in
-            
+    func updateUI(_ firstTime: Bool? = false) {
+        if firstTime == true {
+            imageImageView.clipsToBounds = true
+            editProfileWithGCDButton.layer.borderWidth = 1.0
+            editProfileWithGCDButton.layer.cornerRadius = 12.0
+            editProfileWithOperationButton.layer.borderWidth = 1.0
+            editProfileWithOperationButton.layer.cornerRadius = 12.0
         }
+        imageImageView.image = changedProfile.image ?? #imageLiteral(resourceName: "placeholder-user")
+        nameTextField.text = changedProfile.name
+        infoTextField.text = changedProfile.info ?? ""
     }
     
-    func updateUI() {
-        // TODO: Get_Data_from_file
-//        if let array = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? [Any?] {
-//            profile = array
-//            if let image = profile[image] as? UIImage?,
-//                let name = profile[name] as? String?,
-//                let info = profile[info] as? String? {
-//                imageImageView.image = image
-//                nameTextField.text = name
-//                infoTextField.text = info
-//            }
-//        }
-
-        imageImageView.clipsToBounds = true
-        editProfileWithGCDButton.layer.borderWidth = 1.0
-        editProfileWithGCDButton.layer.cornerRadius = 12.0
-        editProfileWithOperationButton.layer.borderWidth = 1.0
-        editProfileWithOperationButton.layer.cornerRadius = 12.0
-    }
+    // MARK: - @IBActions
     
-    // MARK: Image funcs
-    
-    
-    func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
-    }
-    func insertNewObject(sender: Any?) {
-        NSKeyedArchiver.archiveRootObject(profile, toFile: filePath)
+    @IBAction private func dismissKeyboard(_ recognizer: UITapGestureRecognizer) {
+        view.endEditing(true)
     }
     
     
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-    }
-    
-    // MARK: @IBActions
     @IBAction func dismissButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -94,8 +62,8 @@ class ProfileViewController: UIViewController {
         imagePickerController.allowsEditing = false
         let chooseActionSheet = UIAlertController(title: "Library or Camera?", message: "Choose a image from Library or take new image", preferredStyle: .actionSheet)
         chooseActionSheet.addAction(UIAlertAction(title: "Image Library", style: .default, handler: { (action: UIAlertAction) in
-            if UIImagePickerController.isSourceTypeAvailable(.imageLibrary) {
-                imagePickerController.sourceType = .imageLibrary
+            if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+                imagePickerController.sourceType = .photoLibrary
                 self.present(imagePickerController, animated: true, completion: nil)
             } else {
                 print("Image Library not available")
@@ -113,52 +81,62 @@ class ProfileViewController: UIViewController {
         self.present(chooseActionSheet, animated: true, completion: nil)
     }
     
-    
-    @IBAction func somethingChanged() {
-        if !newChanges {
-            newChanges = true
-            editProfileWithGCDButton.isEnabled = true
-            editProfileWithOperationButton.isEnabled = true
+    // MARK: - DataManagment
+    func loadProfile() {
+        activityIndicator.startAnimating()
+        managerGCD.loadProfile { (profile, error) in
+            self.activityIndicator.stopAnimating()
+            if profile != nil {
+                self.profile = profile
+                self.changedProfile = profile
+            }
+            if error != nil {
+                print("\(error!)")
+            }
         }
+        if profile == nil {
+            self.profile = Profile.generate()
+            self.changedProfile = Profile.generate()
+            self.updateUI()
+        }
+        activityIndicator.stopAnimating()
     }
     
-    // TODO: Move View when keyboard show
-    @IBAction func editProfileWithGCD(_ sender: Any?) {
+    private func saveProfile(with profileManager: ProfileManager) {
         activityIndicator.startAnimating()
-        let image = self.imageImageView.image as Any?
-        let name = self.nameTextField.text as Any?
-        let info = self.infoTextField.text as Any?
-        
-        if managerGCD.saveProfile([image, name, info], completion: nil) {
-            activityIndicator.stopAnimating()
-            activityIndicator.isHidden = true
-            newChanges = false
-            editProfileWithGCDButton.isEnabled = false
-            editProfileWithOperationButton.isEnabled = false
-            let alert = UIAlertController(title: "Данные сохранены", message: "", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
-                alert.dismiss(animated: true, completion: nil)
-            }))
-            self.present(alert, animated: true, completion: nil)
-        } else {
-            let alert = UIAlertController(title: "Ошибка", message: "Не удалось сохранить данные", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-                alert.dismiss(animated: true, completion: nil)
-            }))
-            alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { (action) in
-                alert.dismiss(animated: true, completion: nil)
-                self.editProfileWithGCD(nil)
-            }))
-            self.present(alert, animated: true, completion: nil)
-        }
-        
+        profileManager.saveProfile(changedProfile, completion: { [unowned self] saved, error  in
+            self.activityIndicator.stopAnimating()
+            self.activityIndicator.isHidden = true
+            
+            if saved {
+                let alert = UIAlertController(title: "Данные сохранены", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                let alert = UIAlertController(title: "Ошибка", message: "Не удалось сохранить данные", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                    alert.dismiss(animated: true, completion: nil)
+                }))
+                alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { (action) in
+                    alert.dismiss(animated: true, completion: nil)
+                    self.editProfileWithGCD(nil)
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }
+            if error != nil {
+                print("\(error!)")
+            }
+        })
+    }
+    
+    @IBAction func editProfileWithGCD(_ sender: Any?) {
+        saveProfile(with: managerGCD)
     }
     @IBAction func editProfileWithOperation(_ sender: Any) {
-        //instanceOperation.
-        editProfileWithGCD(self)
+        saveProfile(with: managerOperation)
     }
     
-    // MARK: @IBOutlets
+    // MARK: - @IBOutlets
     @IBOutlet weak var changeImageButton: UIButton!
     @IBOutlet weak var imageImageView: UIImageView!
     @IBOutlet weak var nameTextField: UITextField!
@@ -166,8 +144,9 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var editProfileWithGCDButton: UIButton!
     @IBOutlet weak var editProfileWithOperationButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
-    // MARK: Vars and Lets
+    // MARK: - Vars and Lets
     private var profile: Profile!
     private var changedProfile: Profile! {
         didSet {
@@ -183,15 +162,11 @@ class ProfileViewController: UIViewController {
         editProfileWithOperationButton.isEnabled = bool
     }
     
-    var newChanges = false
     var filePath: String {
         let manager = FileManager.default
         let url = manager.urls(for: .documentDirectory, in: .userDomainMask).first! as NSURL
         return (url.appendingPathComponent("objectFile")?.path)!
     }
-    var lastMethod: String = "Opening VC"
-    var keyboardSize: CGRect? = nil
-    var show: CGFloat = 1.0
     var cornerRadius: CGFloat = 0.0
     var activeTextField: UITextField?
     
@@ -204,35 +179,42 @@ class ProfileViewController: UIViewController {
     let image = 0, name = 1, info = 2
 }
 
+// MARK: - Extensions
 extension ProfileViewController {
-    @objc func keyboardUp(notification: Notification) {
-        show = 1.0
+    @objc private func keyboardUp(notification: Notification) {
+        
+        //show = 1.0
         var userInfo = notification.userInfo!
         let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        let animationDurarion = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
-        UIView.animate(withDuration: animationDurarion, animations: { () -> Void in
-            self.view.bounds.origin.y += (keyboardFrame.height - self.editProfileWithGCDButton.bounds.height * 3 )
-        })
+        
+        let verticalSpace = view.frame.height / 10
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.height + verticalSpace, right: 0)
+        scrollView.contentInset = contentInsets
+        scrollView.scrollIndicatorInsets = contentInsets
+        view.frame.size.height -= keyboardFrame.height
+        if self.activeTextField != nil {
+            let activeFrame = activeTextField!.convert(activeTextField!.bounds, to: scrollView)
+            let activeTextFieldBottomLeftPoint = CGPoint(x: activeFrame.minX, y: activeFrame.maxY)
+            if !view.frame.contains(activeTextFieldBottomLeftPoint) {
+                scrollView.scrollRectToVisible(activeFrame, animated: true)
+            }
+        }
     }
     
     @objc func keyboardDown(notification: Notification) {
-        show = -1.0
-        var userInfo = notification.userInfo!
-        let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        let animationDurarion = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
-        UIView.animate(withDuration: animationDurarion, animations: { () -> Void in
-            self.view.bounds.origin.y -= (keyboardFrame.height - self.editProfileWithGCDButton.bounds.height * 3 )
-        })
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
     }
 }
 
 extension ProfileViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            imageImageView.image = image
-            somethingChanged()
+        var image = info[UIImagePickerControllerOriginalImage] as? UIImage
+        if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
+            image = editedImage
         }
-        picker.dismiss(animated: true, completion: nil)
+        changedProfile = changedProfile.copyWithChanged(image: image)
+        dismiss(animated: true, completion: nil)
     }
 }
 

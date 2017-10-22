@@ -9,11 +9,14 @@
 import Foundation
 import UIKit
 
-class OperationDataManager: OperationDelegate {
-    func saveObjects(_ objects: [Any?], toFile: String) -> Bool {
-        return true
+class OperationDataManager: ProfileManager {
+    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) {
+        
     }
     
+    func loadProfile(completion: @escaping (Profile?, Error?) -> Void) {
+        
+    }
     
     /*var operationQueue = OperationQueue()
     
