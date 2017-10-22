@@ -13,7 +13,7 @@
         <!--Tinkoff Chat-->
         <scene sceneID="g5T-0x-3Ck">
             <objects>
-                <viewController id="TTR-NS-bf6" customClass="ConversationViewController" customModule="TinkoffChat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="TTR-NS-bf6" customClass="ChatViewController" customModule="TinkoffChat" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="AFG-UV-PLG">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

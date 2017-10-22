@@ -1,5 +1,5 @@
 //
-//  ConversationCell.swift
+//  ChatCell.swift
 //  TinkoffChat
 //
 //  Created by Kam Lotfull on 05.10.17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ConversationCellConfiguration: class {
+protocol ChatCellConfiguration: class {
     var name: String? {get set}
     var message: String? {get set}
     var date: Date? {get set}
@@ -16,7 +16,7 @@ protocol ConversationCellConfiguration: class {
     var hasUnreadMessages: Bool {get set}
 }
 
-class ConversationCell: UITableViewCell, ConversationCellConfiguration {
+class ChatCell: UITableViewCell, ChatCellConfiguration {
     
     var name: String? {
         didSet {
@@ -68,10 +68,10 @@ class ConversationCell: UITableViewCell, ConversationCellConfiguration {
     }
     
     class var identifier: String {
-        return "ConversationCell"
+        return "ChatCell"
     }
     
-    weak var cellDelegate: ConversationCellConfiguration?
+    weak var cellDelegate: ChatCellConfiguration?
     
     @IBOutlet weak var timeDateLabel: UILabel!
     @IBOutlet weak var lastMessageLabel: UILabel!

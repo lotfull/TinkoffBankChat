@@ -1,5 +1,5 @@
 //
-//  ConversationsListViewController.swift
+//  ChatsListViewController.swift
 //  TinkoffChat
 //
 //  Created by Kam Lotfull on 05.10.17.
@@ -9,20 +9,20 @@
 import UIKit
 import CoreData
 
-class ConversationsListViewController: UIViewController, UITableViewDelegate {
+class ChatsListViewController: UIViewController, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
     private let dataManager = DataManager()
-    private lazy var dataSource = ConversationsListDataSource(dataManager)
+    private lazy var dataSource = ChatsListDataSource(dataManager)
     
-    let conversationsTableViewCellName = "ConversationCell"
-    let conversationsTableViewCellID = "ConversationCell"
+    let chatsTableViewCellName = "ChatCell"
+    let chatsTableViewCellID = "ChatCell"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let nib = UINib(nibName: conversationsTableViewCellName, bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: conversationsTableViewCellID)
+        let nib = UINib(nibName: chatsTableViewCellName, bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: chatsTableViewCellID)
         tableView.dataSource = dataSource
     }
     
@@ -38,13 +38,13 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let conversationVC = segue.destination as? ConversationViewController,
+        if let chatVC = segue.destination as? ChatViewController,
             let selectedIndexPath = tableView.indexPathForSelectedRow,
-            let selectedCell = dataSource.tableView(tableView, cellForRowAt: selectedIndexPath) as? ConversationCell {
+            let selectedCell = dataSource.tableView(tableView, cellForRowAt: selectedIndexPath) as? ChatCell {
             let selectedChat  = dataSource.chat(for: selectedIndexPath)
-            conversationVC.chat = selectedChat
-            conversationVC.dataManager = dataManager
-            conversationVC.navigationItem.title = selectedCell.name
+            chatVC.chat = selectedChat
+            chatVC.dataManager = dataManager
+            chatVC.navigationItem.title = selectedCell.name
             tableView.deselectRow(at: selectedIndexPath, animated: true)
         }
     }

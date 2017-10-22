@@ -1,5 +1,5 @@
 //
-//  ConversationsListDataSource.swift
+//  ChatsListDataSource.swift
 //  TinkoffChat
 //
 //  Created by Kam Lotfull on 21.10.17.
@@ -8,15 +8,15 @@
 
 import UIKit
 
-class ConversationsListDelegate: NSObject {
+class ChatsListDelegate: NSObject {
     
 }
 
-extension ConversationsListDelegate: UITableViewDelegate {
+extension ChatsListDelegate: UITableViewDelegate {
     
 }
 
-class ConversationsListDataSource: NSObject {
+class ChatsListDataSource: NSObject {
     private var onlineChats: [Chat]
     private var offlineChats: [Chat]
 
@@ -38,14 +38,14 @@ class ConversationsListDataSource: NSObject {
     }
 }
 
-extension ConversationsListDataSource: DataManagerDelegate {
+extension ChatsListDataSource: DataManagerDelegate {
     func didUpdate(_ onlineChats: [Chat], _ offlineChats: [Chat]) {
         self.onlineChats = onlineChats
         self.offlineChats = offlineChats
     }
 }
 
-extension ConversationsListDataSource: UITableViewDataSource {
+extension ChatsListDataSource: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -59,7 +59,7 @@ extension ConversationsListDataSource: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let chatCell = tableView.dequeueReusableCell(withIdentifier: ConversationCell.identifier, for: indexPath) as! ConversationCell
+        let chatCell = tableView.dequeueReusableCell(withIdentifier: ChatCell.identifier, for: indexPath) as! ChatCell
         
         let chat = self.chat(for: indexPath)
         chatCell.nameLabel.text = chat.name

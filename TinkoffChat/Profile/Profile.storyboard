@@ -185,7 +185,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="placeholder-user" width="300" height="300"/>
-        <image name="slr-camera-2-xxl" width="128" height="128"/>
+        <image name="placeholder-user" width="600" height="600"/>
+        <image name="slr-camera-2-xxl" width="256" height="256"/>
     </resources>
 </document>

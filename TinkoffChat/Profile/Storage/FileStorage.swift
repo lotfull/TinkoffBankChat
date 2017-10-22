@@ -49,6 +49,5 @@ class FileStorage {
     private static let profileNameKey = "profileName"
     private static let profileInfoKey = "profileInfo"
     private static let profileImageKey = "profileImage"
-    let photo = 0, name = 1, info = 2
 }
 

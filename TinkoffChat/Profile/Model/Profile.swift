@@ -1,6 +1,6 @@
 //
 //  Profile.swift
-//  TinkoffConversation
+//  TinkoffChat
 //
 //  Created by Kam Lotfull on 20.10.17.
 //  Copyright © 2017 Kam Lotfull. All rights reserved.

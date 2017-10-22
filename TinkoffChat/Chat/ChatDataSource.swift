@@ -1,5 +1,5 @@
 //
-//  ConversationDataSource.swift
+//  ChatDataSource.swift
 //  TinkoffChat
 //
 //  Created by Kam Lotfull on 21.10.17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConversationDataSource: NSObject {
+class ChatDataSource: NSObject {
     
     struct CellIdentifier {
         static let inboxCellID = "InboxCell"
@@ -26,7 +26,7 @@ class ConversationDataSource: NSObject {
     }
 }
 
-extension ConversationDataSource: UITableViewDataSource {
+extension ChatDataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return chat.messages.count
     }
@@ -39,3 +39,8 @@ extension ConversationDataSource: UITableViewDataSource {
         return cell
     }
 }
+
+//extension ChatDataSource: {
+//    
+//}
+
