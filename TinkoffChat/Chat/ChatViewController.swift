@@ -38,7 +38,6 @@ class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = chat.name
-        registerNibs()
         tableView.dataSource = dataSource
         addNotifications()
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
@@ -55,13 +54,6 @@ class ChatViewController: UIViewController {
     
     private func addNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
-    }
-    
-    func registerNibs() {
-        let inboxNib = UINib(nibName: "InboxCell", bundle: nil)
-        tableView.register(inboxNib, forCellReuseIdentifier: dataSource.inboxCell)
-        let outboxNib = UINib(nibName: "OutboxCell", bundle: nil)
-        tableView.register(outboxNib, forCellReuseIdentifier: dataSource.outboxCell)
     }
     
     override func viewDidAppear(_ animated: Bool) {

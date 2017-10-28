@@ -10,8 +10,6 @@
 		9119289A1F9F236C00AA1658 /* MultipeerConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911928991F9F236C00AA1658 /* MultipeerConnector.swift */; };
 		9119289C1F9F238200AA1658 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119289B1F9F238200AA1658 /* ConnectionManager.swift */; };
 		913155CD1F99DEAB00246248 /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 913155CC1F99DEAB00246248 /* Chat.storyboard */; };
-		9145C5191F8AD57300CED785 /* InboxCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9145C5171F8AD57200CED785 /* InboxCell.xib */; };
-		9145C51A1F8AD57300CED785 /* OutboxCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9145C5181F8AD57300CED785 /* OutboxCell.xib */; };
 		9166B47E1F8972660081D4A9 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9166B47D1F8972660081D4A9 /* ChatViewController.swift */; };
 		9166B4811F8975920081D4A9 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9166B47F1F8975920081D4A9 /* MessageCell.swift */; };
 		916836151F9A29650095A427 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916836141F9A29650095A427 /* Message.swift */; };
@@ -41,8 +39,6 @@
 		911928991F9F236C00AA1658 /* MultipeerConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerConnector.swift; sourceTree = "<group>"; };
 		9119289B1F9F238200AA1658 /* ConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
 		913155CC1F99DEAB00246248 /* Chat.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Chat.storyboard; sourceTree = "<group>"; };
-		9145C5171F8AD57200CED785 /* InboxCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InboxCell.xib; sourceTree = "<group>"; };
-		9145C5181F8AD57300CED785 /* OutboxCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OutboxCell.xib; sourceTree = "<group>"; };
 		9166B47D1F8972660081D4A9 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		9166B47F1F8975920081D4A9 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		916836141F9A29650095A427 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -94,8 +90,6 @@
 			isa = PBXGroup;
 			children = (
 				913155CC1F99DEAB00246248 /* Chat.storyboard */,
-				9145C5171F8AD57200CED785 /* InboxCell.xib */,
-				9145C5181F8AD57300CED785 /* OutboxCell.xib */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -293,11 +287,9 @@
 				9181B4961F8026A70088970D /* README.md in Resources */,
 				91D7770A1F72CC3B007573E1 /* LaunchScreen.storyboard in Resources */,
 				91D777071F72CC3B007573E1 /* Assets.xcassets in Resources */,
-				9145C51A1F8AD57300CED785 /* OutboxCell.xib in Resources */,
 				918CF85D1F854352000F4235 /* Lection 3.txt in Resources */,
 				91D777021F72CC3B007573E1 /* ChatsList.storyboard in Resources */,
 				913155CD1F99DEAB00246248 /* Chat.storyboard in Resources */,
-				9145C5191F8AD57300CED785 /* InboxCell.xib in Resources */,
 				91CDAEC71F7C0FA300F3DCB6 /* Lection 2 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
