@@ -8,11 +8,21 @@
 
 import Foundation
 
-struct Chat {
+class Chat {
     let id: String
-    var name: String
-    var messages: [Message]
+    var name: String?
+    var messages = [Message]()
     var isOnline: Bool
-    var hasUnreadMessages: Bool
-    var lastMessageDate: Date?
+    var hasUnreadMessages: Bool {
+        return messages.last?.isRead ?? false
+    }
+    var lastMessageDate: Date? {
+        return messages.last?.date
+    }
+    
+    init(id: String, name: String?, isOnline: Bool) {
+        self.id = id
+        self.name = name ?? "Unnamed"
+        self.isOnline = isOnline
+    }
 }

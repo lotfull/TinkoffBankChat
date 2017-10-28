@@ -13,8 +13,15 @@ class ChatsListViewController: UIViewController, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
-    private let dataManager = DataManager()
-    private lazy var dataSource = ChatsListDataSource(dataManager)
+    private lazy var connectionManager: ConnectionManager = conManager()
+    
+    func conManager() -> ConnectionManager {
+        let connectionManager = ConnectionManager(connector: MultipeerConnector())
+        connectionManager.delegate = self
+        connectionManager.communicationServices(enabled: true)
+        return connectionManager
+    }
+    private lazy var dataSource = ChatsListDataSource(connectionManager)
     
     let chatsTableViewCellName = "ChatCell"
     let chatsTableViewCellID = "ChatCell"
@@ -28,9 +35,8 @@ class ChatsListViewController: UIViewController, UITableViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        connectionManager.delegate = self
+        updateChatsList()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -43,10 +49,22 @@ class ChatsListViewController: UIViewController, UITableViewDelegate {
             let selectedCell = dataSource.tableView(tableView, cellForRowAt: selectedIndexPath) as? ChatCell {
             let selectedChat  = dataSource.chat(for: selectedIndexPath)
             chatVC.chat = selectedChat
-            chatVC.dataManager = dataManager
             chatVC.navigationItem.title = selectedCell.name
+            chatVC.connectionManager = connectionManager
             tableView.deselectRow(at: selectedIndexPath, animated: true)
         }
     }
     
+    private func updateChatsList() {
+        dataSource.update()
+        tableView.reloadData()
+    }
+}
+
+extension ChatsListViewController: ConnectionManagerDelegate {
+    func updateUI() {
+        DispatchQueue.main.async {
+            self.updateChatsList()
+        }
+    }
 }

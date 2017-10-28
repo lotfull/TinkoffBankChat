@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="TTR-NS-bf6">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Tinkoff Chat-->
+        <scene sceneID="g5T-0x-3Ck">
+            <objects>
+                <viewController id="TTR-NS-bf6" customClass="ChatViewController" customModule="TinkoffChat" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AFG-UV-PLG">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="oCz-t1-x9x">
+                                <rect key="frame" x="0.0" y="20" width="375" height="584.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="tDd-GL-Bz2">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tDd-GL-Bz2" id="iSU-HP-HCk">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o8m-T8-Khe" userLabel="Input View">
+                                <rect key="frame" x="8" y="612.5" width="359" height="46.5"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="TnN-s7-LBF">
+                                        <rect key="frame" x="10" y="0.0" width="285" height="46.5"/>
+                                        <subviews>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="5hJ-Ra-Sbl">
+                                                <rect key="frame" x="0.0" y="5" width="285" height="36.5"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" red="0.050980392159999999" green="0.035294117649999998" blue="0.1450980392" alpha="0.2048451835" colorSpace="calibratedRGB"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="15"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="placeholderColor">
+                                                        <color key="value" red="0.050980392159999999" green="0.035294117649999998" blue="0.1450980392" alpha="0.39935732029999998" colorSpace="calibratedRGB"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Введите сообщение"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <variation key="heightClass=regular-widthClass=regular">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                                </variation>
+                                            </textView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="5hJ-Ra-Sbl" firstAttribute="top" secondItem="TnN-s7-LBF" secondAttribute="top" constant="5" id="3aJ-NT-51X"/>
+                                            <constraint firstAttribute="bottom" secondItem="5hJ-Ra-Sbl" secondAttribute="bottom" constant="5" id="xvD-7A-qhq"/>
+                                        </constraints>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FV5-Uk-j23">
+                                        <rect key="frame" x="305" y="1" width="44" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="FV5-Uk-j23" secondAttribute="height" multiplier="1:1" id="Lbc-kn-Ln5"/>
+                                            <constraint firstAttribute="width" constant="44" id="ouS-Ly-mRp"/>
+                                        </constraints>
+                                        <state key="normal" title="Send"/>
+                                        <connections>
+                                            <action selector="sendButtonPressed:" destination="TTR-NS-bf6" eventType="touchUpInside" id="3Fg-fK-Zvi"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="BcS-dJ-Q5b"/>
+                                    <constraint firstItem="TnN-s7-LBF" firstAttribute="top" secondItem="o8m-T8-Khe" secondAttribute="top" id="Hye-Yw-mo6"/>
+                                    <constraint firstItem="FV5-Uk-j23" firstAttribute="leading" secondItem="TnN-s7-LBF" secondAttribute="trailing" constant="10" id="KwN-nx-gj2"/>
+                                    <constraint firstAttribute="bottom" secondItem="TnN-s7-LBF" secondAttribute="bottom" id="QUx-wA-CWz"/>
+                                    <constraint firstItem="TnN-s7-LBF" firstAttribute="leading" secondItem="o8m-T8-Khe" secondAttribute="leading" constant="10" id="SiC-H8-r9c"/>
+                                    <constraint firstItem="FV5-Uk-j23" firstAttribute="centerY" secondItem="o8m-T8-Khe" secondAttribute="centerY" id="WnG-Zp-9fa"/>
+                                    <constraint firstAttribute="trailing" secondItem="FV5-Uk-j23" secondAttribute="trailing" constant="10" id="cw7-Gg-ei5"/>
+                                </constraints>
+                                <viewLayoutGuide key="safeArea" id="fSr-wb-Rpt"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="o8m-T8-Khe" firstAttribute="leading" secondItem="AFG-UV-PLG" secondAttribute="leading" constant="8" id="7ex-TN-1g6"/>
+                            <constraint firstItem="o8m-T8-Khe" firstAttribute="height" secondItem="AFG-UV-PLG" secondAttribute="height" multiplier="0.07" id="GRh-6Q-vTM"/>
+                            <constraint firstItem="orW-hJ-W6X" firstAttribute="bottom" secondItem="o8m-T8-Khe" secondAttribute="bottom" constant="8" id="PNv-Hs-m8M"/>
+                            <constraint firstItem="orW-hJ-W6X" firstAttribute="trailing" secondItem="oCz-t1-x9x" secondAttribute="trailing" id="hiR-O4-hvs"/>
+                            <constraint firstItem="oCz-t1-x9x" firstAttribute="leading" secondItem="orW-hJ-W6X" secondAttribute="leading" id="iQM-00-pPX"/>
+                            <constraint firstAttribute="trailing" secondItem="o8m-T8-Khe" secondAttribute="trailing" constant="8" id="qPX-aa-nnL"/>
+                            <constraint firstItem="oCz-t1-x9x" firstAttribute="top" secondItem="orW-hJ-W6X" secondAttribute="top" id="vxg-Dm-XoL"/>
+                            <constraint firstItem="o8m-T8-Khe" firstAttribute="top" secondItem="oCz-t1-x9x" secondAttribute="bottom" constant="8" id="wVj-5v-2pi"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="orW-hJ-W6X"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Tinkoff Chat" id="9YI-KO-aFd"/>
+                    <connections>
+                        <outlet property="bottomContentConstraint" destination="PNv-Hs-m8M" id="oS1-SQ-0Ca"/>
+                        <outlet property="inputTextView" destination="5hJ-Ra-Sbl" id="Bvd-WW-ApY"/>
+                        <outlet property="sendButton" destination="FV5-Uk-j23" id="BOb-ZJ-nbl"/>
+                        <outlet property="tableView" destination="oCz-t1-x9x" id="5mz-YB-j9U"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Rq-Gd-DAU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1092" y="-403.44827586206901"/>
+        </scene>
+    </scenes>
+</document>

@@ -9,16 +9,16 @@
 import UIKit
 
 protocol MessageCellConfiguration: class {
-    var text: String? {get set}
+    var messageText: String? {get set}
 }
 
-class MessageCell: UITableViewCell {
+class MessageCell: UITableViewCell, MessageCellConfiguration {
     
-    weak var delegate: MessageCellConfiguration?
-
-    @IBOutlet weak var messageText: UILabel!
-    
-    func configure() {
-        messageText.text = delegate?.text
+    var messageText: String? {
+        didSet {
+            messageLabel.text = messageText
+        }
     }
+    
+    @IBOutlet weak var messageLabel: UILabel!
 }

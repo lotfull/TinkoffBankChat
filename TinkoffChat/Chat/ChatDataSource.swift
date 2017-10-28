@@ -34,8 +34,10 @@ extension ChatDataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = chat.messages[indexPath.row]
         let identifier = message.type == .inbox ? CellIdentifier.inboxCellID : CellIdentifier.outboxCellID
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! MessageCell
-        cell.messageText.text = message.text
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        if let messageCell = cell as? MessageCellConfiguration {
+            messageCell.messageText = message.text
+        }
         return cell
     }
 }

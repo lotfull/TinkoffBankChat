@@ -8,54 +8,62 @@
 
 import UIKit
 
-class ChatsListDelegate: NSObject {
-    
-}
-
-extension ChatsListDelegate: UITableViewDelegate {
-    
-}
-
 class ChatsListDataSource: NSObject {
-    private var onlineChats: [Chat]
-    private var offlineChats: [Chat]
-
-    private let dataManager: DataManager
     
-    private let online = "Online"
-    private let history = "History"
+    var chats = [[Chat]]()
     
-    init(_ dataManager: DataManager) {
-        self.dataManager = dataManager
-        self.onlineChats = dataManager.getChats(online: true)
-        self.offlineChats = dataManager.getChats(online: false)
+    let connectionManager: ConnectionManager
+    
+    private let onlineHeader = "Online"
+    private let historyHeader = "History"
+    
+    init(_ connectionManager: ConnectionManager) {
+        self.connectionManager = connectionManager
         super.init()
-        dataManager.delegate = self
+        self.update()
+    }
+    
+    func update() {
+        let onlineChats = sort(connectionManager.getChats(online: true))
+        let offlineChats = sort(connectionManager.getChats(online: false))
+        chats = [onlineChats, offlineChats]
     }
     
     func chat(for indexPath: IndexPath) -> Chat {
-        return indexPath.section == 0 ? onlineChats[indexPath.row] : offlineChats[indexPath.row]
+        return chats[indexPath.section][indexPath.row]
     }
-}
-
-extension ChatsListDataSource: DataManagerDelegate {
-    func didUpdate(_ onlineChats: [Chat], _ offlineChats: [Chat]) {
-        self.onlineChats = onlineChats
-        self.offlineChats = offlineChats
+    
+    private func sort(_ chats: [Chat]) -> [Chat] {
+        var tempChats1 = [Chat]()
+        var tempChats2 = [Chat]()
+        var tempChats3 = [Chat]()
+        for chat in chats {
+            if chat.lastMessageDate != nil {
+                tempChats1.append(chat)
+            } else {
+                if chat.name != nil {
+                    tempChats2.append(chat)
+                } else {
+                    tempChats3.append(chat)
+                }
+            }
+        }
+        let answerChats = tempChats1.sorted { $0.lastMessageDate! > $1.lastMessageDate! } + tempChats2.sorted { $0.name! > $1.name! } + tempChats3
+        return answerChats
     }
 }
 
 extension ChatsListDataSource: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return chats.count
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == 0 ? online : history
+        return section == 0 ? onlineHeader : historyHeader
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? onlineChats.count : offlineChats.count
+        return chats[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

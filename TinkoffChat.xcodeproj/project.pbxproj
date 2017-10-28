@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9119289A1F9F236C00AA1658 /* MultipeerConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911928991F9F236C00AA1658 /* MultipeerConnector.swift */; };
+		9119289C1F9F238200AA1658 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119289B1F9F238200AA1658 /* ConnectionManager.swift */; };
 		913155CD1F99DEAB00246248 /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 913155CC1F99DEAB00246248 /* Chat.storyboard */; };
 		9145C5191F8AD57300CED785 /* InboxCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9145C5171F8AD57200CED785 /* InboxCell.xib */; };
 		9145C51A1F8AD57300CED785 /* OutboxCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9145C5181F8AD57300CED785 /* OutboxCell.xib */; };
@@ -36,6 +38,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		911928991F9F236C00AA1658 /* MultipeerConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerConnector.swift; sourceTree = "<group>"; };
+		9119289B1F9F238200AA1658 /* ConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
 		913155CC1F99DEAB00246248 /* Chat.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Chat.storyboard; sourceTree = "<group>"; };
 		9145C5171F8AD57200CED785 /* InboxCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InboxCell.xib; sourceTree = "<group>"; };
 		9145C5181F8AD57300CED785 /* OutboxCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OutboxCell.xib; sourceTree = "<group>"; };
@@ -77,14 +81,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		913155D01F99DF2500246248 /* Chats List */ = {
+		911928961F9F22F600AA1658 /* Multipeer Connector */ = {
+			isa = PBXGroup;
+			children = (
+				911928991F9F236C00AA1658 /* MultipeerConnector.swift */,
+				9119289B1F9F238200AA1658 /* ConnectionManager.swift */,
+			);
+			path = "Multipeer Connector";
+			sourceTree = "<group>";
+		};
+		911928971F9F232200AA1658 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				913155CC1F99DEAB00246248 /* Chat.storyboard */,
+				9145C5171F8AD57200CED785 /* InboxCell.xib */,
+				9145C5181F8AD57300CED785 /* OutboxCell.xib */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		911928981F9F233700AA1658 /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				91D777001F72CC3B007573E1 /* ChatsList.storyboard */,
-				916836221F9B8E970095A427 /* ChatsListDataSource.swift */,
-				91F9DD351F868B1F0085ABF7 /* ChatCell.swift */,
-				918CF85F1F8688BE000F4235 /* ChatsListViewController.swift */,
 				91F9DD361F868B1F0085ABF7 /* ChatCell.xib */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		913155D01F99DF2500246248 /* Chats List */ = {
+			isa = PBXGroup;
+			children = (
+				911928981F9F233700AA1658 /* UI */,
+				916836221F9B8E970095A427 /* ChatsListDataSource.swift */,
+				918CF85F1F8688BE000F4235 /* ChatsListViewController.swift */,
+				91F9DD351F868B1F0085ABF7 /* ChatCell.swift */,
 				916836161F9A29790095A427 /* Chat.swift */,
 				9168361A1F9A2D450095A427 /* DataManager.swift */,
 			);
@@ -94,12 +125,10 @@
 		913155D21F99DF3900246248 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				911928971F9F232200AA1658 /* UI */,
 				9166B47F1F8975920081D4A9 /* MessageCell.swift */,
 				9166B47D1F8972660081D4A9 /* ChatViewController.swift */,
-				913155CC1F99DEAB00246248 /* Chat.storyboard */,
 				916836201F9B89260095A427 /* ChatDataSource.swift */,
-				9145C5171F8AD57200CED785 /* InboxCell.xib */,
-				9145C5181F8AD57300CED785 /* OutboxCell.xib */,
 				916836141F9A29650095A427 /* Message.swift */,
 			);
 			path = Chat;
@@ -190,8 +219,9 @@
 		91D776FB1F72CC3B007573E1 /* TinkoffChat */ = {
 			isa = PBXGroup;
 			children = (
-				913155D01F99DF2500246248 /* Chats List */,
+				911928961F9F22F600AA1658 /* Multipeer Connector */,
 				913155D21F99DF3900246248 /* Chat */,
+				913155D01F99DF2500246248 /* Chats List */,
 				913155D41F99DF5100246248 /* Profile */,
 				913155D31F99DF4100246248 /* UI */,
 				919D721E1F88B6220031B19F /* SupportFiles */,
@@ -284,12 +314,14 @@
 				919650E11F9501E600282F13 /* OperationDataManager.swift in Sources */,
 				918CF8601F8688BE000F4235 /* ChatsListViewController.swift in Sources */,
 				916836191F9A2A840095A427 /* Profile.swift in Sources */,
+				9119289A1F9F236C00AA1658 /* MultipeerConnector.swift in Sources */,
 				9166B4811F8975920081D4A9 /* MessageCell.swift in Sources */,
 				91D776FD1F72CC3B007573E1 /* AppDelegate.swift in Sources */,
 				919650DF1F94FD8300282F13 /* GCDDataManager.swift in Sources */,
 				9166B47E1F8972660081D4A9 /* ChatViewController.swift in Sources */,
 				91F9DD371F868B1F0085ABF7 /* ChatCell.swift in Sources */,
 				916836291F9BC9CD0095A427 /* FileStorage.swift in Sources */,
+				9119289C1F9F238200AA1658 /* ConnectionManager.swift in Sources */,
 				916836211F9B89260095A427 /* ChatDataSource.swift in Sources */,
 				916836171F9A29790095A427 /* Chat.swift in Sources */,
 				916836151F9A29650095A427 /* Message.swift in Sources */,
