@@ -23,9 +23,9 @@ class ConnectionManager {
         multiPeerConnector.delegate = self
     }
     
-    func getChatFor(_ userID: String) -> Chat? {
+    func getChatFor(_ id: String) -> Chat? {
         for chat in chats {
-            if chat.id == userID { return chat }
+            if chat.id == id { return chat }
         }
         return nil
     }
@@ -51,18 +51,18 @@ extension ConnectionManager: ConnectorDelegate {
     func didFindUser(userID: String, userName: String?) {
         if let chat = getChatFor(userID) {
             chat.isOnline = true
-            
         } else {
             let chat = Chat(id: userID, name: userName, isOnline: true)
             chats.append(chat)
         }
-        
+        delegate?.updateUI()
     }
     
     func didLoseUser(userID: String) {
         if let chat = getChatFor(userID) {
             chat.isOnline = false
         }
+        delegate?.updateUI()
     }
     
     func failedToStartBrowsingForUsers(error: Error) {

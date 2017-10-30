@@ -98,7 +98,9 @@ class MultipeerConnector: NSObject {
     
     func getPeerIDFor(_ userID: String) -> MCPeerID? {
         for peerID in sessionsByPeerID.keys {
-            if peerID.displayName == userID { return peerID }
+            if peerID.displayName == userID {
+                return peerID
+            }
         }
         return nil
     }
@@ -124,6 +126,9 @@ extension MultipeerConnector: MCNearbyServiceAdvertiserDelegate {
         let session = getSessionFor(peerID)
         let agreeInvitation = !session.connectedPeers.contains(peerID)
         invitationHandler(agreeInvitation, session)
+    }
+    func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
+        delegate?.failedToStartAdvertising(error: error)
     }
 }
 
@@ -173,13 +178,7 @@ extension MultipeerConnector: Connector {
             }
         }
     }
-    
-    
-    
 }
-
-
-
 
 func generateIdentifier() -> String {
     return ("\(arc4random_uniform(UINT32_MAX)) + \(Date.timeIntervalSinceReferenceDate) + \(arc4random_uniform(UINT32_MAX))".data(using: .utf8)?.base64EncodedString())!

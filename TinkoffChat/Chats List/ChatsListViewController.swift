@@ -67,4 +67,8 @@ extension ChatsListViewController: ConnectionManagerDelegate {
             self.updateChatsList()
         }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        updateUI()
+    }
 }
