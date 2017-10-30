@@ -71,6 +71,14 @@ class ChatCell: UITableViewCell, ChatCellConfiguration {
         return "ChatCell"
     }
     
+    func configure(with chat: Chat) {
+        name = chat.name
+        message = chat.messages.last?.text
+        date = chat.lastMessageDate
+        online = chat.isOnline
+        hasUnreadMessages = chat.hasUnreadMessages
+    }
+    
     weak var cellDelegate: ChatCellConfiguration?
     
     @IBOutlet weak var timeDateLabel: UILabel!

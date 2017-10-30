@@ -6,13 +6,22 @@
 //  Copyright © 2017 Kam Lotfull. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class ChatsListAssembly {
-    func ChatsListViewController_() -> ChatsListViewController_ {
+    func ChatsListViewControllerr() -> ChatsListViewController_ {
         let model = ChatsListModel()
         let chatsListVC = ChatsListViewController_(model: model)
         model.delegate = chatsListVC
         return chatsListVC
     }
+    
+    private func chatsListModel() -> IChatsListModel {
+        return ChatsListModel()
+    }
+    
+    private func firstService() -> FirstService {
+        return FirstService()
+    }
+    
 }

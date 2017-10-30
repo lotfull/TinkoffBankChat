@@ -19,5 +19,14 @@ protocol IChatsListModel: class {
 class ChatsListModel: IChatsListModel {
     weak var delegate: IChatsListModelDelegate?
     
+    let firstService: FirstService
+    
+    init(firstService: FirstService) {
+        self.firstService = firstService
+    }
+    
+    func fetchChatsList() {
+        firstService.updatePeersList 
+    }
     
 }
