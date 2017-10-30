@@ -1,5 +1,5 @@
 //
-//  FirstService.swift
+//  MultipeerService.swift
 //  TinkoffChat
 //
 //  Created by Kam Lotfull on 30.10.17.
@@ -10,7 +10,7 @@ import Foundation
 
 
 
-class FirstService {
+class MultipeerService {
     
     func updatePeersList(completionHandler: @escaping ([[Chat]]?, String?) -> Void) {
         

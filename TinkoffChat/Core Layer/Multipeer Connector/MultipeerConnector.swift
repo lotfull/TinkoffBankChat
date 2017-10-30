@@ -15,19 +15,6 @@ protocol Connector {
     var online: Bool { get set }
 }
 
-protocol ConnectorDelegate: class {
-    // discovering
-    func didFindUser(userID: String, userName: String?)
-    func didLoseUser(userID: String)
-    
-    // errors
-    func failedToStartBrowsingForUsers(error: Error)
-    func failedToStartAdvertising(error: Error)
-    
-    // messages
-    func didReceiveMessage(text: String, fromUser: String, toUser: String)
-}
-
 class MultipeerConnector: NSObject {
     weak var delegate: ConnectorDelegate?
     

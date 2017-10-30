@@ -47,6 +47,19 @@ class ConnectionManager {
     }
 }
 
+protocol ConnectorDelegate: class {
+    // discovering
+    func didFindUser(userID: String, userName: String?)
+    func didLoseUser(userID: String)
+    
+    // errors
+    func failedToStartBrowsingForUsers(error: Error)
+    func failedToStartAdvertising(error: Error)
+    
+    // messages
+    func didReceiveMessage(text: String, fromUser: String, toUser: String)
+}
+
 extension ConnectionManager: ConnectorDelegate {
     func didFindUser(userID: String, userName: String?) {
         if let chat = getChatFor(userID) {
