@@ -64,11 +64,14 @@ class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
     
     // MARK: - Connector Delegate
     func didFindUser(userID: String, userName: String?) {
+        print("*** didFindUser userName \(userName ?? "No Name User") userID \(userID) ")
         if let chat = getChatFor(userID) {
+            
             chat.isOnline = true
         } else {
             let chat = Chat(id: userID, name: userName, isOnline: true)
             chats.append(chat)
+            print("*** didFindUser chats.first.name \(chats.first?.name ?? "Nothing")")
         }
         newChatsUpdate?(chats)
     }

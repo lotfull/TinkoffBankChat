@@ -53,6 +53,7 @@ class MultipeerConnector: NSObject {
         super.init()
         serviceAdvertiser.delegate = self
         serviceBrowser.delegate = self
+        startServices()
     }
     
     deinit {
@@ -109,8 +110,10 @@ class MultipeerConnector: NSObject {
 extension MultipeerConnector: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         let session = getSessionFor(peerID)
+        print("*** peerID \(peerID.displayName)")
         if session.connectedPeers.contains(peerID) == false {
             browser.invitePeer(peerID, to: session, withContext: nil, timeout: 30)
+            print("*** peerID invited \(peerID.displayName)")
             invitedPeers[peerID] = info
         }
     }
@@ -136,14 +139,17 @@ extension MultipeerConnector: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case .connected:
+            print("*** peerID session \(state.rawValue) connected")
             if let invitedPeer = invitedPeers[peerID] {
                 delegate?.didFindUser(userID: peerID.displayName, userName: invitedPeer?[userNameKey])
             }
         case .notConnected:
+            print("*** peerID session \(state.rawValue) notConnected")
             sessionsByPeerID.removeValue(forKey: peerID)
             invitedPeers.removeValue(forKey: peerID)
             delegate?.didLoseUser(userID: peerID.displayName)
         case .connecting:
+            print("*** peerID session \(state.rawValue) connecting")
             print("CONNECTING")
         }
     }

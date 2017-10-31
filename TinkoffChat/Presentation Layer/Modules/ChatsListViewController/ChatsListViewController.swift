@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 
 class ChatsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ConnectionManagerDelegate {
+    
     // MARK: - ConnectionManagerDelegate
     func updateUI(with chats: [[Chat]]) {
         DispatchQueue.main.async {
@@ -21,8 +22,7 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var tableView: UITableView!
     
     private var model: IChatsListModel!
-
-    var chats = [[Chat]]()
+    var chats = [[Chat]]()// = [[Chat(id: generateIdentifier(), name: "Kamilka", isOnline: true)]]//[[Chat]]()
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -56,7 +56,7 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        model.newChatsFetch
+        model.newChatsFetch()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

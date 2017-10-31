@@ -31,6 +31,7 @@ class PeersService: IPeersService {
         connectionManager.newChatsUpdate = {
             (chats: [Chat]) in
             completionHandler(chats)
+            print("*** newChatsFetch chats.first \(chats.first?.name ?? "Nothing")")
         }
     }
 }
