@@ -9,7 +9,7 @@
 import Foundation
 
 protocol IMessagesService {
-    func newMessagesFetch(completionHandler: @escaping (([Chat]) -> Void))
+    func newMessagesFetch(completionHandler: @escaping ((Chat) -> Void))
 }
 
 class MessagesService: IMessagesService {
@@ -20,10 +20,19 @@ class MessagesService: IMessagesService {
         self.connectionManager = connectionManager
     }
     
-    func newMessagesFetch(completionHandler: @escaping (([Chat]) -> Void)) {
+    func newMessagesFetch(completionHandler: @escaping ((Chat) -> Void)) {
         connectionManager.newMessagesUpdate = {
-            (chats: [Chat]) in
-            completionHandler(chats)
+            (chat: Chat) in
+            completionHandler(chat)
         }
+    }
+    
+    func sendMessage(string: String, to chat: Chat, completionHandler: ((Bool, Error?) -> Void)?) {
+        connectionManager.sendMessage(string: string, to: chat, completionHandler: completionHandler)//) { (success, error) in
+//            if success {
+//                completionHandler!(true, nil)
+//            } else {
+//                completionHandler!(false, error)
+//            }
     }
 }

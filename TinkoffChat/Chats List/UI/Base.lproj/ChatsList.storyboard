@@ -45,7 +45,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="7f4-zC-eaX"/>
                     </view>
-                    <navigationItem key="navigationItem" id="tX0-rB-ZYf"/>
+                    <navigationItem key="navigationItem" id="tX0-rB-ZYf">
+                        <barButtonItem key="rightBarButtonItem" title="В" image="user_icon" landscapeImage="user_icon" largeContentSizeImage="user_icon" style="plain" id="78l-S9-JWL">
+                            <connections>
+                                <segue destination="9Rh-q1-OhZ" kind="presentation" id="0BF-xW-Q3a"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="PG5-A6-hFX" id="cXy-jI-aH8"/>
                     </connections>
@@ -60,7 +66,7 @@
                 <viewControllerPlaceholder storyboardName="Chat" id="1m5-KC-AJD" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2BU-ag-PYP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="68" y="-107"/>
+            <point key="canvasLocation" x="505" y="657"/>
         </scene>
         <!--Profile-->
         <scene sceneID="y6V-ww-Jsa">
@@ -70,7 +76,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vWI-LR-b4o" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="106" y="-9"/>
+            <point key="canvasLocation" x="658" y="777"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Tuu-GM-Iuj">
@@ -91,4 +97,7 @@
             <point key="canvasLocation" x="-870" y="727"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="user_icon" width="25" height="25"/>
+    </resources>
 </document>

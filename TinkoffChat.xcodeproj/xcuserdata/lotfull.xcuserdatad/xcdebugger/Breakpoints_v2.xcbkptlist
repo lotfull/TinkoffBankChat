@@ -42,7 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TinkoffChat/Multipeer Connector/MultipeerConnector.swift"
-            timestampString = "531133993.696303"
+            timestampString = "531149765.248664"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "56"
@@ -57,13 +57,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TinkoffChat/Multipeer Connector/ConnectionManager.swift"
-            timestampString = "531133993.698299"
+            filePath = "TinkoffChat/Service Layer/MessagesService.swift"
+            timestampString = "531150753.167292"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
-            landmarkName = "didFindUser(userID:userName:)"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "newMessagesFetch(completionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

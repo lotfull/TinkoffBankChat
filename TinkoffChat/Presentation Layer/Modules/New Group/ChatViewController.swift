@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ChatViewController: UIViewController {
+class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDelegate, ChatMessagesDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var inputTextView: UITextView!
@@ -18,27 +18,44 @@ class ChatViewController: UIViewController {
             sendButton.isEnabled = true//false
         }
     }
+    
     @IBOutlet weak var bottomContentConstraint: NSLayoutConstraint!
     
     var chat: Chat!
-    var connectionManager: ConnectionManager! {
-        didSet {
-            connectionManager.delegate = self
-        }
-    }
-    private lazy var dataSource = ChatDataSource(chat: chat)
+//    var connectionManager: ConnectionManager! {
+//        didSet {
+//            connectionManager.delegate = self
+//        }
+//    }
     
     @IBAction func sendButtonPressed(_ sender: Any) {
+        guard inputTextView.text != "" else { return }
         inputTextView.text = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        connectionManager.sendMessage(string: inputTextView.text, to: chat, completionHandler: nil)
+        model.sendMessage(string: inputTextView.text, to: chat) { (success, error) in
+            guard success == true else { print(error?.localizedDescription ?? "ooops"); return }
+            self.tableView.reloadData()
+        }//e(string: inputTextView.text, to: chat, completionHandler: nil)
         inputTextView.text = ""
         sendButton.isEnabled = true//false
+    }
+    
+    var model: IChatModel!
+    
+    static func initWith(model: IChatModel) -> ChatViewController {
+        let chatVC = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+        chatVC.model = model
+        return chatVC
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = chat.name
-        tableView.dataSource = dataSource
+        tableView.dataSource = self
+//        tableView.delegate = self
         addNotifications()
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
     }
@@ -46,15 +63,14 @@ class ChatViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         scrollToBottom()
+        model.newMessagesFetch()
     }
     
     @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
     
-    private func addNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
-    }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -74,9 +90,24 @@ class ChatViewController: UIViewController {
     private func enableSendButton(_ trueOrFalse: Bool) {
         sendButton.isEnabled = true///trueOrFalse && !inputTextView.text.isEmpty
     }
-}
-
-extension ChatViewController: UITextViewDelegate {
+    
+    //MARK: - UITableViewDataSource
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return chat.messages.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let message = chat.messages[indexPath.row]
+        let identifier = message.type == .inbox ? CellIdentifier.inboxCellID : CellIdentifier.outboxCellID
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        cell.selectionStyle = .none
+        if let messageCell = cell as? MessageCellConfiguration {
+            messageCell.messageText = message.text
+        }
+        return cell
+    }
+    
+    //MARK: - UITextViewDelegate
     func textViewDidChange(_ textView: UITextView) {
         let ifOnlineAndNotEmpty = chat.isOnline && textView.text != ""
         enableSendButton(ifOnlineAndNotEmpty)
@@ -89,19 +120,23 @@ extension ChatViewController: UITextViewDelegate {
         }
         return true
     }
-}
-
-extension ChatViewController: ConnectionManagerDelegate {
-    func updateUI(with chats: [[Chat]]) {
+    
+    // MARK: - ChatMessagesDelegate
+    func updateUI(with chat: Chat) {
         DispatchQueue.main.async {
+            // Тут уже вроде chat изменился. Выполним проверку
+            print("*** \n self.chat.messages.last?: \(self.chat.messages.last?.text ?? "EMPTY") \n\n NEWchat.messages.last?: \(chat.messages.last?.text ?? "EMPTY") \n")
             self.tableView.reloadData()
             self.scrollToBottom()
             self.enableSendButton(self.chat.isOnline)
         }
     }
-}
-
-extension ChatViewController {
+    
+    // MARK: - KeyBoard notifications
+    private func addNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
+    
     @objc private func keyboardNotification(notification: Notification) {
         if let userInfo = notification.userInfo {
             let endFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
@@ -123,6 +158,15 @@ extension ChatViewController {
                            completion: {_ in self.scrollToBottom() })
         }
     }
+    
+    // MARK: - DataSource
+    struct CellIdentifier {
+        static let inboxCellID = "InboxCell"
+        static let outboxCellID = "OutboxCell"
+    }
+    
+    let inboxCell = "InboxCell"
+    let outboxCell = "OutboxCell"
 }
 
 

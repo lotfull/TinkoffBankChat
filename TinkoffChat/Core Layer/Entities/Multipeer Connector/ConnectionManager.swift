@@ -11,7 +11,7 @@ import Foundation
 class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
     
     var newChatsUpdate: (([Chat]) -> ())?
-    var newMessagesUpdate: (([Chat]) -> ())?
+    var newMessagesUpdate: ((Chat) -> ())?
     
     func sendMessage(string: String, to chat: Chat, completionHandler: ((Bool, Error?) -> Void)?) {
         let message = Message(text: string, date: Date(), type: .outbox)
@@ -19,7 +19,7 @@ class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
         chat.messages.append(message)
         multiPeerConnector.sendMessage(string: string, to: chat.id) { [weak self](success, error) in
             if success {
-                self?.newMessagesUpdate?((self?.chats)!)
+                self?.newMessagesUpdate?(chat)
                 self?.newChatsUpdate?((self?.chats)!)
                 completionHandler!(success, nil)
             } else {
@@ -29,7 +29,7 @@ class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
     }
     
     
-    weak var delegate: ConnectionManagerDelegate?
+    weak var delegate: ChatsListDelegate?
     
     private var multiPeerConnector = MultipeerConnector()
     var chats = [Chat]()
@@ -73,6 +73,7 @@ class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
             chats.append(chat)
             print("*** didFindUser chats.first.name \(chats.first?.name ?? "Nothing")")
         }
+        print("*** \n\n newChatsUpdate\n")
         newChatsUpdate?(chats)
     }
     
@@ -80,22 +81,27 @@ class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
         if let chat = getChatFor(userID) {
             chat.isOnline = false
         }
+        print("*** \n\n newChatsUpdate\n")
         newChatsUpdate?(chats)
     }
     
     func failedToStartBrowsingForUsers(error: Error) {
-        print(error.localizedDescription)
+        print("*** \n\n failedToStartBrowsingForUsers\n")
+        //print(error.localizedDescription)
     }
     
     func failedToStartAdvertising(error: Error) {
-        print(error.localizedDescription)
+        print("*** \n\n failedToStartAdvertising\n")
+        //print(error.localizedDescription)
     }
     
     func didReceiveMessage(text: String, fromUser: String, toUser: String) {
         if let chat = getChatFor(fromUser) {
             let message = Message(text: text, date: Date(), type: .inbox)
             chat.messages.append(message)
-            newMessagesUpdate?(chats)
+            print("*** \n\n newChatsUpdate\n")
+            print("*** \n\n newMessagesUpdate\n")
+            newMessagesUpdate?(chat)
             newChatsUpdate?(chats)
         }
     }

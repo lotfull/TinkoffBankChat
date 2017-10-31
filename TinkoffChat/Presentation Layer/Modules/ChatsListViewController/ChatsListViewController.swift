@@ -9,9 +9,9 @@
 import UIKit
 import CoreData
 
-class ChatsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ConnectionManagerDelegate {
+class ChatsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ChatsListDelegate {
     
-    // MARK: - ConnectionManagerDelegate
+    // MARK: - ChatsListDelegate
     func updateUI(with chats: [[Chat]]) {
         DispatchQueue.main.async {
             self.chats = chats
@@ -60,20 +60,26 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "ChatPressed", sender: nil)
+        let chat = chats[indexPath.section][indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
+        let chatVC = ChatAssembly().chatViewController()
+        chatVC.chat = chat
+        self.navigationController?.pushViewController(chatVC, animated: true)
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let chatVC = segue.destination as? ChatViewController,
-            let selectedIndexPath = tableView.indexPathForSelectedRow,
-            let selectedCell = tableView(tableView, cellForRowAt: selectedIndexPath) as? ChatCell {
-            let selectedChat  = chat(for: selectedIndexPath)
-            chatVC.chat = selectedChat
-            chatVC.navigationItem.title = selectedCell.name
-//            chatVC.connectionManager = connectionManager
-            tableView.deselectRow(at: selectedIndexPath, animated: true)
-        }
-    }
+//
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if let chatVC = segue.destination as? ChatViewController,
+//            let selectedIndexPath = tableView.indexPathForSelectedRow
+////            , let selectedCell = tableView(tableView, cellForRowAt: selectedIndexPath) as? ChatCell
+//        {
+//            let selectedChat = chat(for: selectedIndexPath)
+//            chatVC.chat = selectedChat
+//            chatVC.navigationItem.title = selectedChat.name
+//            chatVC.model = chatModel
+////            chatVC.connectionManager = connectionManager
+//            tableView.deselectRow(at: selectedIndexPath, animated: true)
+//        }
+//    }
     
     private func updateChatsList() {
         tableView.reloadData()

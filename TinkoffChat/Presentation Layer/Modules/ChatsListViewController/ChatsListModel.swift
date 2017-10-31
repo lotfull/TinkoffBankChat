@@ -9,17 +9,17 @@
 import Foundation
 
 protocol IChatsListModel: class {
-    weak var delegate: ConnectionManagerDelegate? { get set }
+    weak var delegate: ChatsListDelegate? { get set }
     func newChatsFetch()
 }
 
-protocol ConnectionManagerDelegate: class {
+protocol ChatsListDelegate: class {
     func updateUI(with chats: [[Chat]])
 }
 
 class ChatsListModel: IChatsListModel {
     
-    weak var delegate: ConnectionManagerDelegate?
+    weak var delegate: ChatsListDelegate?
     
     let peersService:
     PeersService
