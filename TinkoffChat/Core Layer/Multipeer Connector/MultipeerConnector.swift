@@ -15,11 +15,25 @@ protocol Connector {
     var online: Bool { get set }
 }
 
-class MultipeerConnector: NSObject {
-    weak var delegate: ConnectorDelegate?
+class MultipeerConnector: NSObject, Connector {
     
+    // MARK: - protocol Connector
+    func sendMessage(string: String, to userID: String, completionHandler: ((Bool, Error?) -> Void)?) {
+        if let peerID = getPeerIDFor(userID),
+            let session = sessionsByPeerID[peerID] {
+            do {
+                try session.send(serializeMessageWith(string),
+                                 toPeers: [peerID], with: .reliable)
+                completionHandler?(true, nil)
+            } catch {
+                completionHandler?(false, error)
+            }
+        }
+    }
+    weak var delegate: ConnectorDelegate?
     var online = false {
         didSet {
+            print("set online")
             online ? startServices() : stopServices()
         }
     }
@@ -64,6 +78,7 @@ class MultipeerConnector: NSObject {
     }
     
     func startServices() {
+        print("startServices")
         serviceBrowser.startBrowsingForPeers()
         serviceAdvertiser.startAdvertisingPeer()
     }
@@ -152,20 +167,6 @@ extension MultipeerConnector: MCSessionDelegate {
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) { }
 }
 
-extension MultipeerConnector: Connector {
-    func sendMessage(string: String, to userID: String, completionHandler: ((Bool, Error?) -> Void)?) {
-        if let peerID = getPeerIDFor(userID),
-            let session = sessionsByPeerID[peerID] {
-            do {
-                try session.send(serializeMessageWith(string),
-                                 toPeers: [peerID], with: .reliable)
-                completionHandler?(true, nil)
-            } catch {
-                completionHandler?(false, error)
-            }
-        }
-    }
-}
 
 func generateIdentifier() -> String {
     return ("\(arc4random_uniform(UINT32_MAX)) + \(Date.timeIntervalSinceReferenceDate) + \(arc4random_uniform(UINT32_MAX))".data(using: .utf8)?.base64EncodedString())!

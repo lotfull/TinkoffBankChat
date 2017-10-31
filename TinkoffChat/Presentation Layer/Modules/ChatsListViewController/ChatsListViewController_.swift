@@ -10,33 +10,38 @@ import UIKit
 
 class ChatsListViewController_: UIViewController, IChatsListModelDelegate, UITableViewDelegate, UITableViewDataSource {
     
-    
-    
-    private let model: IChatsListModel
-    
-    init(model: IChatsListModel) {
-        self.model = model
+    var model: IChatsListModel!
+
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
-    
+//
+//    convenience init(model: IChatsListModel) {
+//        self.init()
+//        self.model = model
+//    }
+//
     required init?(coder aDecoder: NSCoder) {
-        fatalError("Lol")
+        super.init(coder: aDecoder)
     }
     
-    @IBOutlet weak var messagesTableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureTableView()
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        //configureTableView()
+
+    }
     
     private func configureTableView() {
-        messagesTableView.delegate = self
-        messagesTableView.dataSource = self
-        messagesTableView.register(ChatCell.self, forCellReuseIdentifier: ChatCell.identifier)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(ChatCell.self, forCellReuseIdentifier: ChatCell.identifier)
     }
     
     private var dataSource: [[Chat]] = [[], []]
@@ -53,12 +58,10 @@ class ChatsListViewController_: UIViewController, IChatsListModelDelegate, UITab
         return cell
     }
     
-    
-    
     func setup(dataSource: [[Chat]]) {
         self.dataSource = dataSource
         DispatchQueue.main.async {
-            self.messagesTableView.reloadData()
+            self.tableView.reloadData()
         }
     }
 }

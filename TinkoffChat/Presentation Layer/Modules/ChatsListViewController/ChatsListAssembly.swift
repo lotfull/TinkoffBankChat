@@ -10,18 +10,26 @@ import UIKit
 
 class ChatsListAssembly {
     func ChatsListViewControllerr() -> ChatsListViewController_ {
-        let model = ChatsListModel()
-        let chatsListVC = ChatsListViewController_(model: model)
+        let model = chatsListModel()
+        let chatsListVC = initVC(with: model)
         model.delegate = chatsListVC
         return chatsListVC
     }
     
-    private func chatsListModel() -> IChatsListModel {
-        return ChatsListModel()
+    private func chatsListModel() -> ChatsListModel {
+        return ChatsListModel(multipeerService: multipeerService())
     }
     
-    private func firstService() -> FirstService {
-        return FirstService()
+    private func multipeerService() -> MultipeerService {
+        return MultipeerService(connector: multipeerConnector)
+    }
+    
+    private let multipeerConnector = MultipeerConnector()
+    
+    private func initVC(with model: ChatsListModel) -> ChatsListViewController_ {
+        let chatsListVC_ = UIStoryboard(name: "ChatsList", bundle: nil).instantiateViewController(withIdentifier: "ChatsListViewController_") as! ChatsListViewController_
+        chatsListVC_.model = model
+        return chatsListVC_
     }
     
 }

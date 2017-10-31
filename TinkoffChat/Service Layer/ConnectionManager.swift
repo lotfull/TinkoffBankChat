@@ -13,6 +13,7 @@ protocol ConnectionManagerDelegate: class {
 }
 
 class ConnectionManager {
+    
     weak var delegate: ConnectionManagerDelegate?
     
     let multiPeerConnector: MultipeerConnector
@@ -45,19 +46,6 @@ class ConnectionManager {
         multiPeerConnector.sendMessage(string: text, to: chat.id, completionHandler: nil)
         delegate?.updateUI()
     }
-}
-
-protocol ConnectorDelegate: class {
-    // discovering
-    func didFindUser(userID: String, userName: String?)
-    func didLoseUser(userID: String)
-    
-    // errors
-    func failedToStartBrowsingForUsers(error: Error)
-    func failedToStartAdvertising(error: Error)
-    
-    // messages
-    func didReceiveMessage(text: String, fromUser: String, toUser: String)
 }
 
 extension ConnectionManager: ConnectorDelegate {

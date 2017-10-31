@@ -18,11 +18,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.main.bounds)
+        
+        
+//        let initialViewController = storyboard.instantiateViewController(withIdentifier: "ChatsListViewController_")
+        
         let controller = rootAssembly.ChatsListModule.ChatsListViewControllerr()
-        window?.rootViewController = controller
+        
+        window?.rootViewController = controller// initialViewController//controller
         window?.makeKeyAndVisible()
         return true
     }
    
+    
 }
 

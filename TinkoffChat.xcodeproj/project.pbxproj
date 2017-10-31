@@ -30,7 +30,7 @@
 		9198E4931FA747FA00A5787D /* ChatsListAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4921FA747FA00A5787D /* ChatsListAssembly.swift */; };
 		9198E4951FA7486200A5787D /* ChatsListViewController_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4941FA7486200A5787D /* ChatsListViewController_.swift */; };
 		9198E4971FA748D900A5787D /* ChatsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4961FA748D900A5787D /* ChatsListModel.swift */; };
-		9198E4991FA7555700A5787D /* FirstService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4981FA7555700A5787D /* FirstService.swift */; };
+		9198E4991FA7555700A5787D /* MultipeerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4981FA7555700A5787D /* MultipeerService.swift */; };
 		91CDAEC71F7C0FA300F3DCB6 /* Lection 2 in Resources */ = {isa = PBXBuildFile; fileRef = 91CDAEC61F7C0FA300F3DCB6 /* Lection 2 */; };
 		91D776FD1F72CC3B007573E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D776FC1F72CC3B007573E1 /* AppDelegate.swift */; };
 		91D776FF1F72CC3B007573E1 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D776FE1F72CC3B007573E1 /* ProfileViewController.swift */; };
@@ -65,7 +65,7 @@
 		9198E4921FA747FA00A5787D /* ChatsListAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListAssembly.swift; sourceTree = "<group>"; };
 		9198E4941FA7486200A5787D /* ChatsListViewController_.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListViewController_.swift; sourceTree = "<group>"; };
 		9198E4961FA748D900A5787D /* ChatsListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListModel.swift; sourceTree = "<group>"; };
-		9198E4981FA7555700A5787D /* FirstService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstService.swift; sourceTree = "<group>"; };
+		9198E4981FA7555700A5787D /* MultipeerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerService.swift; sourceTree = "<group>"; };
 		91CDAEC61F7C0FA300F3DCB6 /* Lection 2 */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Lection 2"; sourceTree = "<group>"; };
 		91D776F91F72CC3B007573E1 /* TinkoffChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinkoffChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D776FC1F72CC3B007573E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -93,7 +93,6 @@
 			isa = PBXGroup;
 			children = (
 				911928991F9F236C00AA1658 /* MultipeerConnector.swift */,
-				9119289B1F9F238200AA1658 /* ConnectionManager.swift */,
 			);
 			path = "Multipeer Connector";
 			sourceTree = "<group>";
@@ -202,7 +201,8 @@
 		9143CB971FA5B4A6005DE096 /* Service Layer */ = {
 			isa = PBXGroup;
 			children = (
-				9198E4981FA7555700A5787D /* FirstService.swift */,
+				9119289B1F9F238200AA1658 /* ConnectionManager.swift */,
+				9198E4981FA7555700A5787D /* MultipeerService.swift */,
 			);
 			path = "Service Layer";
 			sourceTree = "<group>";
@@ -210,6 +210,7 @@
 		9143CB981FA5B4AD005DE096 /* Core Layer */ = {
 			isa = PBXGroup;
 			children = (
+				911928961F9F22F600AA1658 /* Multipeer Connector */,
 				91D776FC1F72CC3B007573E1 /* AppDelegate.swift */,
 				9198E48F1FA7473000A5787D /* RootAssembly.swift */,
 			);
@@ -236,8 +237,8 @@
 			isa = PBXGroup;
 			children = (
 				9198E4921FA747FA00A5787D /* ChatsListAssembly.swift */,
-				9198E4941FA7486200A5787D /* ChatsListViewController_.swift */,
 				9198E4961FA748D900A5787D /* ChatsListModel.swift */,
+				9198E4941FA7486200A5787D /* ChatsListViewController_.swift */,
 			);
 			path = ChatsListViewController;
 			sourceTree = "<group>";
@@ -279,7 +280,6 @@
 				9143CB961FA5B49A005DE096 /* Presentation Layer */,
 				9143CB971FA5B4A6005DE096 /* Service Layer */,
 				9143CB981FA5B4AD005DE096 /* Core Layer */,
-				911928961F9F22F600AA1658 /* Multipeer Connector */,
 				913155D21F99DF3900246248 /* Chat */,
 				913155D01F99DF2500246248 /* Chats List */,
 				913155D41F99DF5100246248 /* Profile */,
@@ -371,7 +371,7 @@
 			files = (
 				9198E4951FA7486200A5787D /* ChatsListViewController_.swift in Sources */,
 				91D776FF1F72CC3B007573E1 /* ProfileViewController.swift in Sources */,
-				9198E4991FA7555700A5787D /* FirstService.swift in Sources */,
+				9198E4991FA7555700A5787D /* MultipeerService.swift in Sources */,
 				919650E11F9501E600282F13 /* OperationDataManager.swift in Sources */,
 				918CF8601F8688BE000F4235 /* ChatsListViewController.swift in Sources */,
 				916836191F9A2A840095A427 /* Profile.swift in Sources */,
