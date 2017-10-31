@@ -30,7 +30,7 @@ class ChatViewController: UIViewController {
     
     @IBAction func sendButtonPressed(_ sender: Any) {
         inputTextView.text = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        connectionManager.sendMessage(text: inputTextView.text, to: chat)
+        connectionManager.sendMessage(string: inputTextView.text, to: chat, completionHandler: nil)
         inputTextView.text = ""
         sendButton.isEnabled = true//false
     }
@@ -92,7 +92,7 @@ extension ChatViewController: UITextViewDelegate {
 }
 
 extension ChatViewController: ConnectionManagerDelegate {
-    func updateUI() {
+    func updateUI(with chats: [[Chat]]) {
         DispatchQueue.main.async {
             self.tableView.reloadData()
             self.scrollToBottom()

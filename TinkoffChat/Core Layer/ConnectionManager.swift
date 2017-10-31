@@ -8,33 +8,30 @@
 
 import Foundation
 
-class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
+protocol ConnectionManagerProtocol: class {
+    //func updateUI()
+    func sendMessage(string: String, to userID: String, completionHandler: ((_ success: Bool, _ error: Error?) -> Void)?)
+    var chatsUpdate: ((_ chats: [Chat]) -> Void)? { get set }
+    var messagesUpdate: ((_ messages: [Message]) -> Void)? { get set }
+}
+
+protocol ConnectorDelegate: class {
+    func didFindUser(userID: String, userName: String?)
+    func didLoseUser(userID: String)
+    func failedToStartBrowsingForUsers(error: Error)
+    func failedToStartAdvertising(error: Error)
+    func didReceiveMessage(text: String, fromUser: String, toUser: String)
+}
+
+class ConnectionManager: ConnectionManagerProtocol, ConnectorDelegate {
     
-    var newChatsUpdate: (([Chat]) -> ())?
-    var newMessagesUpdate: (([Chat]) -> ())?
+    weak var delegate: ConnectionManagerDelegate_?
     
-    func sendMessage(string: String, to chat: Chat, completionHandler: ((Bool, Error?) -> Void)?) {
-        let message = Message(text: string, date: Date(), type: .outbox)
-        message.makeReaded()
-        chat.messages.append(message)
-        multiPeerConnector.sendMessage(string: string, to: chat.id) { [weak self](success, error) in
-            if success {
-                self?.newMessagesUpdate?((self?.chats)!)
-                self?.newChatsUpdate?((self?.chats)!)
-                completionHandler!(success, nil)
-            } else {
-                completionHandler!(false, error)
-            }
-        }
-    }
-    
-    
-    weak var delegate: ConnectionManagerDelegate?
-    
-    private var multiPeerConnector = MultipeerConnector()
+    let multiPeerConnector: MultipeerConnector
     var chats = [Chat]()
     
-    init() {
+    init(connector: MultipeerConnector) {
+        self.multiPeerConnector = connector
         multiPeerConnector.delegate = self
     }
     
@@ -53,16 +50,16 @@ class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
         multiPeerConnector.online = enabled
     }
     
-//    func sendMessage(text: String, to chat: Chat) {
-//        let message = Message(text: text, date: Date(), type: .outbox)
-//        message.makeReaded()
-//        chat.messages.append(message)
-//        multiPeerConnector.sendMessage(string: text, to: chat.id, completionHandler: nil)
-//        newMessagesUpdate(chats)
-//        newChatsUpdate(chats)
-//    }
-    
-    // MARK: - Connector Delegate
+    func sendMessage(text: String, to chat: Chat) {
+        let message = Message(text: text, date: Date(), type: .outbox)
+        message.makeReaded()
+        chat.messages.append(message)
+        multiPeerConnector.sendMessage(string: text, to: chat.id, completionHandler: nil)
+        delegate?.updateUI()
+    }
+}
+
+extension ConnectionManager: ConnectorDelegate {
     func didFindUser(userID: String, userName: String?) {
         if let chat = getChatFor(userID) {
             chat.isOnline = true
@@ -70,14 +67,14 @@ class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
             let chat = Chat(id: userID, name: userName, isOnline: true)
             chats.append(chat)
         }
-        newChatsUpdate?(chats)
+        delegate?.updateUI()
     }
     
     func didLoseUser(userID: String) {
         if let chat = getChatFor(userID) {
             chat.isOnline = false
         }
-        newChatsUpdate?(chats)
+        delegate?.updateUI()
     }
     
     func failedToStartBrowsingForUsers(error: Error) {
@@ -92,8 +89,9 @@ class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
         if let chat = getChatFor(fromUser) {
             let message = Message(text: text, date: Date(), type: .inbox)
             chat.messages.append(message)
-            newMessagesUpdate?(chats)
-            newChatsUpdate?(chats)
+            delegate?.updateUI()
         }
     }
+    
+    
 }

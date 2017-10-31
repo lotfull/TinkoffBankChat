@@ -9,19 +9,24 @@
 import UIKit
 
 class ChatsListAssembly {
-    func ChatsListViewControllerr() -> ChatsListViewController_ {
-        let model = ChatsListModel()
-        let chatsListVC = ChatsListViewController_(model: model)
+    
+    func chatsListViewController() -> ChatsListViewController {
+        let model = chatsListModel()
+        let chatsListVC = ChatsListViewController.initWith(model: model)
         model.delegate = chatsListVC
         return chatsListVC
     }
     
     private func chatsListModel() -> IChatsListModel {
-        return ChatsListModel()
+        return ChatsListModel(peersService: peersService())
     }
     
-    private func firstService() -> FirstService {
-        return FirstService()
+    private func peersService() -> PeersService {
+        return PeersService(connectionManager: connectionManager())
+    }
+    
+    private func connectionManager() -> ConnectionManagerProtocol {
+        return RootAssembly.connectionManager
     }
     
 }

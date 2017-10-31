@@ -18,7 +18,6 @@
 		916836171F9A29790095A427 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916836161F9A29790095A427 /* Chat.swift */; };
 		916836191F9A2A840095A427 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916836181F9A2A840095A427 /* Profile.swift */; };
 		916836211F9B89260095A427 /* ChatDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916836201F9B89260095A427 /* ChatDataSource.swift */; };
-		916836231F9B8E970095A427 /* ChatsListDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916836221F9B8E970095A427 /* ChatsListDataSource.swift */; };
 		916836251F9B9E860095A427 /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 916836241F9B9E860095A427 /* Profile.storyboard */; };
 		916836291F9BC9CD0095A427 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916836281F9BC9CD0095A427 /* FileStorage.swift */; };
 		9181B4961F8026A70088970D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9181B4951F8026A70088970D /* README.md */; };
@@ -28,9 +27,9 @@
 		919650E11F9501E600282F13 /* OperationDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919650E01F9501E600282F13 /* OperationDataManager.swift */; };
 		9198E4901FA7473000A5787D /* RootAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E48F1FA7473000A5787D /* RootAssembly.swift */; };
 		9198E4931FA747FA00A5787D /* ChatsListAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4921FA747FA00A5787D /* ChatsListAssembly.swift */; };
-		9198E4951FA7486200A5787D /* ChatsListViewController_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4941FA7486200A5787D /* ChatsListViewController_.swift */; };
 		9198E4971FA748D900A5787D /* ChatsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4961FA748D900A5787D /* ChatsListModel.swift */; };
-		9198E4991FA7555700A5787D /* FirstService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4981FA7555700A5787D /* FirstService.swift */; };
+		9198E4991FA7555700A5787D /* PeersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4981FA7555700A5787D /* PeersService.swift */; };
+		9198E4A51FA84F1A00A5787D /* MessagesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4A41FA84F1A00A5787D /* MessagesService.swift */; };
 		91CDAEC71F7C0FA300F3DCB6 /* Lection 2 in Resources */ = {isa = PBXBuildFile; fileRef = 91CDAEC61F7C0FA300F3DCB6 /* Lection 2 */; };
 		91D776FD1F72CC3B007573E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D776FC1F72CC3B007573E1 /* AppDelegate.swift */; };
 		91D776FF1F72CC3B007573E1 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D776FE1F72CC3B007573E1 /* ProfileViewController.swift */; };
@@ -53,7 +52,6 @@
 		916836161F9A29790095A427 /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		916836181F9A2A840095A427 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		916836201F9B89260095A427 /* ChatDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDataSource.swift; sourceTree = "<group>"; };
-		916836221F9B8E970095A427 /* ChatsListDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListDataSource.swift; sourceTree = "<group>"; };
 		916836241F9B9E860095A427 /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		916836281F9BC9CD0095A427 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		9181B4951F8026A70088970D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -63,9 +61,9 @@
 		919650E01F9501E600282F13 /* OperationDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationDataManager.swift; sourceTree = "<group>"; };
 		9198E48F1FA7473000A5787D /* RootAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootAssembly.swift; sourceTree = "<group>"; };
 		9198E4921FA747FA00A5787D /* ChatsListAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListAssembly.swift; sourceTree = "<group>"; };
-		9198E4941FA7486200A5787D /* ChatsListViewController_.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListViewController_.swift; sourceTree = "<group>"; };
 		9198E4961FA748D900A5787D /* ChatsListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListModel.swift; sourceTree = "<group>"; };
-		9198E4981FA7555700A5787D /* FirstService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstService.swift; sourceTree = "<group>"; };
+		9198E4981FA7555700A5787D /* PeersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeersService.swift; sourceTree = "<group>"; };
+		9198E4A41FA84F1A00A5787D /* MessagesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesService.swift; sourceTree = "<group>"; };
 		91CDAEC61F7C0FA300F3DCB6 /* Lection 2 */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Lection 2"; sourceTree = "<group>"; };
 		91D776F91F72CC3B007573E1 /* TinkoffChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinkoffChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D776FC1F72CC3B007573E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -112,15 +110,13 @@
 				91D777001F72CC3B007573E1 /* ChatsList.storyboard */,
 				91F9DD361F868B1F0085ABF7 /* ChatCell.xib */,
 			);
-			path = UI;
+			name = UI;
+			path = "../../../Chats List/UI";
 			sourceTree = "<group>";
 		};
 		913155D01F99DF2500246248 /* Chats List */ = {
 			isa = PBXGroup;
 			children = (
-				911928981F9F233700AA1658 /* UI */,
-				916836221F9B8E970095A427 /* ChatsListDataSource.swift */,
-				918CF85F1F8688BE000F4235 /* ChatsListViewController.swift */,
 				91F9DD351F868B1F0085ABF7 /* ChatCell.swift */,
 				916836161F9A29790095A427 /* Chat.swift */,
 			);
@@ -202,7 +198,8 @@
 		9143CB971FA5B4A6005DE096 /* Service Layer */ = {
 			isa = PBXGroup;
 			children = (
-				9198E4981FA7555700A5787D /* FirstService.swift */,
+				9198E4981FA7555700A5787D /* PeersService.swift */,
+				9198E4A41FA84F1A00A5787D /* MessagesService.swift */,
 			);
 			path = "Service Layer";
 			sourceTree = "<group>";
@@ -235,8 +232,9 @@
 		9198E4911FA747E700A5787D /* ChatsListViewController */ = {
 			isa = PBXGroup;
 			children = (
+				911928981F9F233700AA1658 /* UI */,
 				9198E4921FA747FA00A5787D /* ChatsListAssembly.swift */,
-				9198E4941FA7486200A5787D /* ChatsListViewController_.swift */,
+				918CF85F1F8688BE000F4235 /* ChatsListViewController.swift */,
 				9198E4961FA748D900A5787D /* ChatsListModel.swift */,
 			);
 			path = ChatsListViewController;
@@ -369,9 +367,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9198E4951FA7486200A5787D /* ChatsListViewController_.swift in Sources */,
 				91D776FF1F72CC3B007573E1 /* ProfileViewController.swift in Sources */,
-				9198E4991FA7555700A5787D /* FirstService.swift in Sources */,
+				9198E4991FA7555700A5787D /* PeersService.swift in Sources */,
 				919650E11F9501E600282F13 /* OperationDataManager.swift in Sources */,
 				918CF8601F8688BE000F4235 /* ChatsListViewController.swift in Sources */,
 				916836191F9A2A840095A427 /* Profile.swift in Sources */,
@@ -383,12 +380,12 @@
 				9166B47E1F8972660081D4A9 /* ChatViewController.swift in Sources */,
 				91F9DD371F868B1F0085ABF7 /* ChatCell.swift in Sources */,
 				916836291F9BC9CD0095A427 /* FileStorage.swift in Sources */,
+				9198E4A51FA84F1A00A5787D /* MessagesService.swift in Sources */,
 				9119289C1F9F238200AA1658 /* ConnectionManager.swift in Sources */,
 				916836211F9B89260095A427 /* ChatDataSource.swift in Sources */,
 				916836171F9A29790095A427 /* Chat.swift in Sources */,
 				916836151F9A29650095A427 /* Message.swift in Sources */,
 				9198E4901FA7473000A5787D /* RootAssembly.swift in Sources */,
-				916836231F9B8E970095A427 /* ChatsListDataSource.swift in Sources */,
 				9198E4971FA748D900A5787D /* ChatsListModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

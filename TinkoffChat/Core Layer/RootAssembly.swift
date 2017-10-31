@@ -10,4 +10,6 @@ import Foundation
 
 class RootAssembly {
     var ChatsListModule: ChatsListAssembly = ChatsListAssembly()
+    
+    static let connectionManager: ConnectionManagerProtocol = ConnectionManager()
 }
