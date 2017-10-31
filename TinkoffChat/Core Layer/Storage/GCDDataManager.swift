@@ -9,11 +9,6 @@
 import Foundation
 
 class GCDDataManager: ProfileManager {
-    
-    private let serialQueue = DispatchQueue(label: "com.lotfull.gcdDataManagerQueue")
-    private let fileStorage = FileStorage()
-    let queue = DispatchQueue(label: "editProfileWithGCD.queue")
-    
     func loadProfile(completion: @escaping (Profile?, Error?) -> Void) {
         serialQueue.async {
             if let profile = self.fileStorage.loadProfile() {
@@ -46,6 +41,10 @@ class GCDDataManager: ProfileManager {
         }
     }
     
+    private let serialQueue = DispatchQueue(label: "com.lotfull.gcdDataManagerQueue")
+    private let fileStorage = FileStorage()
+    
+    let queue = DispatchQueue(label: "editProfileWithGCD.queue")
     func saveObjects(_ objects: [Any?], toFile: String) -> Bool {
         return NSKeyedArchiver.archiveRootObject(objects, toFile: toFile)
     }

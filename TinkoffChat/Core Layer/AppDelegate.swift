@@ -14,7 +14,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    private let rootAssembly = RootAssembly()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        
+        let controller = rootAssembly.ChatsListModule.chatsListViewController()
+        let navigationViewController = UINavigationController.init(rootViewController: controller)
+        window?.rootViewController = navigationViewController
+        window?.makeKeyAndVisible()
         return true
     }
    
