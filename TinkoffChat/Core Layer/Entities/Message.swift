@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Message {
+class Message {
     let type: MessageType
     let text: String
     let date: Date

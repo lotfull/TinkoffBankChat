@@ -24,7 +24,7 @@
         <!--Профиль-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ProfileViewController" customModule="TinkoffChat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileViewController" id="BYZ-38-t0r" customClass="ProfileViewController" customModule="TinkoffChat" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -112,7 +112,7 @@
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="editProfileWithGCD:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sLD-gE-yiS"/>
+                                                    <action selector="saveProfileButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sc5-5V-lvK"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -170,7 +170,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="placeholder-user" width="600" height="600"/>
+        <image name="placeholder-user" width="300" height="300"/>
         <image name="slr-camera-2-xxl" width="256" height="256"/>
     </resources>
 </document>

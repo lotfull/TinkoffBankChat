@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    fileprivate let rootAssembly = RootAssembly()
+    let rootAssembly = RootAssembly()
 //    lazy var coreDataStack = CoreDataStack(modelName: "SurfJournalModel")
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -25,16 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         
-        guard let chatsListViewController = navigationController.topViewController as? ChatsListViewController else {
-            fatalError("Application Storyboard mis-configuration")
-        }
-        chatsListViewController.coreDataStack = coreDataStack
+//        guard let chatsListViewController = navigationController.topViewController as? ChatsListViewController else {
+//            fatalError("Application Storyboard mis-configuration")
+//        }
+//        chatsListViewController.coreDataStack = CoreDataStack
         
         return true
-    }
-    
-    func applicationWillTerminate(_ application: UIApplication) {
-        self.saveContext()
     }
 }
 

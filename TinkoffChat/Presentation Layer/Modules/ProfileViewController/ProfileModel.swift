@@ -9,11 +9,22 @@
 import Foundation
 
 protocol IProfileModel: class {
-    // func A ()
+    weak var delegate: ProfileDelegate? { get set }
+    func loadProfile(completion: @escaping (Profile?, Error?) -> Void)
+    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void)
+}
+
+protocol ProfileDelegate: class {
+    func updateUI(firstTime: Bool)
 }
 
 class ProfileModel: IProfileModel {
-//    weak var delegate:
+    
+    func loadProfile(completion: @escaping (Profile?, Error?) -> Void) {
+        profileService.loadProfile(completion: completion)
+    }
+    
+    weak var delegate: ProfileDelegate?
     
     let profileService: ProfileService
     
@@ -21,7 +32,11 @@ class ProfileModel: IProfileModel {
         self.profileService = profileService
     }
     
-    // func A () { ... }
+    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) {
+        profileService.saveProfile(profile, completion: completion)
+    }
+    
+    
     
     
 }

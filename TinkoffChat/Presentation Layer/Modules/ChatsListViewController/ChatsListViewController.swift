@@ -82,6 +82,12 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
 //            tableView.deselectRow(at: selectedIndexPath, animated: true)
 //        }
 //    }
+    @IBAction func presentProfile(_ sender: Any) {
+        let profileVC = ProfileAssembly().profileViewController()
+        self.present(profileVC, animated: true, completion: nil)
+    }
+    
+    
     
     private func updateChatsList() {
         tableView.reloadData()

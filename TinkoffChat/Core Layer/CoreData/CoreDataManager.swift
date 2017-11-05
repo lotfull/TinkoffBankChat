@@ -54,18 +54,20 @@ class CoreDataManager {
         return appUser
     }
     
-    static func saveUserProfile(_ profile: Profile?, success: Void) {
-        if let saveContext = CoreDataManager.coreDataStack?.saveContext {
+    static func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) {
+        if let saveContext = coreDataStack?.saveContext {
             guard let appUser = CoreDataManager.findOrInsertAppUser(in: saveContext) else {
-                print("appUser finding incorrect")
+                print("findOrInsertAppUser incorrect")
+                print(#function)
+                completion(false, CoreDataError.saveError)
                 return
             }
-            appUser.name = profile?.name
-            appUser.info = profile?.info
-            if profile?.image != nil {
-                appUser.image = UIImagePNGRepresentation((profile?.image)!) as Data?
+            appUser.name = profile.name
+            appUser.info = profile.info
+            if profile.image != nil {
+                appUser.image = UIImagePNGRepresentation((profile.image)!) as Data?
             }
-            CoreDataManager.coreDataStack?.performSave(context: (self.coreDataStack?.saveContext)!, completionHandler:{ success })
+            CoreDataManager.coreDataStack?.performSave(context: (CoreDataManager.coreDataStack?.saveContext)!, completion: completion)
             
         }
     }

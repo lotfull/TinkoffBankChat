@@ -22,11 +22,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDel
     @IBOutlet weak var bottomContentConstraint: NSLayoutConstraint!
     
     var chat: Chat!
-//    var connectionManager: ConnectionManager! {
-//        didSet {
-//            connectionManager.delegate = self
-//        }
-//    }
     
     @IBAction func sendButtonPressed(_ sender: Any) {
         guard inputTextView.text != "" else { return }

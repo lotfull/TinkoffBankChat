@@ -6,12 +6,14 @@
 //  Copyright © 2017 Kam Lotfull. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class ProfileAssembly {
     func profileViewController() -> ProfileViewController {
         let model = profileModel()
-        
+        let profileVC = ProfileViewController.initWith(model: model)
+        model.delegate = profileVC
+        return profileVC
     }
     
     func profileModel() -> IProfileModel {
