@@ -21,11 +21,9 @@
 		916836171F9A29790095A427 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916836161F9A29790095A427 /* Chat.swift */; };
 		916836191F9A2A840095A427 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916836181F9A2A840095A427 /* Profile.swift */; };
 		916836251F9B9E860095A427 /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 916836241F9B9E860095A427 /* Profile.storyboard */; };
-		916836291F9BC9CD0095A427 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916836281F9BC9CD0095A427 /* FileStorage.swift */; };
 		9181B4961F8026A70088970D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9181B4951F8026A70088970D /* README.md */; };
 		918CF85D1F854352000F4235 /* Lection 3.txt in Resources */ = {isa = PBXBuildFile; fileRef = 918CF85C1F854352000F4235 /* Lection 3.txt */; };
 		918CF8601F8688BE000F4235 /* ChatsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918CF85F1F8688BE000F4235 /* ChatsListViewController.swift */; };
-		919650DF1F94FD8300282F13 /* GCDDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919650DE1F94FD8300282F13 /* GCDDataManager.swift */; };
 		9198E4901FA7473000A5787D /* RootAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E48F1FA7473000A5787D /* RootAssembly.swift */; };
 		9198E4931FA747FA00A5787D /* ChatsListAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4921FA747FA00A5787D /* ChatsListAssembly.swift */; };
 		9198E4971FA748D900A5787D /* ChatsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9198E4961FA748D900A5787D /* ChatsListModel.swift */; };
@@ -63,11 +61,9 @@
 		916836161F9A29790095A427 /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		916836181F9A2A840095A427 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		916836241F9B9E860095A427 /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
-		916836281F9BC9CD0095A427 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		9181B4951F8026A70088970D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		918CF85C1F854352000F4235 /* Lection 3.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Lection 3.txt"; sourceTree = "<group>"; };
 		918CF85F1F8688BE000F4235 /* ChatsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListViewController.swift; sourceTree = "<group>"; };
-		919650DE1F94FD8300282F13 /* GCDDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDDataManager.swift; sourceTree = "<group>"; };
 		9198E48F1FA7473000A5787D /* RootAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootAssembly.swift; sourceTree = "<group>"; };
 		9198E4921FA747FA00A5787D /* ChatsListAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListAssembly.swift; sourceTree = "<group>"; };
 		9198E4961FA748D900A5787D /* ChatsListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListModel.swift; sourceTree = "<group>"; };
@@ -155,16 +151,6 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
-		913155D51F99DFA900246248 /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-				919650DE1F94FD8300282F13 /* GCDDataManager.swift */,
-				916836281F9BC9CD0095A427 /* FileStorage.swift */,
-			);
-			name = Storage;
-			path = ../Profile/Storage;
-			sourceTree = "<group>";
-		};
 		9143CB961FA5B49A005DE096 /* Presentation Layer */ = {
 			isa = PBXGroup;
 			children = (
@@ -190,7 +176,6 @@
 				919D312A1FAE22B600EF655B /* Model.xcdatamodeld */,
 				91D776FC1F72CC3B007573E1 /* AppDelegate.swift */,
 				9198E48F1FA7473000A5787D /* RootAssembly.swift */,
-				913155D51F99DFA900246248 /* Storage */,
 				911928961F9F22F600AA1658 /* Multipeer Connector */,
 				910966871FA8BA3100FC63BF /* Entities */,
 			);
@@ -386,12 +371,10 @@
 				9166B4811F8975920081D4A9 /* MessageCell.swift in Sources */,
 				910966891FA8BB8700FC63BF /* ProfileAssembly.swift in Sources */,
 				91D776FD1F72CC3B007573E1 /* AppDelegate.swift in Sources */,
-				919650DF1F94FD8300282F13 /* GCDDataManager.swift in Sources */,
 				919D312C1FAE22B600EF655B /* Model.xcdatamodeld in Sources */,
 				9166B47E1F8972660081D4A9 /* ChatViewController.swift in Sources */,
 				919D31321FAE2E6A00EF655B /* AppUser.swift in Sources */,
 				91F9DD371F868B1F0085ABF7 /* ChatCell.swift in Sources */,
-				916836291F9BC9CD0095A427 /* FileStorage.swift in Sources */,
 				9198E4A51FA84F1A00A5787D /* MessagesService.swift in Sources */,
 				9119289C1F9F238200AA1658 /* ConnectionManager.swift in Sources */,
 				9109668D1FA8BBCB00FC63BF /* ProfileService.swift in Sources */,

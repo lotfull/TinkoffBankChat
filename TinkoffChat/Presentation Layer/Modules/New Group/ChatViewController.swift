@@ -15,7 +15,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDel
     @IBOutlet weak var inputTextView: UITextView!
     @IBOutlet weak var sendButton: UIButton! {
         didSet {
-            sendButton.isEnabled = true//false
+            sendButton.isEnabled = true
         }
     }
     
@@ -29,9 +29,9 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDel
         model.sendMessage(string: inputTextView.text, to: chat) { (success, error) in
             guard success == true else { print(error?.localizedDescription ?? "ooops"); return }
             self.tableView.reloadData()
-        }//e(string: inputTextView.text, to: chat, completionHandler: nil)
+        }
         inputTextView.text = ""
-        sendButton.isEnabled = true//false
+        sendButton.isEnabled = true
     }
     
     var model: IChatModel!
@@ -83,7 +83,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDel
     }
     
     private func enableSendButton(_ trueOrFalse: Bool) {
-        sendButton.isEnabled = true///trueOrFalse && !inputTextView.text.isEmpty
+        sendButton.isEnabled = true
     }
     
     //MARK: - UITableViewDataSource
@@ -119,8 +119,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDel
     // MARK: - ChatMessagesDelegate
     func updateUI(with chat: Chat) {
         DispatchQueue.main.async {
-            // Тут уже вроде chat изменился. Выполним проверку
-            print("*** \n self.chat.messages.last?: \(self.chat.messages.last?.text ?? "EMPTY") \n\n NEWchat.messages.last?: \(chat.messages.last?.text ?? "EMPTY") \n")
             self.tableView.reloadData()
             self.scrollToBottom()
             self.enableSendButton(self.chat.isOnline)

@@ -27,9 +27,7 @@ class ProfileService: DataManager {
             let myProfile = Profile(name: appUser.name ?? "Unnamed User",
                                     info: appUser.info ?? "No info",
                                     image: image)
-//            DispatchQueue.main.async {
             completion(myProfile, nil)
-//            }
         } else {
             print("Core data error")
             completion(nil, CoreDataError.loadError)
@@ -39,19 +37,4 @@ class ProfileService: DataManager {
     func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) {
         CoreDataManager.saveProfile(profile, completion: completion)
     }
-    
-//    func saveProfile(profile: Profile, completionHandler: @escaping (CoreDataError?) -> () ) {
-//
-//    }
-//
-//    func loadProfile(completionHandler: @escaping (Profile, CoreDataError?) -> ()) {
-//        if let appUser = CoreDataManager.getAppUser() {
-//            let myProfile = Profile(name: appUser.name, info: appUser.info, image: UIImage(data: appUser.image ?? Data()))
-//            DispatchQueue.main.async {
-//                completionHandler(myProfile, .loadError)
-//            }
-//        } else {
-//            print("Core data error")
-//        }
-//    }
 }

@@ -53,16 +53,6 @@ class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
         multiPeerConnector.online = enabled
     }
     
-//    func sendMessage(text: String, to chat: Chat) {
-//        let message = Message(text: text, date: Date(), type: .outbox)
-//        message.makeReaded()
-//        chat.messages.append(message)
-//        multiPeerConnector.sendMessage(string: text, to: chat.id, completionHandler: nil)
-//        newMessagesUpdate(chats)
-//        newChatsUpdate(chats)
-//    }
-    
-    // MARK: - Connector Delegate
     func didFindUser(userID: String, userName: String?) {
         print("*** didFindUser userName \(userName ?? "No Name User") userID \(userID) ")
         if let chat = getChatFor(userID) {
@@ -87,12 +77,10 @@ class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
     
     func failedToStartBrowsingForUsers(error: Error) {
         print("*** \n\n failedToStartBrowsingForUsers\n")
-        //print(error.localizedDescription)
     }
     
     func failedToStartAdvertising(error: Error) {
         print("*** \n\n failedToStartAdvertising\n")
-        //print(error.localizedDescription)
     }
     
     func didReceiveMessage(text: String, fromUser: String, toUser: String) {
