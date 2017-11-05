@@ -36,15 +36,6 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
         return chatsListVC
     }
     
-//    private lazy var connectionManager: ConnectionManager = conManager()
-//
-//    func conManager() -> ConnectionManager {
-//        let connectionManager = ConnectionManager(connector: MultipeerConnector())
-//        connectionManager.delegate = self
-//        connectionManager.communicationServices(enabled: true)
-//        return connectionManager
-//    }
-    
     let chatsTableViewCellName = "ChatCell"
     let chatsTableViewCellID = "ChatCell"
 
@@ -68,20 +59,15 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
         chatVC.chat = chat
         self.navigationController?.pushViewController(chatVC, animated: true)
     }
-//
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let chatVC = segue.destination as? ChatViewController,
-//            let selectedIndexPath = tableView.indexPathForSelectedRow
-////            , let selectedCell = tableView(tableView, cellForRowAt: selectedIndexPath) as? ChatCell
-//        {
-//            let selectedChat = chat(for: selectedIndexPath)
-//            chatVC.chat = selectedChat
-//            chatVC.navigationItem.title = selectedChat.name
-//            chatVC.model = chatModel
-////            chatVC.connectionManager = connectionManager
-//            tableView.deselectRow(at: selectedIndexPath, animated: true)
-//        }
-//    }
+    
+
+    @IBAction func presentProfile(_ sender: Any) {
+        let profileVC = ProfileAssembly().profileViewController()
+        let navigationController = UINavigationController.init(rootViewController: profileVC)
+        self.present(navigationController, animated: true, completion: nil)
+    }
+    
+    
     
     private func updateChatsList() {
         tableView.reloadData()

@@ -28,11 +28,6 @@ class MessagesService: IMessagesService {
     }
     
     func sendMessage(string: String, to chat: Chat, completionHandler: ((Bool, Error?) -> Void)?) {
-        connectionManager.sendMessage(string: string, to: chat, completionHandler: completionHandler)//) { (success, error) in
-//            if success {
-//                completionHandler!(true, nil)
-//            } else {
-//                completionHandler!(false, error)
-//            }
+        connectionManager.sendMessage(string: string, to: chat, completionHandler: completionHandler)
     }
 }

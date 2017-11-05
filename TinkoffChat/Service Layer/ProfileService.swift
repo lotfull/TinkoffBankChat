@@ -6,31 +6,35 @@
 //  Copyright © 2017 Kam Lotfull. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import CoreData
 
 protocol DataManager {
-    func saveProfileData(profile: Profile, completionHandler: @escaping (CoreDataError?) -> () )
-    func loadProfileData(completionHandler: @escaping (Profile, CoreDataError?) ->() )
+    func loadProfile(completion: @escaping (Profile?, Error?) -> Void)
+    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void)
 }
 
 enum CoreDataError: Error {
-    case saveError
     case loadError
+    case saveError
 }
 
 class ProfileService: DataManager {
     
-    func saveProfileData(profile: Profile, completionHandler: @escaping (CoreDataError?) -> () ) {
-        CoreDataManager.saveUserProfile(profile, success: completionHandler(.loadError))//saveUserData(profileData, success: handler(.loadError))
-    }
-    
-    func loadProfileData(completionHandler: @escaping (Profile, CoreDataError?) -> ()) {
-        if let myProfile = CoreDataManager.getAppUser() {
-            DispatchQueue.main.async {
-                completionHandler(myProfile, .loadError)
-            }
+    func loadProfile(completion: @escaping (Profile?, Error?) -> Void) {
+        if let appUser = CoreDataManager.getAppUser() {
+            let image = appUser.image != nil ? UIImage(data: appUser.image!) : #imageLiteral(resourceName: "placeholder-user")
+            let myProfile = Profile(name: appUser.name ?? "Unnamed User",
+                                    info: appUser.info ?? "No info",
+                                    image: image)
+            completion(myProfile, nil)
         } else {
             print("Core data error")
+            completion(nil, CoreDataError.loadError)
         }
+    }
+    
+    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) {
+        CoreDataManager.saveProfile(profile, completion: completion)
     }
 }
