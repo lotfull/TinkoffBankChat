@@ -14,17 +14,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    private let rootAssembly = RootAssembly()
+    fileprivate let rootAssembly = RootAssembly()
+//    lazy var coreDataStack = CoreDataStack(modelName: "SurfJournalModel")
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        self.window = UIWindow(frame: UIScreen.main.bounds)
         
+        self.window = UIWindow(frame: UIScreen.main.bounds)
         let controller = rootAssembly.ChatsListModule.chatsListViewController()
-        let navigationViewController = UINavigationController.init(rootViewController: controller)
-        window?.rootViewController = navigationViewController
+        let navigationController = UINavigationController.init(rootViewController: controller)
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
+        
+        guard let chatsListViewController = navigationController.topViewController as? ChatsListViewController else {
+            fatalError("Application Storyboard mis-configuration")
+        }
+        chatsListViewController.coreDataStack = coreDataStack
+        
         return true
     }
-   
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        self.saveContext()
+    }
 }
+
+
+
+
+
+
+
+
+
+
 

@@ -27,24 +27,26 @@ class ProfileViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if cornerRadius == 0 {
-            cornerRadius = (changeImageButton.bounds.size.width) / 2 // + 4
-        }
-        changeImageButton.layer.cornerRadius = cornerRadius
-        imageImageView.layer.cornerRadius = cornerRadius
+        setCornerRadius()
     }
     
     func updateUI(_ firstTime: Bool? = false) {
         if firstTime == true {
             imageImageView.clipsToBounds = true
-            editProfileWithGCDButton.layer.borderWidth = 1.0
-            editProfileWithGCDButton.layer.cornerRadius = 12.0
-            editProfileWithOperationButton.layer.borderWidth = 1.0
-            editProfileWithOperationButton.layer.cornerRadius = 12.0
+            saveProfileButton.layer.borderWidth = 1.0
+            saveProfileButton.layer.cornerRadius = 12.0
         }
         imageImageView.image = changedProfile.image ?? #imageLiteral(resourceName: "placeholder-user")
         nameTextField.text = changedProfile.name ?? "Без Имени"
         infoTextField.text = changedProfile.info ?? "Без Описания"
+    }
+    
+    private func setCornerRadius() {
+        if cornerRadius == 0 {
+            cornerRadius = (changeImageButton.bounds.size.width) / 2
+        }
+        changeImageButton.layer.cornerRadius = cornerRadius
+        imageImageView.layer.cornerRadius = cornerRadius
     }
     
     private func addNotifications() {
@@ -52,10 +54,8 @@ class ProfileViewController: UIViewController {
     }
     
     private func enableButtonsIf(_ bool: Bool) {
-        editProfileWithGCDButton.isEnabled = bool
-        editProfileWithOperationButton.isEnabled = bool
-        editProfileWithGCDButton.backgroundColor = bool ? .white : .black
-        editProfileWithOperationButton.backgroundColor = bool ? .white : .black
+        saveProfileButton.isEnabled = bool
+        saveProfileButton.backgroundColor = bool ? .white : .black
     }
 
     // MARK: - @IBActions
@@ -148,17 +148,13 @@ class ProfileViewController: UIViewController {
     @IBAction func editProfileWithGCD(_ sender: Any?) {
         saveProfile(with: managerGCD)
     }
-    @IBAction func editProfileWithOperation(_ sender: Any) {
-        saveProfile(with: managerOperation)
-    }
     
     // MARK: - @IBOutlets
     @IBOutlet weak var changeImageButton: UIButton!
     @IBOutlet weak var imageImageView: UIImageView!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var infoTextField: UITextField!
-    @IBOutlet weak var editProfileWithGCDButton: UIButton!
-    @IBOutlet weak var editProfileWithOperationButton: UIButton!
+    @IBOutlet weak var saveProfileButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var contentTopConstraint: NSLayoutConstraint!
 
@@ -171,7 +167,6 @@ class ProfileViewController: UIViewController {
         }
     }
     private let managerGCD = GCDDataManager()
-    private let managerOperation = OperationDataManager()
     
     var filePath: String {
         let manager = FileManager.default

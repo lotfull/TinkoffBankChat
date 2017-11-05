@@ -11,6 +11,8 @@ import CoreData
 
 class ChatsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ChatsListDelegate {
     
+    var coreDataStack: CoreDataStack!
+    
     // MARK: - ChatsListDelegate
     func updateUI(with chats: [[Chat]]) {
         DispatchQueue.main.async {
@@ -22,7 +24,7 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var tableView: UITableView!
     
     private var model: IChatsListModel!
-    var chats = [[Chat]]()// = [[Chat(id: generateIdentifier(), name: "Kamilka", isOnline: true)]]//[[Chat]]()
+    var chats = [[Chat]]()
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

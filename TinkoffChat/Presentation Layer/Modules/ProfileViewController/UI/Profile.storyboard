@@ -102,31 +102,17 @@
                                         <rect key="frame" x="0.0" y="543" width="343" height="44"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="koE-8M-6OH">
-                                                <rect key="frame" x="0.0" y="0.0" width="163.5" height="44"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="343" height="44"/>
                                                 <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="44" id="M8m-sO-nJ0"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="22"/>
-                                                <state key="normal" title="GCD">
+                                                <state key="normal" title="Сохранить">
                                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 </state>
                                                 <connections>
                                                     <action selector="editProfileWithGCD:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sLD-gE-yiS"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e29-Oj-Yy8">
-                                                <rect key="frame" x="179.5" y="0.0" width="163.5" height="44"/>
-                                                <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="44" id="KsD-Jp-nR6"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="22"/>
-                                                <state key="normal" title="Operation">
-                                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="editProfileWithOperation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="IcO-Xh-A2J"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -154,11 +140,10 @@
                         <outlet property="activityIndicator" destination="v6R-Of-Onm" id="P9c-b4-lzy"/>
                         <outlet property="changeImageButton" destination="DlL-LQ-546" id="ICE-rj-nTg"/>
                         <outlet property="contentTopConstraint" destination="z7n-t4-8fN" id="5qx-bY-7gj"/>
-                        <outlet property="editProfileWithGCDButton" destination="koE-8M-6OH" id="ghE-Ri-s05"/>
-                        <outlet property="editProfileWithOperationButton" destination="e29-Oj-Yy8" id="11I-vx-obP"/>
                         <outlet property="imageImageView" destination="z5k-zC-8zC" id="URB-y6-HTh"/>
                         <outlet property="infoTextField" destination="0bj-Dr-S1y" id="F3B-ua-PBd"/>
                         <outlet property="nameTextField" destination="1EQ-5O-dCt" id="fLK-FO-eve"/>
+                        <outlet property="saveProfileButton" destination="koE-8M-6OH" id="ghE-Ri-s05"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

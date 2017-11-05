@@ -26,7 +26,7 @@
                                         <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="TtL-gl-mVd" id="0fI-DD-n06">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                         <connections>
@@ -46,7 +46,7 @@
                         <viewLayoutGuide key="safeArea" id="7f4-zC-eaX"/>
                     </view>
                     <navigationItem key="navigationItem" id="tX0-rB-ZYf">
-                        <barButtonItem key="rightBarButtonItem" title="В" image="user_icon" landscapeImage="user_icon" largeContentSizeImage="user_icon" style="plain" id="78l-S9-JWL">
+                        <barButtonItem key="rightBarButtonItem" image="user_icon" landscapeImage="user_icon" largeContentSizeImage="user_icon" id="78l-S9-JWL">
                             <connections>
                                 <segue destination="9Rh-q1-OhZ" kind="presentation" id="0BF-xW-Q3a"/>
                             </connections>
@@ -58,7 +58,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R9t-Fg-eXa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-150" y="726.76056338028172"/>
+            <point key="canvasLocation" x="-107" y="727"/>
         </scene>
         <!--Chat-->
         <scene sceneID="OQF-Y7-G00">

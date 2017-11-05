@@ -59,7 +59,7 @@ class CoreDataStack {
     fileprivate var masterContext: NSManagedObjectContext? {
         get {
             if _masterContext == nil {
-                let context = NSManagedObjectContext(concurrencyType: .fileprivateQueueConcurrencyType)
+                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
                 guard let persistentStoreCoordinator = self.persistentStoreCoordinator else {
                     print("Empty persistent store coordenator")
                     return nil
@@ -92,10 +92,10 @@ class CoreDataStack {
     }
     
     fileprivate var _saveContext: NSManagedObjectContext?
-    fileprivate var saveContext: NSManagedObjectContext? {
+    public var saveContext: NSManagedObjectContext? {
         get {
             if _saveContext == nil {
-                let context = NSManagedObjectContext(concurrencyType: .fileprivateQueueConcurrencyType)
+                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
                 guard let parentContext = self.mainContext else {
                     print("No master context!")
                     return nil

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Chat {
+extension Chat {
     let id: String
     var name: String?
     var messages = [Message]()
