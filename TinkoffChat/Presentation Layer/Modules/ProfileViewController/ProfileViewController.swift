@@ -222,7 +222,7 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
                 self.contentTopConstraint?.constant = 0.0
             } else {
                 if let keyboardHeignt = endFrame?.size.height {
-                    self.contentTopConstraint?.constant = -keyboardHeignt/2.0
+                    self.contentTopConstraint?.constant = -keyboardHeignt/1.5
                 }
             }
             UIView.animate(withDuration: duration,
