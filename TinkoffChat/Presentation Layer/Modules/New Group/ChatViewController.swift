@@ -93,7 +93,7 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDel
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = chat.messages[indexPath.row]
-        let identifier = message.type == .inbox ? CellIdentifier.inboxCellID : CellIdentifier.outboxCellID
+        let identifier = message.type == inbox ? CellIdentifier.inboxCellID : CellIdentifier.outboxCellID
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         cell.selectionStyle = .none
         if let messageCell = cell as? MessageCellConfiguration {

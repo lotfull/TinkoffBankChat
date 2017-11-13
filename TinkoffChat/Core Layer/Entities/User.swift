@@ -6,6 +6,7 @@
 //  Copyright © 2017 Kam Lotfull. All rights reserved.
 //
 
+import UIKit
 import CoreData
 
 extension User {
@@ -29,13 +30,14 @@ extension User {
             print("Failed to fetch User: \(error)")
         }
         if user == nil {
-            user = User.insertUser(in: context)
+            user = User.insertUser(with: id, in: context)
         }
         return user
     }
     
-    private static func insertUser(in context: NSManagedObjectContext) -> User? {
+    private static func insertUser(with id: String, in context: NSManagedObjectContext) -> User? {
         let user = NSEntityDescription.insertNewObject(forEntityName: "User", into: context) as? User
+        user?.id = id
         user?.name = User.generateCurrentUserNameString()
         return user
     }
@@ -50,10 +52,10 @@ extension User {
     }
     
     private static func generateCurrentUserNameString() -> String {
-        return "User-\(arc4random_uniform(1000))"
+        return UIDevice.current.identifierForVendor!.uuidString
     }
     static func generateUserIDString() -> String {
-        return "UserID\(arc4random_uniform(UINT32_MAX))"
+        return UIDevice.current.identifierForVendor!.uuidString
     }
     
 }

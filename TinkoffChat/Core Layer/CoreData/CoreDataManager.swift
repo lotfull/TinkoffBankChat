@@ -9,8 +9,11 @@
 import UIKit
 import CoreData
 
+protocol ICoreDataManager {
+    
+}
 
-class CoreDataManager {
+class CoreDataManager: ICoreDataManager {
     
     private static var _coreDataStack: CoreDataStack?
     public static var coreDataStack: CoreDataStack? {
@@ -22,55 +25,111 @@ class CoreDataManager {
         }
     }
     
+    static func appendChat(with userID: String, userName: String?) {
+        guard let saveContext = self.coreDataStack?.saveContext,
+            let user = User.findOrInsertUser(withID: userID, in: saveContext),
+            let chat = Chat.findOrInsertChat(with: userID, in: saveContext) else {
+                print("findOrInsert(AppUser/Chat) incorrect", #function)
+                return
+        }
+        user.isOnline = true
+        chat.isOnline = true
+        user.name = userName
+        user.chat = chat
+        
+        coreDataStack?.performSave(context: saveContext, completion: { (success, error) in
+            guard success else {
+                print("appendChat coreDataStack?.performSave() error \(error!)")
+                return
+            }
+        })
+    }
+    
+    static func deleteChat(with userID: String) {
+        guard let saveContext = self.coreDataStack?.saveContext,
+            let user = User.findOrInsertUser(withID: userID, in: saveContext),
+            let chat = Chat.findOrInsertChat(with: userID, in: saveContext) else {
+                print("findOrInsert(AppUser/Chat) incorrect", #function)
+                return
+        }
+        user.isOnline = false
+        chat.isOnline = false
+        
+        coreDataStack?.performSave(context: saveContext, completion: { (success, error) in
+            guard success else {
+                print("deleteChat coreDataStack?.performSave() error \(error!)")
+                return
+            }
+        })
+    }
+    
+    static func saveMessage(with text: String, with partnerID: String, type: Bool) {
+        let senderID = type == inbox ? partnerID : myID
+        guard let saveContext = self.coreDataStack?.saveContext,
+            let chat = Chat.findOrInsertChat(with: partnerID,
+                                             in: saveContext),
+            let sender = User.findOrInsertUser(withID: senderID,
+                                               in: saveContext),
+            let _ = Message.insertMessage(withText: text,
+                                          fromSender: sender,
+                                          toChat: chat,
+                                          inContext: saveContext)
+            else {
+                print("saveMessage guard error")
+                return
+        }
+        chat.hasUnreadMessages = type == inbox
+        coreDataStack?.performSave(context: saveContext, completion: { (success, error) in
+            guard success else {
+                print("saveMessage coreDataStack?.performSave() error \(error!)")
+                return
+            }
+        })
+    }
+    
     static func getAppUser() -> AppUser? {
         if let context = self.coreDataStack?.saveContext {
-            return self.findOrInsertAppUser(in: context)
+            return AppUser.findOrInsertAppUser(in: context)
         }
         return nil
     }
     
-    static func findOrInsertAppUser(in context: NSManagedObjectContext) -> AppUser? {
-        guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
-            print("Model is not available in context!")
-            assert(false)
-            return nil
-        }
-        var appUser: AppUser?
-        guard let fetchRequest = AppUser.fetchRequestAppUser(model: model) else {
-            return nil
-        }
-        do {
-            let results = try context.fetch(fetchRequest)
-            assert(results.count < 2, "Multiple AppUsers found!")
-            if let foundUser = results.first {
-                appUser = foundUser
-            }
-        } catch {
-            print("Failed to fetch AppUser: \(error)")
-        }
-        if appUser == nil {
-            appUser = AppUser.insertAppUser(in: context)
-        }
-        return appUser
-    }
-    
     static func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) {
         if let saveContext = coreDataStack?.saveContext {
-            guard let appUser = CoreDataManager.findOrInsertAppUser(in: saveContext) else {
+            guard let appUser = AppUser.findOrInsertAppUser(in: saveContext),
+                let user = appUser.currentUser else {
                 print("findOrInsertAppUser incorrect")
                 print(#function)
                 completion(false, CoreDataError.saveError)
                 return
             }
-            appUser.name = profile.name
-            appUser.info = profile.info
+            user.name = profile.name
+            user.info = profile.info
             if profile.image != nil {
-                appUser.image = UIImagePNGRepresentation((profile.image)!) as Data?
+                user.image = UIImagePNGRepresentation((profile.image)!) as Data?
             }
             CoreDataManager.coreDataStack?.performSave(context: (CoreDataManager.coreDataStack?.saveContext)!, completion: completion)
-            
         }
     }
+    
+    private static var myID: String {
+        get {
+            guard let saveContext = coreDataStack?.saveContext,
+                let appUser = AppUser.findOrInsertAppUser(in: saveContext),
+                let currentUserID = appUser.currentUser?.id else {
+                    print("App User Not Found in myID")
+                    return UUID().uuidString
+            }
+            return currentUserID
+        }
+    }
+
+//    guard let appUser = AppUser.findOrInsertAppUser(in: stack.saveContext),
+//            let currentUserID = appUser.currentUser?.id else {
+//                assertionFailure()
+//                return UUID().uuidString
+//        }
+//        return currentUserID
 }
 
 

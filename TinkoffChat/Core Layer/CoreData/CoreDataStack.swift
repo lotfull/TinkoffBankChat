@@ -8,7 +8,13 @@
 
 import CoreData
 
-class CoreDataStack {
+protocol ICoreDataStack: class {
+    var saveContext: NSManagedObjectContext? { get }
+    var mainContext: NSManagedObjectContext? { get }
+    func performSave(context: NSManagedObjectContext, completion: @escaping (Bool, Error?) -> Void)
+}
+
+class CoreDataStack: ICoreDataStack {
     
     fileprivate var storeURL: URL {
         get {
@@ -74,7 +80,7 @@ class CoreDataStack {
     }
     
     fileprivate var _mainContext: NSManagedObjectContext?
-    fileprivate var mainContext: NSManagedObjectContext? {
+    var mainContext: NSManagedObjectContext? {
         get {
             if _mainContext == nil {
                 let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
@@ -92,7 +98,7 @@ class CoreDataStack {
     }
     
     fileprivate var _saveContext: NSManagedObjectContext?
-    public var saveContext: NSManagedObjectContext? {
+    var saveContext: NSManagedObjectContext? {
         get {
             if _saveContext == nil {
                 let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
@@ -116,6 +122,7 @@ class CoreDataStack {
                     try context.save()
                 } catch {
                     print("Context save error: \(error)")
+                    completion(false, error)
                 }
                 if let parent = context.parent {
                     self?.performSave(context: parent, completion: completion)

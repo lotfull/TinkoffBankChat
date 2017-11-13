@@ -22,10 +22,11 @@ enum CoreDataError: Error {
 class ProfileService: DataManager {
     
     func loadProfile(completion: @escaping (Profile?, Error?) -> Void) {
-        if let appUser = CoreDataManager.getAppUser() {
-            let image = appUser.image != nil ? UIImage(data: appUser.image!) : #imageLiteral(resourceName: "placeholder-user")
-            let myProfile = Profile(name: appUser.name ?? "Unnamed User",
-                                    info: appUser.info ?? "No info",
+        if let appUser = CoreDataManager.getAppUser(),
+            let user = appUser.currentUser {
+            let image = user.image != nil ? UIImage(data: user.image!) : #imageLiteral(resourceName: "placeholder-user")
+            let myProfile = Profile(name: user.name ?? "Unnamed User",
+                                    info: user.info ?? "No info",
                                     image: image)
             completion(myProfile, nil)
         } else {
