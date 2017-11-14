@@ -38,9 +38,8 @@ class CoreDataManager: ICoreDataManager {
         user.chat = chat
         
         coreDataStack?.performSave(context: saveContext, completion: { (success, error) in
-            guard success else {
+            if !success {
                 print("appendChat coreDataStack?.performSave() error \(error!)")
-                return
             }
         })
     }
@@ -56,9 +55,8 @@ class CoreDataManager: ICoreDataManager {
         chat.isOnline = false
         
         coreDataStack?.performSave(context: saveContext, completion: { (success, error) in
-            guard success else {
+            if !success {
                 print("deleteChat coreDataStack?.performSave() error \(error!)")
-                return
             }
         })
     }
@@ -80,9 +78,8 @@ class CoreDataManager: ICoreDataManager {
         }
         chat.hasUnreadMessages = type == inbox
         coreDataStack?.performSave(context: saveContext, completion: { (success, error) in
-            guard success else {
+            if !success {
                 print("saveMessage coreDataStack?.performSave() error \(error!)")
-                return
             }
         })
     }
@@ -95,21 +92,19 @@ class CoreDataManager: ICoreDataManager {
     }
     
     static func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) {
-        if let saveContext = coreDataStack?.saveContext {
-            guard let appUser = AppUser.findOrInsertAppUser(in: saveContext),
-                let user = appUser.currentUser else {
-                print("findOrInsertAppUser incorrect")
-                print(#function)
-                completion(false, CoreDataError.saveError)
-                return
-            }
-            user.name = profile.name
-            user.info = profile.info
-            if profile.image != nil {
-                user.image = UIImagePNGRepresentation((profile.image)!) as Data?
-            }
-            CoreDataManager.coreDataStack?.performSave(context: (CoreDataManager.coreDataStack?.saveContext)!, completion: completion)
+        guard let saveContext = coreDataStack?.saveContext,
+            let appUser = AppUser.findOrInsertAppUser(in: saveContext),
+            let user = appUser.currentUser else {
+            print("findOrInsertAppUser incorrect", #function)
+            completion(false, CoreDataError.saveError)
+            return
         }
+        user.name = profile.name
+        user.info = profile.info
+        if profile.image != nil {
+            user.image = UIImagePNGRepresentation((profile.image)!) as Data?
+        }
+        CoreDataManager.coreDataStack?.performSave(context: saveContext, completion: completion)
     }
     
     private static var myID: String {

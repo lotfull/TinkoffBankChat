@@ -18,7 +18,9 @@ protocol ChatMessagesDelegate: class {
     func updateUI(with chat: Chat)
 }
 
-class ChatModel: IChatModel {
+
+
+class ChatModel: IChatModel, IConnectionManagerDelegate, IConnectionManagerChatDelegate {
     
     weak var delegate: ChatMessagesDelegate?
     

@@ -25,7 +25,7 @@ class ChatsListAssembly {
         return PeersService(connectionManager: connectionManager())
     }
     
-    private func connectionManager() -> ConnectionManagerProtocol {
+    private func connectionManager() -> IConnectionManager {
         return RootAssembly.connectionManager
     }
     

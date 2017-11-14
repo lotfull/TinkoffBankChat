@@ -48,7 +48,10 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = chat.name
+        
+        model?.chatService.fetchedResultsController.tableView = tableView
+        
+        navigationItem.title = chat.member?.name
         tableView.dataSource = self
 //        tableView.delegate = self
         addNotifications()

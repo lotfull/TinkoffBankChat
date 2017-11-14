@@ -12,7 +12,7 @@
 		9109668D1FA8BBCB00FC63BF /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9109668C1FA8BBCB00FC63BF /* ProfileService.swift */; };
 		9119289A1F9F236C00AA1658 /* MultipeerConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911928991F9F236C00AA1658 /* MultipeerConnector.swift */; };
 		9119289C1F9F238200AA1658 /* ConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9119289B1F9F238200AA1658 /* ConnectionManager.swift */; };
-		91288B521FB9D4A0007C9932 /* ChatListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91288B511FB9D4A0007C9932 /* ChatListService.swift */; };
+		91288B521FB9D4A0007C9932 /* ChattingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91288B511FB9D4A0007C9932 /* ChattingService.swift */; };
 		913155CD1F99DEAB00246248 /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 913155CC1F99DEAB00246248 /* Chat.storyboard */; };
 		9143CB9B1FA5B525005DE096 /* homework-6.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9143CB991FA5B525005DE096 /* homework-6.pdf */; };
 		9143CB9C1FA5B525005DE096 /* presentation-6.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9143CB9A1FA5B525005DE096 /* presentation-6.pdf */; };
@@ -22,6 +22,7 @@
 		916836171F9A29790095A427 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916836161F9A29790095A427 /* Chat.swift */; };
 		916836191F9A2A840095A427 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916836181F9A2A840095A427 /* Profile.swift */; };
 		916836251F9B9E860095A427 /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 916836241F9B9E860095A427 /* Profile.storyboard */; };
+		918082071FBB5499009A71BB /* ChatDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918082061FBB5499009A71BB /* ChatDataService.swift */; };
 		9181B4961F8026A70088970D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9181B4951F8026A70088970D /* README.md */; };
 		918CF85D1F854352000F4235 /* Lection 3.txt in Resources */ = {isa = PBXBuildFile; fileRef = 918CF85C1F854352000F4235 /* Lection 3.txt */; };
 		918CF8601F8688BE000F4235 /* ChatsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918CF85F1F8688BE000F4235 /* ChatsListViewController.swift */; };
@@ -53,7 +54,7 @@
 		9109668C1FA8BBCB00FC63BF /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		911928991F9F236C00AA1658 /* MultipeerConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerConnector.swift; sourceTree = "<group>"; };
 		9119289B1F9F238200AA1658 /* ConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionManager.swift; sourceTree = "<group>"; };
-		91288B511FB9D4A0007C9932 /* ChatListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListService.swift; sourceTree = "<group>"; };
+		91288B511FB9D4A0007C9932 /* ChattingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingService.swift; sourceTree = "<group>"; };
 		913155CC1F99DEAB00246248 /* Chat.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Chat.storyboard; sourceTree = "<group>"; };
 		9143CB991FA5B525005DE096 /* homework-6.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "homework-6.pdf"; sourceTree = "<group>"; };
 		9143CB9A1FA5B525005DE096 /* presentation-6.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "presentation-6.pdf"; sourceTree = "<group>"; };
@@ -63,6 +64,7 @@
 		916836161F9A29790095A427 /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		916836181F9A2A840095A427 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		916836241F9B9E860095A427 /* Profile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
+		918082061FBB5499009A71BB /* ChatDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDataService.swift; sourceTree = "<group>"; };
 		9181B4951F8026A70088970D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		918CF85C1F854352000F4235 /* Lection 3.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Lection 3.txt"; sourceTree = "<group>"; };
 		918CF85F1F8688BE000F4235 /* ChatsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListViewController.swift; sourceTree = "<group>"; };
@@ -164,10 +166,11 @@
 		9143CB971FA5B4A6005DE096 /* Service Layer */ = {
 			isa = PBXGroup;
 			children = (
-				9198E4981FA7555700A5787D /* PeersService.swift */,
-				9198E4A41FA84F1A00A5787D /* MessagesService.swift */,
 				9109668C1FA8BBCB00FC63BF /* ProfileService.swift */,
-				91288B511FB9D4A0007C9932 /* ChatListService.swift */,
+				9198E4981FA7555700A5787D /* PeersService.swift */,
+				918082061FBB5499009A71BB /* ChatDataService.swift */,
+				9198E4A41FA84F1A00A5787D /* MessagesService.swift */,
+				91288B511FB9D4A0007C9932 /* ChattingService.swift */,
 			);
 			path = "Service Layer";
 			sourceTree = "<group>";
@@ -384,7 +387,8 @@
 				916836171F9A29790095A427 /* Chat.swift in Sources */,
 				9198E4B21FA8926C00A5787D /* ChatModel.swift in Sources */,
 				9109668B1FA8BB9300FC63BF /* ProfileModel.swift in Sources */,
-				91288B521FB9D4A0007C9932 /* ChatListService.swift in Sources */,
+				91288B521FB9D4A0007C9932 /* ChattingService.swift in Sources */,
+				918082071FBB5499009A71BB /* ChatDataService.swift in Sources */,
 				916836151F9A29650095A427 /* Message.swift in Sources */,
 				9198E4901FA7473000A5787D /* RootAssembly.swift in Sources */,
 				91B65B1B1FAF1FC400C42E58 /* CoreDataManager.swift in Sources */,

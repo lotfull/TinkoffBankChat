@@ -18,7 +18,6 @@
         <attribute name="type" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="chat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Chat" inverseName="lastMessage" inverseEntity="Chat" syncable="YES"/>
         <relationship name="lastInChat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Chat" syncable="YES"/>
-        <relationship name="sender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
         <attribute name="id" attributeType="String" syncable="YES"/>
@@ -31,6 +30,7 @@
     </entity>
     <fetchRequest name="AppUser" entity="AppUser"/>
     <fetchRequest name="ChatByID" entity="Chat" predicateString="id == &quot;$id&quot;"/>
+    <fetchRequest name="ChatByOnlineUserID" entity="Chat" predicateString="member.isOnline == 1 AND messages != nil"/>
     <fetchRequest name="MessagesByChatID" entity="User"/>
     <fetchRequest name="UserByID" entity="User" predicateString="userID == &quot;$id&quot;"/>
     <fetchRequest name="UsersOnline" entity="Message" predicateString="chat.id == $id"/>
@@ -38,6 +38,6 @@
         <element name="AppUser" positionX="-414" positionY="-162" width="128" height="60"/>
         <element name="User" positionX="-414" positionY="-6" width="128" height="150"/>
         <element name="Chat" positionX="-387" positionY="-18" width="128" height="135"/>
-        <element name="Message" positionX="-369" positionY="-9" width="128" height="150"/>
+        <element name="Message" positionX="-369" positionY="-9" width="128" height="135"/>
     </elements>
 </model>

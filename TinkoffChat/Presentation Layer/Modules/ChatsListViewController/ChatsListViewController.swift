@@ -9,21 +9,22 @@
 import UIKit
 import CoreData
 
-class ChatsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ChatsListDelegate {
+class ChatsListViewController: UIViewController, ChatsListDelegate {
     
-    var coreDataStack: CoreDataStack!
-    
-    // MARK: - ChatsListDelegate
-    func updateUI(with chats: [[Chat]]) {
-        DispatchQueue.main.async {
-            self.chats = chats
-            self.updateChatsList()
-        }
-    }
+//    var coreDataStack: CoreDataStack!
+//
+//    // MARK: - ChatsListDelegate
+//    func updateUI(with chats: [[Chat]]) {
+//        DispatchQueue.main.async {
+//            self.chats = chats
+//            self.updateChatsList()
+//        }
+//    }
     
     @IBOutlet weak var tableView: UITableView!
     
     private var model: IChatsListModel!
+    
     var chats = [[Chat]]()
 
     required init?(coder aDecoder: NSCoder) {
@@ -42,13 +43,12 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         let nib = UINib(nibName: chatsTableViewCellName, bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: chatsTableViewCellID)
-        tableView.dataSource = self
-        tableView.delegate = self
+        model.setup(tableView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        tableView.reloadData()
         model.newChatsFetch()
     }
     
@@ -60,14 +60,11 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
         self.navigationController?.pushViewController(chatVC, animated: true)
     }
     
-
     @IBAction func presentProfile(_ sender: Any) {
         let profileVC = ProfileAssembly().profileViewController()
         let navigationController = UINavigationController.init(rootViewController: profileVC)
         self.present(navigationController, animated: true, completion: nil)
     }
-    
-    
     
     private func updateChatsList() {
         tableView.reloadData()
@@ -76,33 +73,3 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
     private let sectionName = ["Online", "History"]
 }
 
-extension ChatsListViewController {
-    
-    func chat(for indexPath: IndexPath) -> Chat {
-        return chats[indexPath.section][indexPath.row]
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return chats.count
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionName[section]
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chats[section].count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let chatCell = tableView.dequeueReusableCell(withIdentifier: ChatCell.identifier, for: indexPath) as! ChatCell
-        
-        let chat = self.chat(for: indexPath)
-        chatCell.nameLabel.text = chat.name
-        chatCell.message = chat.messages.last?.text
-        chatCell.date = chat.lastMessageDate
-        chatCell.online = chat.isOnline
-        chatCell.hasUnreadMessages = chat.hasUnreadMessages
-        return chatCell
-    }
-}

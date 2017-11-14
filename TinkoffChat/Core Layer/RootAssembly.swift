@@ -12,7 +12,7 @@ class RootAssembly {
     
     var ChatsListModule: ChatsListAssembly = ChatsListAssembly()
     
-    static let connectionManager: ConnectionManagerProtocol = ConnectionManager()
+    static let connectionManager: IConnectionManager = ConnectionManager()
     
     static let coreDataManager: CoreDataManager = CoreDataManager()
 }

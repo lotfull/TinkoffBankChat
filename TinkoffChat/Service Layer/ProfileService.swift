@@ -9,17 +9,16 @@
 import UIKit
 import CoreData
 
-protocol DataManager {
-    func loadProfile(completion: @escaping (Profile?, Error?) -> Void)
-    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void)
-}
-
 enum CoreDataError: Error {
     case loadError
     case saveError
 }
+protocol IProfileService: class {
+    func loadProfile(completion: @escaping (Profile?, Error?) -> Void)
+    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void)
+}
 
-class ProfileService: DataManager {
+class ProfileService: IProfileService {
     
     func loadProfile(completion: @escaping (Profile?, Error?) -> Void) {
         if let appUser = CoreDataManager.getAppUser(),

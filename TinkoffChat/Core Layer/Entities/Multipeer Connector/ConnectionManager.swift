@@ -8,12 +8,29 @@
 
 import Foundation
 
-class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
-    
-//    var newChatsUpdate: (([Chat]) -> ())?
-//    var newMessagesUpdate: ((Chat) -> ())?
-//
-    
+protocol ConnectorDelegate: class {
+    func didFindUser(userID: String, userName: String?)
+    func didLoseUser(userID: String)
+    func failedToStartBrowsingForUsers(error: Error)
+    func failedToStartAdvertising(error: Error)
+    func didReceiveMessage(text: String, fromUser: String, toUser: String)
+}
+
+protocol IConnectionManager: class {
+    var newChatsUpdate: ((_ chats: [Chat]) -> ())? { get set }
+    var newMessagesUpdate: ((_ chats: Chat) -> ())? { get set }
+    func sendMessage(string: String, to chat: Chat, completionHandler: ((_ success: Bool, _ error: Error?) -> Void)?)
+    weak var delegate: IConnectionManagerDelegate
+    weak var 
+}
+
+protocol IConnectionManagerDelegate: class {
+    func chatCreated(chat: Chat)
+    func chatChanged(chat: Chat)
+    func didLostUser(withID userID: String)
+}
+
+class ConnectionManager: ConnectorDelegate, IConnectionManager {
     
 //    var dataManager: CoreDataManager
     
@@ -31,7 +48,6 @@ class ConnectionManager: ConnectorDelegate, ConnectionManagerProtocol {
             }
         }
     }
-    
     
     weak var delegate: ChatsListDelegate?
     
