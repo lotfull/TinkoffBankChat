@@ -18,6 +18,10 @@ protocol ICoreDataManager {
     func isOnlineChat(withID chatID: String) -> Bool
     func turnChatsOffline()
     var mainContext: NSManagedObjectContext { get }
+    func handleFoundUserWith(id: String, userName: String?)
+    func handleLostUserWith(id: String)
+    func handleSentMessageWith(text: String, toChatWithID conversationID: String)
+    func handleReceivedMessageWith(text: String, fromUserID: String)
     func handleDidFindUser(userID: String, userName: String?)
     func handleDidLoseUser(userID: String)
     func handleFailedToStartBrowsingForUsers(error: Error)
@@ -28,48 +32,118 @@ protocol ICoreDataManager {
 
 class CoreDataManager: ICoreDataManager {
     
-    private static var _coreDataStack: CoreDataStack?
-    public static var coreDataStack: CoreDataStack? {
+    private var _coreDataStack: CoreDataStack?
+    private var coreDataStack: CoreDataStack {
         get {
             if _coreDataStack == nil {
                 _coreDataStack = CoreDataStack.init()
             }
-            return _coreDataStack
+            return _coreDataStack!
         }
     }
     
+    
+    func handleFoundUserWith(id: String, userName: String?) {
+        print("Handling found user!")
+        let saveContext = self.coreDataStack.saveContext
+        saveContext.perform {
+            let chat = Chat.findOrInsertChat(withID: id, in: saveContext)
+            chat.isOnline = true
+            let user = User.findOrInsertUser(withID: id, in: saveContext)
+            user.name = userName
+            user.isOnline = true
+            user.chat = chat
+            chat.user = user
+            self.coreDataStack.performSave(in: saveContext, completionHandler: nil)
+        }
+    }
+    
+    func handleLostUserWith(id: String) {
+        print("Handling lost user!")
+        let saveContext = coreDataStack.saveContext
+        saveContext.perform {
+            let user = User.findOrInsertUser(withID: id, in: saveContext)
+            user.isOnline = false
+            let chat = Chat.findOrInsertChat(withID: id, in: saveContext)
+            chat.isOnline = false
+            self.coreDataStack.performSave(in: saveContext, completionHandler: nil)
+        }
+    }
+    
+    // MARK: Message
+    
+    func handleSentMessageWith(text: String, toChatWithID chatID: String) {
+        let saveContext = coreDataStack.saveContext
+        saveContext.perform {
+            let message = self.createMessageWith(text: text, in: saveContext)
+            message.type = outbox
+            let chat = Chat.findOrInsertChat(withID: chatID, in: saveContext)
+            message.chat = chat
+            chat.addToMessages(message)
+            chat.lastMessage = message
+            self.coreDataStack.performSave(in: saveContext, completionHandler: nil)
+        }
+    }
+    
+    func handleReceivedMessageWith(text: String, fromUserID: String) {
+        let saveContext = coreDataStack.saveContext
+        saveContext.perform {
+            let chat = Chat.findOrInsertChat(withID: fromUserID, in: saveContext)
+            let message = self.createMessageWith(text: text, in: saveContext)
+            message.type = inbox
+            message.chat = chat
+            chat.lastMessage = message
+            chat.hasUnreadMessages = true
+            chat.addToMessages(message)
+            print("*** message", message)
+            self.coreDataStack.performSave(in: saveContext, completionHandler: nil)
+        }
+    }
+    
+    func createMessageWith(text: String, in context: NSManagedObjectContext) -> Message {
+        let message = Message(context: context)
+        message.id = "\(Date.timeIntervalSinceReferenceDate)" + "\(arc4random_uniform(1000000))"
+        message.date = Date()
+        message.text = text
+        return message
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /////////////////////////////////////////////
+    
+    
+    
+    
+    
+    
     func handleDidFindUser(userID: String, userName: String?) {
         print(#function)
-        guard let coreDataStack = CoreDataManager.coreDataStack,
-            let saveContext = coreDataStack.saveContext else {
-                print("findOrInsert(AppUser/Chat) incorrect", #function)
-                return
-        }
         saveContext.perform {
-            guard let chat = Chat.findOrInsertChat(withChatID: userID, in: saveContext),
-                let user = User.findOrInsertUser(withID: userID, in: saveContext) else { print("(chat/user) not (find/insert)ed"); return }
+            let chat = Chat.findOrInsertChat(withID: userID, in: self.saveContext)
+            let user = User.findOrInsertUser(withID: userID, in: self.saveContext)
             user.isOnline = true
             chat.isOnline = true
             user.name = userName
             user.chat = chat
             print(#function, chat)
             print(#function, user)
-            coreDataStack.performSave(in: saveContext, completionHandler: nil)
+            self.coreDataStack.performSave(in: self.saveContext, completionHandler: nil)
         }
     }
     
     func handleDidLoseUser(userID: String) {
         print(#function)
-        guard let coreDataStack = CoreDataManager.coreDataStack,
-            let saveContext = coreDataStack.saveContext,
-            let chat = Chat.findOrInsertChat(withChatID: userID, in: saveContext),
-            let user = chat.user else {
-                print("findOrInsert(AppUser/Chat) incorrect", #function)
-                return
-        }
+        let chat = Chat.findOrInsertChat(withID: userID, in: saveContext)
+        let user = chat.user!
         user.isOnline = false
         chat.isOnline = false
-        
         coreDataStack.performSave(context: saveContext, completion: { (success, error) in
             if !success {
                 print("deleteChat coreDataStack?.performSave() error \(error!)")
@@ -107,23 +181,20 @@ class CoreDataManager: ICoreDataManager {
     
     func turnChatsOffline() {
         print(#function)
-        guard let coreDataStack = CoreDataManager.coreDataStack,
-            let masterContext = coreDataStack.masterContext else { return }
-        masterContext.performAndWait {
+        self.masterContext.performAndWait {
             let asyncBatchUpdateRequest = NSBatchUpdateRequest(entity: Chat.entity())
             asyncBatchUpdateRequest.propertiesToUpdate = ["isOnline": NSNumber(value: false)]
             asyncBatchUpdateRequest.resultType = .updatedObjectIDsResultType
             do {
                 guard let objectIDsResult = try masterContext.execute(asyncBatchUpdateRequest) as? NSBatchUpdateResult else {
-                    assertionFailure("Failed batch updating for conversations")
+                    assertionFailure("Failed batch updating for chats")
                     return
                 }
                 guard let objectIDs = objectIDsResult.result as? [NSManagedObjectID] else {
                     assertionFailure("Wrong type of NSBatchResult was expected")
                     return
                 }
-                guard let mainContext = coreDataStack.mainContext else { return }
-                mainContext.performAndWait {
+                self.mainContext.performAndWait {
                     for objectID in objectIDs {
                         let object = mainContext.object(with: objectID)
                         mainContext.refresh(object, mergeChanges: true)
@@ -131,14 +202,19 @@ class CoreDataManager: ICoreDataManager {
                     coreDataStack.performSave(context: masterContext) {_,_ in}
                 }
             } catch {
-                print("Failed batch updating for conversations")
+                print("Failed batch updating for chats")
             }
         }
     }
     
     var mainContext: NSManagedObjectContext {
-        guard let mainContext = CoreDataManager.coreDataStack?.mainContext else { fatalError("mainContext nil") }
-        return mainContext
+        return self.coreDataStack.mainContext
+    }
+    var saveContext: NSManagedObjectContext {
+        return self.coreDataStack.saveContext
+    }
+    var masterContext: NSManagedObjectContext {
+        return self.coreDataStack.masterContext
     }
     
     func sentMessage(with text: String, toPartnerWithID partnerID: String) {
@@ -147,58 +223,42 @@ class CoreDataManager: ICoreDataManager {
     }
     
     func readChat(withID chatID: String) {
-        guard let coreDataStack = CoreDataManager.coreDataStack,
-            let saveContext = coreDataStack.saveContext,
-            let chat = Chat.findOrInsertChat(withChatID: chatID, in: saveContext) else {
-                print("readChat error")
-                return
-        }
+        let chat = Chat.findOrInsertChat(withID: chatID, in: self.saveContext)
         chat.hasUnreadMessages = false
-        coreDataStack.performSave(context: saveContext) {_,_ in}
+        self.coreDataStack.performSave(context: self.saveContext) {_,_ in}
     }
     
     func getUserNameForChat(withID chatID: String) -> String {
-        guard let coreDataStack = CoreDataManager.coreDataStack,
-            let saveContext = coreDataStack.saveContext,
-            let user = User.findOrInsertUser(withID: chatID, in: saveContext) else { print("getUserNameForChat error"); return "Unnamed" }
+        let user = User.findOrInsertUser(withID: chatID, in: self.saveContext)
         return user.name ?? "Unnamed"
     }
     
     func isOnlineChat(withID chatID: String) -> Bool {
-        guard let coreDataStack = CoreDataManager.coreDataStack,
-            let saveContext = coreDataStack.saveContext,
-            let chat = Chat.findOrInsertChat(withChatID: chatID, in: saveContext) else { print("isOnlineChat error"); return false }
+        let chat = Chat.findOrInsertChat(withID: chatID, in: self.saveContext)
         return chat.isOnline
     }
     
     func saveMessage(withText text: String, partnerID: String, type: Bool) {
         print(#function)
-        guard let coreDataStack = CoreDataManager.coreDataStack,
-            let saveContext = coreDataStack.saveContext,
-            let chat = Chat.findOrInsertChat(withChatID: partnerID, in: saveContext),
-            let _ = Message.insertMessage(withText: text,
+        let chat = Chat.findOrInsertChat(withID: partnerID, in: self.saveContext)
+        guard let _ = Message.insertMessage(withText: text,
                                           type: type,
                                           toChat: chat,
-                                          inContext: saveContext)
+                                          inContext: self.saveContext)
             else {
                 print("saveMessage guard error")
                 return
         }
         chat.hasUnreadMessages = type == inbox
-        coreDataStack.performSave(in: saveContext, completionHandler: nil)
+        coreDataStack.performSave(in: self.saveContext, completionHandler: nil)
     }
     
     func getAppUser() -> AppUser? {
-        if let context = CoreDataManager.coreDataStack?.saveContext {
-            return AppUser.findOrInsertAppUser(in: context)
-        }
-        return nil
+        return AppUser.findOrInsertAppUser(in: self.saveContext)
     }
     
     func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) {
-        guard let coreDataStack = CoreDataManager.coreDataStack,
-            let saveContext = coreDataStack.saveContext,
-            let appUser = AppUser.findOrInsertAppUser(in: saveContext),
+        guard let appUser = AppUser.findOrInsertAppUser(in: self.saveContext),
             let user = appUser.currentUser else {
             print("findOrInsertAppUser incorrect", #function)
             completion(false, CoreDataError.saveError)
@@ -209,13 +269,12 @@ class CoreDataManager: ICoreDataManager {
         if profile.image != nil {
             user.image = UIImagePNGRepresentation((profile.image)!) as Data?
         }
-        coreDataStack.performSave(context: saveContext, completion: completion)
+        coreDataStack.performSave(context: self.saveContext, completion: completion)
     }
     
     private var myID: String {
         get {
-            guard let saveContext = CoreDataManager.coreDataStack?.saveContext,
-                let appUser = AppUser.findOrInsertAppUser(in: saveContext),
+            guard let appUser = AppUser.findOrInsertAppUser(in: saveContext),
                 let currentUserID = appUser.currentUser?.id else {
                     print("App User Not Found in myID")
                     return UUID().uuidString

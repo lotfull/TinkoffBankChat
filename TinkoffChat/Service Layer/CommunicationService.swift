@@ -15,11 +15,13 @@ protocol ICommunicationService: class {
 
 class CommunicationService: NSObject, ICommunicationService, ICommunicatorDelegate {
     func didFindUser(userID: String, userName: String?) {
-        coreDataManager.handleDidFindUser(userID: userID, userName: userName)
+//        coreDataManager.handleDidFindUser(userID: userID, userName: userName)
+        coreDataManager.handleFoundUserWith(id: userID, userName: userName)
     }
     
     func didLoseUser(userID: String) {
-        coreDataManager.handleDidLoseUser(userID: userID)
+//        coreDataManager.handleDidLoseUser(userID: userID)
+        coreDataManager.handleLostUserWith(id: userID)
     }
     
     func failedToStartBrowsingForUsers(error: Error) {
@@ -31,7 +33,8 @@ class CommunicationService: NSObject, ICommunicationService, ICommunicatorDelega
     }
     
     func didReceiveMessage(text: String, fromUser: String, toUser: String) {
-        coreDataManager.handleDidReceiveMessage(text: text, fromUser: fromUser, toUser: toUser)
+//        coreDataManager.handleDidReceiveMessage(text: text, fromUser: fromUser, toUser: toUser)
+        coreDataManager.handleReceivedMessageWith(text: text, fromUserID: fromUser)
     }
     
     let coreDataManager: ICoreDataManager// = RootAssembly.coreDataManager
@@ -51,7 +54,8 @@ class CommunicationService: NSObject, ICommunicationService, ICommunicatorDelega
                 print("CommunicationService sendMessage fall")
                 return
             }
-            self.coreDataManager.sentMessage(with: text, toPartnerWithID: userID)
+//            self.coreDataManager.sentMessage(with: text, toPartnerWithID: userID)
+            self.coreDataManager.handleSentMessageWith(text: text, toChatWithID: userID)
             completionHandler!(success, error)
         }
     }

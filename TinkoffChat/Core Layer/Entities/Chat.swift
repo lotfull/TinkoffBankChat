@@ -29,15 +29,15 @@ import CoreData
 //}
 
 extension Chat {
-    static func findOrInsertChat(withChatID chatID: String, in context: NSManagedObjectContext) -> Chat? {
+    static func findOrInsertChat(withID chatID: String, in context: NSManagedObjectContext) -> Chat {
         
         guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
-            print("Model is not available in context!")
-            assert(false)
-            return nil
+            assertionFailure("Model is not available in context!")
+            fatalError()
         }
         guard let fetchRequest = Chat.fetchRequestChat(withChatID: chatID, model: model) else {
-            return nil
+            assertionFailure("Chat.fetchRequestChat == nil")
+            fatalError()
         }
         var chat: Chat?
         do {
@@ -54,10 +54,7 @@ extension Chat {
             print(#function, "chat == nil")
             chat = Chat.insertChat(with: chatID, in: context)
         }
-        if chat == nil {
-            print(#function, "chat not inserted")
-        }
-        return chat
+        return chat!
     }
     
 //    static func findOrInsertChatByUser(withUserID userID: String, in context: NSManagedObjectContext) -> Chat? {

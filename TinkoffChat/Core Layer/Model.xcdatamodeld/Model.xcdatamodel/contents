@@ -7,8 +7,8 @@
         <attribute name="hasUnreadMessages" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="isOnline" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="lastMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Message" inverseName="chat" inverseEntity="Message" syncable="YES"/>
-        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Message" syncable="YES"/>
+        <relationship name="lastMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Message" inverseName="lastInChat" inverseEntity="Message" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Message" inverseName="chat" inverseEntity="Message" syncable="YES"/>
         <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="chat" inverseEntity="User" syncable="YES"/>
     </entity>
     <entity name="Message" representedClassName="Message" syncable="YES" codeGenerationType="class">
@@ -16,8 +16,8 @@
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="chat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Chat" inverseName="lastMessage" inverseEntity="Chat" syncable="YES"/>
-        <relationship name="lastInChat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Chat" syncable="YES"/>
+        <relationship name="chat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Chat" inverseName="messages" inverseEntity="Chat" syncable="YES"/>
+        <relationship name="lastInChat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Chat" inverseName="lastMessage" inverseEntity="Chat" syncable="YES"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
         <attribute name="id" attributeType="String" syncable="YES"/>

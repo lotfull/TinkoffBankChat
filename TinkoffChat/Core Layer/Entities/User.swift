@@ -10,15 +10,15 @@ import UIKit
 import CoreData
 
 extension User {
-    static func findOrInsertUser(withID id: String, in context: NSManagedObjectContext) -> User? {
+    static func findOrInsertUser(withID id: String, in context: NSManagedObjectContext) -> User {
         guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
-            print("Model is not available in context!")
-            assert(false)
-            return nil
+            assertionFailure("Model is not available in context!")
+            fatalError()
         }
         var user: User?
         guard let fetchRequest = User.fetchRequestUserByID(model: model, id: id) else {
-            return nil
+            assertionFailure("User.fetchRequestUserByID == nil")
+            fatalError()
         }
         do {
             let results = try context.fetch(fetchRequest)
@@ -34,7 +34,7 @@ extension User {
             print(#function, "user == nil")
             user = User.insertUser(with: id, in: context)
         }
-        return user
+        return user!
     }
     
     private static func insertUser(with id: String, in context: NSManagedObjectContext) -> User? {
