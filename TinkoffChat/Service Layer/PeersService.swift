@@ -14,14 +14,14 @@ import Foundation
 //
 //class PeersService: IPeersService {
 //
-//    var connectionManager: IConnectionManager
+//    var communicationManager: ICommunicationManager
 //
-//    init(connectionManager: IConnectionManager) {
-//        self.connectionManager = connectionManager
+//    init(communicationManager: ICommunicationManager) {
+//        self.communicationManager = communicationManager
 //    }
 //
 //    func newChatsFetch(completionHandler: @escaping (([Chat]) -> ())) {
-//        connectionManager.newChatsUpdate = {
+//        communicationManager.newChatsUpdate = {
 //            (chats: [Chat]) in
 //            completionHandler(chats)
 //            print("*** newChatsFetch chats.first \(chats.first?.name ?? "Nothing")")

@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ChatsListViewController: UIViewController, ChatsListDelegate {
+class ChatsListViewController: UIViewController {
     
 //    var coreDataStack: CoreDataStack!
 //
@@ -43,20 +43,20 @@ class ChatsListViewController: UIViewController, ChatsListDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         let nib = UINib(nibName: chatsTableViewCellName, bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: chatsTableViewCellID)
         model.setup(tableView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print(#function)
         super.viewWillAppear(animated)
         tableView.reloadData()
-        model.newChatsFetch()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let chat = chats[indexPath.section][indexPath.row]
         tableView.deselectRow(at: indexPath, animated: true)
-        let chatVC = ChatAssembly().chatViewController()
-        chatVC.chat = chat
+        let selectedChatID = model.chatID(for: indexPath)
+        let chatVC = ChatAssembly().chatViewController(withChatID: selectedChatID)
         self.navigationController?.pushViewController(chatVC, animated: true)
     }
     

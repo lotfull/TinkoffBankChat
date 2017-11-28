@@ -22,3 +22,8 @@ class MessageCell: UITableViewCell, MessageCellConfiguration {
     
     @IBOutlet weak var messageLabel: UILabel!
 }
+
+enum MessageCellID: String {
+    case inbox = "InboxCell"
+    case outbox = "OutboxCell"
+}

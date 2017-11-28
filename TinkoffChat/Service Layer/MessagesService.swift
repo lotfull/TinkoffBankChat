@@ -14,21 +14,21 @@ import Foundation
 //
 //class MessagesService: IMessagesService {
 //
-//    var connectionManager: IConnectionManager
+//    var communicationManager: ICommunicationManager
 //    
-//    init(connectionManager: IConnectionManager) {
-//        self.connectionManager = connectionManager
+//    init(communicationManager: ICommunicationManager) {
+//        self.communicationManager = communicationManager
 //    }
 //
 //    func newMessagesFetch(completionHandler: @escaping ((Chat) -> Void)) {
-//        connectionManager.newMessagesUpdate = {
+//        communicationManager.newMessagesUpdate = {
 //            (chat: Chat) in
 //            completionHandler(chat)
 //        }
 //    }
 //
 //    func sendMessage(string: String, to chat: Chat, completionHandler: ((Bool, Error?) -> Void)?) {
-//        connectionManager.sendMessage(string: string, to: chat, completionHandler: completionHandler)
+//        communicationManager.sendMessage(string: string, to: chat, completionHandler: completionHandler)
 //    }
 //}
 

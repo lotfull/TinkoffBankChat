@@ -31,15 +31,15 @@ import CoreData
 //    case outbox
 //}
 extension Message {
-    static func insertMessage(withText text: String, fromSender sender: User, toChat chat: Chat, inContext context: NSManagedObjectContext) -> Message? {
+    static func insertMessage(withText text: String, type: Bool, toChat chat: Chat, inContext context: NSManagedObjectContext) -> Message? {
         guard let message = NSEntityDescription.insertNewObject(forEntityName: "Message", into: context) as? Message else {
             print("Failed insertNewObject(forEntityName: Message")
             return nil
         }
-        let messageID = sender.id + "\(Date.timeIntervalSinceReferenceDate)" + "\(arc4random_uniform(1000000))"
+        let messageID = chat.id! + "\(Date.timeIntervalSinceReferenceDate)" + "\(arc4random_uniform(1000000))"
         message.id = messageID
         message.text = text
-        message.sender = sender
+        message.type = type
         message.date = Date()
         message.chat = chat
         message.lastInChat = chat

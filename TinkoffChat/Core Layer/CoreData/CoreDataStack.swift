@@ -62,7 +62,7 @@ class CoreDataStack: ICoreDataStack {
     }
     
     fileprivate var _masterContext: NSManagedObjectContext?
-    fileprivate var masterContext: NSManagedObjectContext? {
+    public var masterContext: NSManagedObjectContext? {
         get {
             if _masterContext == nil {
                 let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)

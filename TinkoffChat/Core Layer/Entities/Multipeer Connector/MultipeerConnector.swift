@@ -1,5 +1,5 @@
 //
-//  MultipeerConnector.swift
+//  MultipeerCommunicator.swift
 //  TinkoffChat
 //
 //  Created by Kam Lotfull on 24.10.17.
@@ -9,14 +9,22 @@
 import Foundation
 import MultipeerConnectivity
 
-protocol Connector {
+protocol ICommunicator {
     func sendMessage(string: String, to userID: String, completionHandler: ((_ success: Bool, _ error: Error?) -> Void)?)
-    weak var delegate: ConnectorDelegate? { get set }
+    weak var delegate: ICommunicatorDelegate? { get set }
     var online: Bool { get set }
 }
 
-class MultipeerConnector: NSObject {
-    weak var delegate: ConnectorDelegate?
+protocol ICommunicatorDelegate: class {
+    func didFindUser(userID: String, userName: String?)
+    func didLoseUser(userID: String)
+    func failedToStartBrowsingForUsers(error: Error)
+    func failedToStartAdvertising(error: Error)
+    func didReceiveMessage(text: String, fromUser: String, toUser: String)
+}
+
+class MultipeerCommunicator: NSObject {
+    weak var delegate: ICommunicatorDelegate?
     
     var online = false {
         didSet {
@@ -94,7 +102,7 @@ class MultipeerConnector: NSObject {
     }
 }
 
-extension MultipeerConnector: MCNearbyServiceBrowserDelegate {
+extension MultipeerCommunicator: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         let session = getSessionFor(peerID)
         print("*** peerID \(peerID.displayName)")
@@ -111,7 +119,7 @@ extension MultipeerConnector: MCNearbyServiceBrowserDelegate {
     }
 }
 
-extension MultipeerConnector: MCNearbyServiceAdvertiserDelegate {
+extension MultipeerCommunicator: MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         let session = getSessionFor(peerID)
         let agreeInvitation = !session.connectedPeers.contains(peerID)
@@ -122,7 +130,7 @@ extension MultipeerConnector: MCNearbyServiceAdvertiserDelegate {
     }
 }
 
-extension MultipeerConnector: MCSessionDelegate {
+extension MultipeerCommunicator: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case .connected:
@@ -158,7 +166,7 @@ extension MultipeerConnector: MCSessionDelegate {
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) { }
 }
 
-extension MultipeerConnector: Connector {
+extension MultipeerCommunicator: ICommunicator {
     func sendMessage(string: String, to userID: String, completionHandler: ((Bool, Error?) -> Void)?) {
         if let peerID = getPeerIDFor(userID),
             let session = sessionsByPeerID[peerID] {

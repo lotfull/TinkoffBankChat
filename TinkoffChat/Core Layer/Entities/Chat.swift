@@ -29,14 +29,14 @@ import CoreData
 //}
 
 extension Chat {
-    static func findOrInsertChat(with ID: String, in context: NSManagedObjectContext) -> Chat? {
+    static func findOrInsertChat(withChatID chatID: String, in context: NSManagedObjectContext) -> Chat? {
         
         guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
             print("Model is not available in context!")
             assert(false)
             return nil
         }
-        guard let fetchRequest = Chat.fetchRequestChat(with: ID, model: model) else {
+        guard let fetchRequest = Chat.fetchRequestChat(withChatID: chatID, model: model) else {
             return nil
         }
         var chat: Chat?
@@ -50,13 +50,48 @@ extension Chat {
             print("Failed to fetch Chat: \(error)")
         }
         if chat == nil {
-            chat = Chat.insertChat(with: ID, in: context)
+            chat = Chat.insertChat(with: chatID, in: context)
         }
         return chat
     }
     
-    static func fetchRequestChat(with ID: String, model: NSManagedObjectModel) -> NSFetchRequest<Chat>? {
+    static func findOrInsertChatByUser(withUserID userID: String, in context: NSManagedObjectContext) -> Chat? {
+        
+        guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
+            print("Model is not available in context!")
+            assert(false)
+            return nil
+        }
+        guard let fetchRequest = Chat.fetchRequestChatByUser(withUserID: userID, model: model) else {
+            return nil
+        }
+        var chat: Chat?
+        do {
+            let results = try context.fetch(fetchRequest)
+            assert(results.count < 2, "Multiple chats found!")
+            if let foundChat = results.first {
+                chat = foundChat
+            }
+        } catch {
+            print("Failed to fetch Chat: \(error)")
+        }
+        if chat == nil {
+            chat = Chat.insertChat(with: chatID, in: context)
+        }
+        return chat
+    }
+    
+    static func fetchRequestChat(withChatID ID: String, model: NSManagedObjectModel) -> NSFetchRequest<Chat>? {
         let requestName = "ChatByID"
+        guard let fetchRequest = model.fetchRequestTemplate(forName: requestName) as? NSFetchRequest<Chat> else {
+            assert(false, "No fetch request template with name \(requestName)")
+            return nil
+        }
+        return fetchRequest
+    }
+    
+    static func fetchRequestChatByUser(withUserID UserID: String, model: NSManagedObjectModel) -> NSFetchRequest<Chat>? {
+        let requestName = "ChatByUserID"
         guard let fetchRequest = model.fetchRequestTemplate(forName: requestName) as? NSFetchRequest<Chat> else {
             assert(false, "No fetch request template with name \(requestName)")
             return nil
@@ -67,6 +102,7 @@ extension Chat {
     static func insertChat(with ID: String, in context: NSManagedObjectContext) -> Chat? {
         if let chat = NSEntityDescription.insertNewObject(forEntityName: "Chat", into: context) as? Chat {
             chat.id = ID
+            chat.isOnline = true
             return chat
         }
         return nil
