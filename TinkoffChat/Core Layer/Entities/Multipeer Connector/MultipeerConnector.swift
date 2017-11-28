@@ -34,7 +34,7 @@ class MultipeerCommunicator: NSObject {
     
     let serviceType = "tinkoff-chat"
     let userNameKey = "userName"
-    let myPeerID = MCPeerID(displayName: UIDevice.current.identifierForVendor!.uuidString)
+    let myPeerID = MCPeerID(displayName: "DEF" + UIDevice.current.identifierForVendor!.uuidString)
     let serviceBrowser: MCNearbyServiceBrowser
     let serviceAdvertiser: MCNearbyServiceAdvertiser
     

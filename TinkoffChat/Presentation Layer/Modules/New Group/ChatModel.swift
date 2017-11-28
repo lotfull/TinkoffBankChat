@@ -35,19 +35,18 @@ class ChatModel: NSObject, IChatModel, UITableViewDelegate, UITableViewDataSourc
     var isOnline: Bool {
         return chatDataService.isOnlineChat(withID: chatID)
     }
-//    func send(message: String) {
-//        communicationService.sendMessage(text: message, to: chatID)
-//    }
+    
     private let fetchedResultsController: NSFetchedResultsController<Message>
     private var tableView: UITableView!
 
     init(communicationService: ICommunicationService,
         chatDataService: IChatDataService,
-        chatID: String) {
+        chat: Chat) {
+        
         self.communicationService = communicationService
         self.chatDataService = chatDataService
-        self.chatID = chatID
-        self.name = chatDataService.getUserNameForChat(withID: chatID)
+        self.chatID = chat.id ?? "chatID\(arc4random_uniform(1000))"
+        self.name = "name"//chatDataService.getUserNameForChat(withID: self.chatID)
         
         let mainContext = chatDataService.mainContext//.mainContext
         guard let model = mainContext.persistentStoreCoordinator?.managedObjectModel else {
@@ -56,11 +55,12 @@ class ChatModel: NSObject, IChatModel, UITableViewDelegate, UITableViewDataSourc
         
         
         let fetchRequest: NSFetchRequest<Message> = Message.fetchRequestMessageByChatID(ID: chatID, model: model)!
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Message.date), ascending: true)]
-        self.fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                                 managedObjectContext: mainContext,
-                                                                 sectionNameKeyPath: nil,
-                                                                 cacheName: nil)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Message.text), ascending: true)]
+        self.fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: mainContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil)
         super.init()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(managedObjectContextDidSave(_:)),
@@ -95,6 +95,7 @@ class ChatModel: NSObject, IChatModel, UITableViewDelegate, UITableViewDataSourc
         communicationService.sendMessage(text: text, to: chatID, completionHandler: completionHandler)
     }
     
+    private var shouldScrollToBottom = false
 }
 
 // MARK: - UITableViewDataSource
@@ -125,6 +126,49 @@ extension ChatModel {
         }
         messageCell.messageText = message.text
         return messageCell
+    }
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        CATransaction.begin()
+        CATransaction.setCompletionBlock {
+            let adjustedTableViewFrameSize = self.tableView.frame.height - self.tableView.contentInset.bottom
+            let contentExceedsTableViewFrame = self.tableView.contentSize.height > adjustedTableViewFrameSize
+            if self.shouldScrollToBottom && contentExceedsTableViewFrame {
+                let offset = CGPoint(x: 0, y: self.tableView.contentSize.height - adjustedTableViewFrameSize)
+                self.tableView.setContentOffset(offset, animated: true)
+            }
+            self.shouldScrollToBottom = false
+        }
+        tableView.beginUpdates()
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+        CATransaction.commit()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .delete:
+            deleteRowsInTableAtIndexPath(indexPath)
+        case .insert:
+            self.shouldScrollToBottom = true
+            insertRowsInTableAtIndexPath(newIndexPath)
+        default:
+            break
+        }
+    }
+    
+    private func deleteRowsInTableAtIndexPath(_ indexPath: IndexPath?) {
+        if let indexPath = indexPath {
+            tableView.deleteRows(at: [indexPath], with: .none)
+        }
+    }
+    
+    private func insertRowsInTableAtIndexPath(_ indexPath: IndexPath?) {
+        if let indexPath = indexPath {
+            tableView.insertRows(at: [indexPath], with: .none)
+        }
     }
 }
 

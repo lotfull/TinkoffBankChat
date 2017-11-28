@@ -10,8 +10,8 @@ import Foundation
 
 class ChatAssembly {
     
-    func chatViewController(withChatID chatID: String) -> ChatViewController {
-        let model = chatModel(withChatID: chatID)
+    func chatViewController(withChat chat: Chat) -> ChatViewController {
+        let model = chatModel(withChat: chat)
         let chatVC = ChatViewController.initWith(model: model)
         model.delegate = chatVC
         return chatVC
@@ -23,10 +23,10 @@ class ChatAssembly {
 ////        chatViewController.setDependencies(model)
 //    }
     
-    private func chatModel(withChatID chatID: String) -> ChatModel {
+    private func chatModel(withChat chat: Chat) -> ChatModel {
         return ChatModel(communicationService: RootAssembly.communicationService,
                          chatDataService: RootAssembly.chatDataService,
-                         chatID: chatID)
+                         chat: chat)
     }
 
 }

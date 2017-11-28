@@ -153,8 +153,8 @@ class ChatsListModel: NSObject, IChatsListModel, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let selectedChatID = chatID(for: indexPath)
-        let chatVC = ChatAssembly().chatViewController(withChatID: selectedChatID)
+        let selectedChat = fetchedResultsController.object(at: indexPath)
+        let chatVC = ChatAssembly().chatViewController(withChat: selectedChat)
         delegate?.pushVC(chatVC)
     }
 }

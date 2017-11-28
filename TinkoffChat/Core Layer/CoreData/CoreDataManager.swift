@@ -277,7 +277,7 @@ class CoreDataManager: ICoreDataManager {
             guard let appUser = AppUser.findOrInsertAppUser(in: saveContext),
                 let currentUserID = appUser.currentUser?.id else {
                     print("App User Not Found in myID")
-                    return UUID().uuidString
+                    return "ABC" + UUID().uuidString
             }
             return currentUserID
         }

@@ -54,10 +54,10 @@ extension User {
     }
     
     private static func generateCurrentUserNameString() -> String {
-        return UIDevice.current.identifierForVendor!.uuidString
+        return "FUC" + UIDevice.current.identifierForVendor!.uuidString
     }
     static func generateUserIDString() -> String {
-        return UIDevice.current.identifierForVendor!.uuidString
+        return "KYO" + UIDevice.current.identifierForVendor!.uuidString
     }
     
 }
