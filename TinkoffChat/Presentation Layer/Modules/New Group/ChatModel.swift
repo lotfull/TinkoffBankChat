@@ -54,8 +54,8 @@ class ChatModel: NSObject, IChatModel, UITableViewDelegate, UITableViewDataSourc
         }
         
         
-        let fetchRequest: NSFetchRequest<Message> = Message.fetchRequestMessageByChatID(ID: chatID, model: model)!
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Message.text), ascending: true)]
+        let fetchRequest: NSFetchRequest<Message> = Message.fetchRequestMessageByChatID(ID: chatID, model: model)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Message.date), ascending: true)]
         self.fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: mainContext,
