@@ -39,39 +39,31 @@ class CoreDataManager: ICoreDataManager {
     }
     
     func handleDidFindUser(userID: String, userName: String?) {
-        print("Context save error: Error Domain=NSCocoaErrorDomain Code=1560 \"(null)\" UserInfo={NSDetailedErrors=(",
-            "Error Domain=NSCocoaErrorDomain Code=1570 \"The operation couldn\'t be completed. (Cocoa error 1570.)\" UserInfo={NSValidationErrorObject=<Chat: 0x60000008e830> (entity: Chat; id: 0x600000036e20 <x-coredata:///Chat/tA225AA51-6C60-44D3-B178-21340B6A77C24> ; data: {\n    hasUnreadMessages = 1;\n    id = \"C5188E09-C6DD-42F3-A3C0-D9108CDE1815\";\n    isOnline = nil;\n    lastMessage = \"0x600000035720 <x-coredata:///Message/tA225AA51-6C60-44D3-B178-21340B6A77C25>\";\n    messages =     (\n    );\n    user = nil;\n}), NSValidationErrorKey=isOnline, NSLocalizedDescription=The operation couldn\'t be completed. (Cocoa error 1570.)}",
-            "Error Domain=NSCocoaErrorDomain Code=1570 \"The operation couldn\'t be completed. (Cocoa error 1570.)\" UserInfo={NSValidationErrorObject=<Chat: 0x60000008e830> (entity: Chat; id: 0x600000036e20 <x-coredata:///Chat/tA225AA51-6C60-44D3-B178-21340B6A77C24> ; data: {\n    hasUnreadMessages = 1;\n    id = \"C5188E09-C6DD-42F3-A3C0-D9108CDE1815\";\n    isOnline = nil;\n    lastMessage = \"0x600000035720 <x-coredata:///Message/tA225AA51-6C60-44D3-B178-21340B6A77C25>\";\n    messages =     (\n    );\n    user = nil;\n}), NSValidationErrorKey=user, NSLocalizedDescription=The operation couldn\'t be completed. (Cocoa error 1570.)}",
-            "saveMessage coreDataStack?.performSave() error Error Domain=NSCocoaErrorDomain Code=1560 \"(null)\" UserInfo={NSDetailedErrors=(",
-            "Error Domain=NSCocoaErrorDomain Code=1570 \"The operation couldn\'t be completed. (Cocoa error 1570.)\" UserInfo={NSValidationErrorObject=<Chat: 0x60000008e830> (entity: Chat; id: 0x600000036e20 <x-coredata:///Chat/tA225AA51-6C60-44D3-B178-21340B6A77C24> ; data: {\n    hasUnreadMessages = 1;\n    id = \"C5188E09-C6DD-42F3-A3C0-D9108CDE1815\";\n    isOnline = nil;\n    lastMessage = \"0x600000035720 <x-coredata:///Message/tA225AA51-6C60-44D3-B178-21340B6A77C25>\";\n    messages =     (\n    );\n    user = nil;\n}), NSValidationErrorKey=isOnline, NSLocalizedDescription=The operation couldn\'t be completed. (Cocoa error 1570.)}",
-            "Error Domain=NSCocoaErrorDomain Code=1570 \"The operation couldn\'t be completed. (Cocoa error 1570.)\" UserInfo={NSValidationErrorObject=<Chat: 0x60000008e830> (entity: Chat; id: 0x600000036e20 <x-coredata:///Chat/tA225AA51-6C60-44D3-B178-21340B6A77C24> ; data: {\n    hasUnreadMessages = 1;\n    id = \"C5188E09-C6DD-42F3-A3C0-D9108CDE1815\";\n    isOnline = nil;\n    lastMessage = \"0x600000035720 <x-coredata:///Message/tA225AA51-6C60-44D3-B178-21340B6A77C25>\";\n    messages =     (\n    );\n    user = nil;\n}), NSValidationErrorKey=user, NSLocalizedDescription=The operation couldn\'t be completed. (Cocoa error 1570.)}")
         print(#function)
         guard let coreDataStack = CoreDataManager.coreDataStack,
-            let saveContext = coreDataStack.saveContext,
-            let user = User.findOrInsertUser(withID: userID, in: saveContext),
-            let chat = Chat.findOrInsertChatByUser(withUserID: userID, in: saveContext) else {
+            let saveContext = coreDataStack.saveContext else {
                 print("findOrInsert(AppUser/Chat) incorrect", #function)
                 return
         }
-        user.isOnline = true
-        chat.isOnline = true
-        user.name = userName
-        user.chat = chat
-        
-        coreDataStack.performSave(context: saveContext, completion: { (success, error) in
-            if !success {
-                print("appendChat coreDataStack?.performSave() error \(error!)")
-            }
-            print("saved successfully")
-        })
+        saveContext.perform {
+            guard let chat = Chat.findOrInsertChat(withChatID: userID, in: saveContext),
+                let user = User.findOrInsertUser(withID: userID, in: saveContext) else { print("(chat/user) not (find/insert)ed"); return }
+            user.isOnline = true
+            chat.isOnline = true
+            user.name = userName
+            user.chat = chat
+            print(#function, chat)
+            print(#function, user)
+            coreDataStack.performSave(in: saveContext, completionHandler: nil)
+        }
     }
     
     func handleDidLoseUser(userID: String) {
         print(#function)
         guard let coreDataStack = CoreDataManager.coreDataStack,
             let saveContext = coreDataStack.saveContext,
-            let user = User.findOrInsertUser(withID: userID, in: saveContext),
-            let chat = Chat.findOrInsertChatByUser(withUserID: userID, in: saveContext) else {
+            let chat = Chat.findOrInsertChat(withChatID: userID, in: saveContext),
+            let user = chat.user else {
                 print("findOrInsert(AppUser/Chat) incorrect", #function)
                 return
         }
@@ -161,7 +153,7 @@ class CoreDataManager: ICoreDataManager {
                 print("readChat error")
                 return
         }
-        chat.hasUnreadMessages = false//.isUnread = false
+        chat.hasUnreadMessages = false
         coreDataStack.performSave(context: saveContext) {_,_ in}
     }
     
@@ -183,8 +175,7 @@ class CoreDataManager: ICoreDataManager {
         print(#function)
         guard let coreDataStack = CoreDataManager.coreDataStack,
             let saveContext = coreDataStack.saveContext,
-            let chat = Chat.findOrInsertChat(withChatID: partnerID,
-                                             in: saveContext),
+            let chat = Chat.findOrInsertChat(withChatID: partnerID, in: saveContext),
             let _ = Message.insertMessage(withText: text,
                                           type: type,
                                           toChat: chat,
@@ -194,11 +185,7 @@ class CoreDataManager: ICoreDataManager {
                 return
         }
         chat.hasUnreadMessages = type == inbox
-        coreDataStack.performSave(context: saveContext, completion: { (success, error) in
-            if !success {
-                print("saveMessage coreDataStack?.performSave() error \(error!)")
-            }
-        })
+        coreDataStack.performSave(in: saveContext, completionHandler: nil)
     }
     
     func getAppUser() -> AppUser? {

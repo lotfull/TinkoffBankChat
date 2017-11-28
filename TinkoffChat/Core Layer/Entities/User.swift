@@ -23,6 +23,7 @@ extension User {
         do {
             let results = try context.fetch(fetchRequest)
             assert(results.count < 2, "Multiple Users found!")
+            print("*** user results\n", results)
             if let foundUser = results.first {
                 user = foundUser
             }
@@ -30,6 +31,7 @@ extension User {
             print("Failed to fetch User: \(error)")
         }
         if user == nil {
+            print(#function, "user == nil")
             user = User.insertUser(with: id, in: context)
         }
         return user
