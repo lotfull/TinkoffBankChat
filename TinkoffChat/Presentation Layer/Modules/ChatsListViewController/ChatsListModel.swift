@@ -12,6 +12,7 @@ import CoreData
 protocol IChatsListModel: class {
     func chatID(for indexPath: IndexPath) -> String
     func setup(_ tableView: UITableView)
+    weak var delegate: IChatsListDelegate? { get set }
 }
 
 class ChatsListModel: NSObject, IChatsListModel, UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate {
@@ -22,6 +23,8 @@ class ChatsListModel: NSObject, IChatsListModel, UITableViewDelegate, UITableVie
     private var tableView: UITableView!
     private var fetchedResultsController: NSFetchedResultsController<Chat>
 
+    weak var delegate: IChatsListDelegate?
+    
     init(chatDataService: IChatDataService,
         communicationService: ICommunicationService) {
         self.chatDataService = chatDataService
@@ -37,49 +40,17 @@ class ChatsListModel: NSObject, IChatsListModel, UITableViewDelegate, UITableVie
     
     func setup(_ tableView: UITableView) {
         self.tableView = tableView
-        fetchedResultsController.delegate = self
-//        self.tableView.register(nib, forCellReuseIdentifier: chatsTableViewCellID)
         self.tableView.dataSource = self
         self.tableView.delegate = self
-    }
-    /*
-    private func sortForTableFormat(_ chats: [Chat]) -> [[Chat]] {
-        var onlineChats1 = [Chat]()
-        var onlineChats2 = [Chat]()
-        var onlineChats3 = [Chat]()
-        var offlineChats1 = [Chat]()
-        var offlineChats2 = [Chat]()
-        var offlineChats3 = [Chat]()
-        for chat in chats {
-            if chat.isOnline {
-                if chat.lastMessage?.date != nil {
-                    onlineChats1.append(chat)
-                } else {
-                    if chat.user.name != nil {
-                        onlineChats2.append(chat)
-                    } else {
-                        onlineChats3.append(chat)
-                    }
-                }
-            } else {
-                if chat.lastMessage?.date != nil {
-                    offlineChats1.append(chat)
-                } else {
-                    if chat.name != nil {
-                        offlineChats2.append(chat)
-                    } else {
-                        offlineChats3.append(chat)
-                    }
-                }
-            }
+        fetchedResultsController.delegate = self
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            print("Error fetching: \(error)")
         }
-        let answerChats = [
-            onlineChats1.sorted { $0.lastMessageDate! > $1.lastMessageDate! } + onlineChats2.sorted { $0.name! > $1.name! } + onlineChats3,
-            offlineChats1.sorted { $0.lastMessageDate! > $1.lastMessageDate! } + offlineChats2.sorted { $0.name! > $1.name! } + offlineChats3
-        ]
-        return answerChats
     }
-    */
+    
+    
     ///////////// ---- ////////////
     
     func chatID(for indexPath: IndexPath) -> String {
@@ -178,5 +149,12 @@ class ChatsListModel: NSObject, IChatsListModel, UITableViewDelegate, UITableVie
         default:
             break
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let selectedChatID = chatID(for: indexPath)
+        let chatVC = ChatAssembly().chatViewController(withChatID: selectedChatID)
+        delegate?.pushVC(chatVC)
     }
 }

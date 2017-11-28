@@ -47,8 +47,8 @@ extension Message {
     }
     
     static func fetchRequestMessageByChatID(ID: String, model: NSManagedObjectModel) -> NSFetchRequest<Message>? {
-        let requestName = "MessageByChatID"
-        guard let fetchRequest = model.fetchRequestTemplate(forName: requestName) as? NSFetchRequest<Message> else {
+        let requestName = "MessagesByChatID"
+        guard let fetchRequest = model.fetchRequestFromTemplate(withName: requestName, substitutionVariables: ["id" : ID]) as? NSFetchRequest<Message> else {
             assert(false, "No fetch request template with name \(requestName)")
             return nil
         }

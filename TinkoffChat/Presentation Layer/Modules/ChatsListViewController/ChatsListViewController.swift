@@ -9,24 +9,15 @@
 import UIKit
 import CoreData
 
-class ChatsListViewController: UIViewController {
-    
-//    var coreDataStack: CoreDataStack!
-//
-//    // MARK: - ChatsListDelegate
-//    func updateUI(with chats: [[Chat]]) {
-//        DispatchQueue.main.async {
-//            self.chats = chats
-//            self.updateChatsList()
-//        }
-//    }
-    
+protocol IChatsListDelegate: class {
+    func pushVC(_ viewController: UIViewController)
+}
+
+class ChatsListViewController: UIViewController, IChatsListDelegate {
     @IBOutlet weak var tableView: UITableView!
     
     private var model: IChatsListModel!
     
-    var chats = [[Chat]]()
-
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -34,6 +25,7 @@ class ChatsListViewController: UIViewController {
     static func initWith(model: IChatsListModel) -> ChatsListViewController {
         let chatsListVC = UIStoryboard(name: "ChatsList", bundle: nil).instantiateViewController(withIdentifier: "ChatsListViewController") as! ChatsListViewController
         chatsListVC.model = model
+        model.delegate = chatsListVC//.delegate = chatsListVC
         return chatsListVC
     }
     
@@ -53,13 +45,6 @@ class ChatsListViewController: UIViewController {
         tableView.reloadData()
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let selectedChatID = model.chatID(for: indexPath)
-        let chatVC = ChatAssembly().chatViewController(withChatID: selectedChatID)
-        self.navigationController?.pushViewController(chatVC, animated: true)
-    }
-    
     @IBAction func presentProfile(_ sender: Any) {
         let profileVC = ProfileAssembly().profileViewController()
         let navigationController = UINavigationController.init(rootViewController: profileVC)
@@ -68,6 +53,10 @@ class ChatsListViewController: UIViewController {
     
     private func updateChatsList() {
         tableView.reloadData()
+    }
+    
+    func pushVC(_ viewController: UIViewController) {
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
     
     private let sectionName = ["Online", "History"]

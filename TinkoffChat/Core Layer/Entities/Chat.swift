@@ -86,21 +86,12 @@ extension Chat {
     
     static func fetchRequestChat(withChatID ID: String, model: NSManagedObjectModel) -> NSFetchRequest<Chat>? {
         let requestName = "ChatByID"
-        guard let fetchRequest = model.fetchRequestTemplate(forName: requestName) as? NSFetchRequest<Chat> else {
+        guard let fetchRequest = model.fetchRequestFromTemplate(withName: requestName, substitutionVariables: ["id" : ID]) as? NSFetchRequest<Chat> else {
             assert(false, "No fetch request template with name \(requestName)")
             return nil
         }
         return fetchRequest
     }
-    
-//    static func fetchRequestChatByUser(withUserID UserID: String, model: NSManagedObjectModel) -> NSFetchRequest<Chat>? {
-//        let requestName = "ChatByID"
-//        guard let fetchRequest = model.fetchRequestTemplate(forName: requestName) as? NSFetchRequest<Chat> else {
-//            assert(false, "No fetch request template with name \(requestName)")
-//            return nil
-//        }
-//        return fetchRequest
-//    }
     
     static func insertChat(with ID: String, in context: NSManagedObjectContext) -> Chat? {
         if let chat = NSEntityDescription.insertNewObject(forEntityName: "Chat", into: context) as? Chat {
@@ -114,16 +105,6 @@ extension Chat {
         }
         return nil
     }
-    
-//    static func insertChat(withUserID userID: String, in context: NSManagedObjectContext) -> Chat? {
-//        if let chat = NSEntityDescription.insertNewObject(forEntityName: "Chat", into: context) as? Chat {
-//            chat.user = User.findOrInsertUser(withID: userID, in: context)
-//            chat.id = userID
-//            chat.isOnline = true
-//            return chat
-//        }
-//        return nil
-//    }
     
     static func generateChatID() -> String {
         return ("Chat-\(arc4random_uniform(1000))-\(Date.timeIntervalSinceReferenceDate)".data(using: .utf8)?.base64EncodedString())!

@@ -46,7 +46,7 @@ extension User {
     
     private static func fetchRequestUserByID(model: NSManagedObjectModel, id: String) -> NSFetchRequest<User>? {
         let requestName = "UserByID"
-        guard let fetchRequest = model.fetchRequestFromTemplate(withName: requestName, substitutionVariables: [id: id]) as? NSFetchRequest<User> else {
+        guard let fetchRequest = model.fetchRequestFromTemplate(withName: requestName, substitutionVariables: ["id": id]) as? NSFetchRequest<User> else {
             assert(false, "No fetch request template with name \(requestName)")
             return nil
         }
