@@ -15,4 +15,6 @@ class RootAssembly {
     static let multipeerCommunicator: ICommunicator = MultipeerCommunicator()
     static let communicationService: ICommunicationService = CommunicationService()
     static let chatDataService: IChatDataService = ChatDataService()
+    static let profileImagePickerAssembly = ProfileImagePickerAssembly()
+
 }

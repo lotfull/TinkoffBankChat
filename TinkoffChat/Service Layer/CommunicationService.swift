@@ -59,32 +59,4 @@ class CommunicationService: NSObject, ICommunicationService, ICommunicatorDelega
             completionHandler!(success, error)
         }
     }
-    
-//
-//    var frc: NSFetchedResultsController<Chat>?
-//    let stack: ICoreDataStack
-//    var tableView: UITableView? {
-//        didSet {
-//            do {
-//                try self.frc?.performFetch()
-//                self.tableView?.reloadData()
-//            } catch {
-//                print(error)
-//            }
-//        }
-//    }
-//
-//    init(stack: ICoreDataStack) {
-//        self.stack = stack
-//
-//        let mainContext = stack.mainContext
-//        var persistentStore = mainContext?.persistentStoreCoordinator
-//        if let parent = mainContext?.parent {
-//            persistentStore = parent.persistentStoreCoordinator
-//        }
-//        let fetchRequestManager
-//
-//
-//        super.init()
-//    }
 }

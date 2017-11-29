@@ -17,8 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let rootAssembly = RootAssembly()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
-        self.window = UIWindow(frame: UIScreen.main.bounds)
+        self.window = LogoEmittingWindow(frame: UIScreen.main.bounds)
         let controller = rootAssembly.ChatsListModule.chatsListViewController()
         let navigationController = UINavigationController.init(rootViewController: controller)
         window?.rootViewController = navigationController

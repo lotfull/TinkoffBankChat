@@ -267,7 +267,7 @@ class CoreDataManager: ICoreDataManager {
         user.name = profile.name
         user.info = profile.info
         if profile.image != nil {
-            user.image = UIImagePNGRepresentation((profile.image)!) as Data?
+            user.image = UIImageJPEGRepresentation((profile.image)!, 1.0) as Data?
         }
         coreDataStack.performSave(context: self.saveContext, completion: completion)
     }

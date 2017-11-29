@@ -37,6 +37,7 @@ class ChatsListViewController: UIViewController, IChatsListDelegate {
         let nib = UINib(nibName: chatsTableViewCellName, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: chatsTableViewCellID)
         model.setup(tableView)
+        navigationItem.rightBarButtonItem?.tintColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
     }
     
     override func viewWillAppear(_ animated: Bool) {

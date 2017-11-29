@@ -9,27 +9,6 @@
 import Foundation
 import CoreData
 
-//class Message {
-//    let type: MessageType
-//    let text: String
-//    let date: Date
-//    var isRead = false
-//
-//    init(text: String, date: Date, type: MessageType) {
-//        self.date = date
-//        self.text = text
-//        self.type = type
-//    }
-//
-//    func makeReaded() {
-//        isRead = true
-//    }
-//}
-//
-//enum MessageType {
-//    case inbox
-//    case outbox
-//}
 extension Message {
     static func insertMessage(withText text: String, type: Bool, toChat chat: Chat, inContext context: NSManagedObjectContext) -> Message? {
         guard let message = NSEntityDescription.insertNewObject(forEntityName: "Message", into: context) as? Message else {
