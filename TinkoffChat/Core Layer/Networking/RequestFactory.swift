@@ -10,8 +10,12 @@ import UIKit
 
 struct RequestsFactory {
     struct PixabayAPIRequests {
-        static func imageList() -> RequestConfig<[PixabayImageListAPIModel]> {
-            return RequestConfig<[PixabayImageListAPIModel]>(request: PixabayImageListRequest(), parser: PixabayImageListParser())
+        static func editorChoiceImagesList() -> RequestConfig<[PixabayImageListAPIModel]> {
+            return RequestConfig<[PixabayImageListAPIModel]>(request: PixabayEditorChoiceImagesRequest(), parser: PixabayImageListParser())
+        }
+        
+        static func carImagesList() -> RequestConfig<[PixabayImageListAPIModel]> {
+            return RequestConfig<[PixabayImageListAPIModel]>(request: PixabayCarImagesRequest(), parser: PixabayImageListParser())
         }
     }
     struct CommonRequest {

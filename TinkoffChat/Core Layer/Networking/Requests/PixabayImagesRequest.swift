@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol PixabayAPIRequest: IRequest {
+protocol PixabayImagesRequest: IRequest {
     typealias QueryParameters = [String: String]
     
     var apiKey: String { get }
@@ -16,7 +16,7 @@ protocol PixabayAPIRequest: IRequest {
     var queryParameters: QueryParameters { get }
 }
 
-extension PixabayAPIRequest {
+extension PixabayImagesRequest {
     var apiKey: String {
         return "7217317-93c7464b4fc13908868d6e7e9"
     }
@@ -35,6 +35,27 @@ extension PixabayAPIRequest {
     }
     
     private func prepareQueryStringFrom(_ queryParameters: QueryParameters) -> String {
-        return queryParameters.flatMap({ "\($0.key)=\($0.value)" }).joined(separator: "&")
+        return queryParameters.flatMap({
+            "\($0.key)=\($0.value)" }).joined(separator: "&")
+    }
+}
+
+class PixabayEditorChoiceImagesRequest: PixabayImagesRequest {
+    var queryParameters: [String: String] {
+        return ["key": apiKey,
+                "imageType": "photo",
+                "editors_choice": "true",
+                "per_page": "100",
+        ]
+    }
+}
+
+class PixabayCarImagesRequest: PixabayImagesRequest {
+    var queryParameters: [String: String] {
+        return ["key": apiKey,
+                "q": "car"
+                "imageType": "photo",
+                "per_page": "100",
+        ]
     }
 }

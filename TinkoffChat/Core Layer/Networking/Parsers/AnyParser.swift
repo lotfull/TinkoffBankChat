@@ -8,8 +8,8 @@
 
 import Foundation
 
-class AnyParser<Model> {
-    func parse(data: Data) -> Model? {
+class AnyParser<T> {
+    func parse(data: Data) -> T? {
         fatalError("This class should be subclassed")
     }
 }

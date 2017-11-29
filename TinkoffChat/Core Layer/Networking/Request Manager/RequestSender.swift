@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct RequestConfig<Model> {
+struct RequestConfig<T> {
     let request: IRequest
-    let parser: AnyParser<Model>
+    let parser: AnyParser<T>
 }
 
 enum Result<T> {
@@ -21,7 +21,7 @@ enum Result<T> {
 class RequestSender: IRequestSender {
     private let session = URLSession.shared
     
-    func send<Model>(config: RequestConfig<Model>, completionHandler: @escaping (Result<Model>) -> Void) {
+    func send<T>(config: RequestConfig<T>, completionHandler: @escaping (Result<T>) -> Void) {
         let urlRequest = config.request.urlRequest
         session.dataTask(with: urlRequest) { (data, _, error) in
             switch error {
@@ -34,6 +34,6 @@ class RequestSender: IRequestSender {
                 }
                 completionHandler(Result.success(parsedModel))
             }
-            }.resume()
+        }.resume()
     }
 }

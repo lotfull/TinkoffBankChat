@@ -9,5 +9,5 @@
 import Foundation
 
 protocol IRequestSender: class {
-    func send<Model>(config: RequestConfig<Model>, completionHandler: @escaping (Result<Model>) -> Void)
+    func send<T>(config: RequestConfig<T>, completionHandler: @escaping (Result<T>) -> Void)
 }

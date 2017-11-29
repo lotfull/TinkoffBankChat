@@ -21,7 +21,7 @@ class ProfileImageLoaderService: IProfileImageLoaderService {
     }
     
     func loadImages(completionHandler: @escaping ([PixabayImageListAPIModel]?, String?) -> Void) {
-        let imageListConfig: RequestConfig<[PixabayImageListAPIModel]> = RequestsFactory.PixabayAPIRequests.imageList()
+        let imageListConfig: RequestConfig<[PixabayImageListAPIModel]> = RequestsFactory.PixabayAPIRequests.editorChoiceImagesList()
         requestSender.send(config: imageListConfig) { (result: Result<[PixabayImageListAPIModel]>) in
             switch result {
             case .success(let images):
