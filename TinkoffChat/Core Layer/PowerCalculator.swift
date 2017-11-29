@@ -12,10 +12,10 @@ protocol IPowerCalculator {
     func makePow(value: Int, power: Int) -> Int
 }
 
-class powerCalculator: IPowerCalculator {
+class PowerCalculator: IPowerCalculator {
     
     
     func makePow(value: Int, power: Int) -> Int {
-        <#code#>
+        return Int(pow(Double(value), Double(power)))
     }
 }

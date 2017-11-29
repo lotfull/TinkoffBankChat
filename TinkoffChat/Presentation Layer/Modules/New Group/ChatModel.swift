@@ -53,14 +53,15 @@ class ChatModel: NSObject, IChatModel, UITableViewDelegate, UITableViewDataSourc
             preconditionFailure("Model is not available in context")
         }
         
-        
         let fetchRequest: NSFetchRequest<Message> = Message.fetchRequestMessageByChatID(ID: chatID, model: model)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Message.date), ascending: true)]
+        let byDate = NSSortDescriptor(key: #keyPath(Message.date), ascending: true)
+        fetchRequest.sortDescriptors = [byDate]
         self.fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: mainContext,
             sectionNameKeyPath: nil,
             cacheName: nil)
+        
         super.init()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(managedObjectContextDidSave(_:)),

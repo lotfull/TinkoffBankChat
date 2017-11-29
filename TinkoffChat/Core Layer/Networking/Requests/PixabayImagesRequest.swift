@@ -53,7 +53,7 @@ class PixabayEditorChoiceImagesRequest: PixabayImagesRequest {
 class PixabayCarImagesRequest: PixabayImagesRequest {
     var queryParameters: [String: String] {
         return ["key": apiKey,
-                "q": "car"
+                "q": "car",
                 "imageType": "photo",
                 "per_page": "100",
         ]

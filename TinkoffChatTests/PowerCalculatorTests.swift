@@ -7,19 +7,41 @@
 //
 
 import XCTest
+@testable import TinkoffChat
 
 class PowerCalculatorTests: XCTestCase {
     
     
-    var calculator: PowerCalculator
+    var calculator: PowerCalculator!
+    
     override func setUp() {
         super.setUp()
+        
+        calculator = PowerCalculator()
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     override func tearDown() {
+        calculator = nil
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
+    }
+    
+    func testCalculationOfPower() {
+        //given
+        let a = 2
+        let power = 3
+        let expectedResult = 8
+        
+        //when
+        let result = calculator.makePow(value: a, power: power)
+        
+        //then
+        XCTAssertEqual(result, expectedResult)
+    }
+    
+    func testCalculationOfZeroPower() {
+        
     }
     
     func testExample() {
