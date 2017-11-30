@@ -110,24 +110,20 @@ extension MultipeerCommunicator: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         print("*** peerID found \(peerID.displayName)")
         let session = getSessionFor(peerID)
-        print(session.connectedPeers)
-        if invitedPeers[peerID] == nil {
-            browser.invitePeer(peerID, to: session, withContext: nil, timeout: 30)
+        print("*** peerID \(peerID.displayName)")
+        if session.connectedPeers.contains(peerID) == false {
+            browser.invitePeer(peerID, to: session, withContext: nil, timeout: 3)
             print("*** peerID invited \(peerID.displayName)")
             invitedPeers[peerID] = info
         } else {
-            print("*** peerID already in connectedPeers \(peerID.displayName)\n*** invitedPeers[peerID] = \(invitedPeers[peerID])")
+            print("*** peerID already in connectedPeers \(peerID.displayName)")
         }
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
         print("*** peerID lost \(peerID.displayName)")
-        let session_ = getSessionFor(peerID)
         sessionsByPeerID.removeValue(forKey: peerID)
-        session(session_, peer: peerID, didChange: .notConnected)
-//        let indexOfPeerID = session.connectedPeers.index(of: peerID)
-//        session.connectedPeers.remove(at: indexOfPeerID)
-        invitedPeers.removeValue(forKey: peerID)
+        getSessionFor(peerID).disconnect()
         delegate?.didLoseUser(userID: peerID.displayName)
     }
 }
@@ -158,6 +154,7 @@ extension MultipeerCommunicator: MCSessionDelegate {
             sessionsByPeerID.removeValue(forKey: peerID)
             invitedPeers.removeValue(forKey: peerID)
             delegate?.didLoseUser(userID: peerID.displayName)
+            session.disconnect()
         case .connecting:
             print("*** peerID session \(state.rawValue) CONNECTING with peer \(peerID.displayName)")
         }
