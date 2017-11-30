@@ -45,17 +45,14 @@ class ChatModel: NSObject, IChatModel, UITableViewDelegate, UITableViewDataSourc
         
         self.communicationService = communicationService
         self.chatDataService = chatDataService
-        self.chatID = chat.id ?? "chatID\(arc4random_uniform(1000))"
-        self.name = "name"//chatDataService.getUserNameForChat(withID: self.chatID)
+        self.chatID = chat.id ?? { print("undeginedChat.id"); return "undeginedChat.id" }()
+        self.name = chat.user?.name ?? { print("undeginedChat.user.name"); return "undeginedChat.user.name" }()
         
-        let mainContext = chatDataService.mainContext//.mainContext
-        guard let model = mainContext.persistentStoreCoordinator?.managedObjectModel else {
-            preconditionFailure("Model is not available in context")
-        }
-        
-        let fetchRequest: NSFetchRequest<Message> = Message.fetchRequestMessageByChatID(ID: chatID, model: model)
+        let mainContext = chatDataService.mainContext
+        let fetchRequest = Message.fetchRequestMessageByChatID(ID: chatID, context: mainContext)
         let byDate = NSSortDescriptor(key: #keyPath(Message.date), ascending: true)
         fetchRequest.sortDescriptors = [byDate]
+        
         self.fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: mainContext,
@@ -70,7 +67,8 @@ class ChatModel: NSObject, IChatModel, UITableViewDelegate, UITableViewDataSourc
     }
     
     @objc func managedObjectContextDidSave(_ notification: NSNotification) {
-        delegate?.userBecameOnline(online: chatDataService.isOnlineChat(withID: chatID))
+        let isChatOnline = chatDataService.isOnlineChat(withID: chatID)
+        delegate?.userBecameOnline(online: isChatOnline)
     }
     func markChatAsRead() {
         chatDataService.makeReadChat(withID: chatID)
@@ -86,11 +84,11 @@ class ChatModel: NSObject, IChatModel, UITableViewDelegate, UITableViewDataSourc
         } catch {
             print("Error fetching: \(error)")
         }
-        do {
-            try self.fetchedResultsController.performFetch()
-        } catch {
-            print("Error fetching: \(error)")
-        }
+//        do {
+//            try self.fetchedResultsController.performFetch()
+//        } catch {
+//            print("Error fetching: \(error)")
+//        }
     }
     func sendMessage(text: String, completionHandler: ((Bool, Error?) -> Void)?) {
         communicationService.sendMessage(text: text, to: chatID, completionHandler: completionHandler)

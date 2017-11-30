@@ -12,7 +12,7 @@ import UIKit
 
 class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
-    // MARK: - Vars and Lets
+    var model: IProfileModel!
     private var profile: Profile!
     private var changedProfile: Profile! {
         didSet {
@@ -20,7 +20,6 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
             updateUI(firstTime: false)
         }
     }
-//    private let managerGCD = GCDDataManager()
     
     var filePath: String {
         let manager = FileManager.default
@@ -46,6 +45,37 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var contentTopConstraint: NSLayoutConstraint!
     
+    static func initWith(model: IProfileModel) -> ProfileViewController {
+        let profileVC = UIStoryboard(name: "Profile", bundle: nil).instantiateViewController(withIdentifier: "ProfileViewController") as! ProfileViewController
+        profileVC.model = model
+        return profileVC
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        nameTextField.delegate = self
+        infoTextField.delegate = self
+        loadProfile()
+        updateUI(firstTime: true)
+        enableKeyboardActions()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setCornerRadius()
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    
     // MARK: - ProfileDelegate methods
     func updateUI(firstTime: Bool) {
         if firstTime {
@@ -57,28 +87,8 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
         nameTextField.text = changedProfile.name ?? "Без Имени"
         infoTextField.text = changedProfile.info ?? "Без Описания"
     }
-    
-    var model: IProfileModel!
-    static func initWith(model: IProfileModel) -> ProfileViewController {
-        let profileVC = UIStoryboard(name: "Profile", bundle: nil).instantiateViewController(withIdentifier: "ProfileViewController") as! ProfileViewController
-        profileVC.model = model
-        return profileVC
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
+
     // MARK: - Main funcs
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        nameTextField.delegate = self
-        infoTextField.delegate = self
-        loadProfile()
-        updateUI(firstTime: true)
-        enableKeyboardActions()
-    }
-    
     lazy var imagePickerController: UIImagePickerController = {
         let imagePC = UIImagePickerController()
         imagePC.delegate = self
@@ -87,9 +97,6 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
     }()
     
     
-    override func viewWillAppear(_ animated: Bool) {
-        setCornerRadius()
-    }
     
     // MARK: - UI
     private func setCornerRadius() {

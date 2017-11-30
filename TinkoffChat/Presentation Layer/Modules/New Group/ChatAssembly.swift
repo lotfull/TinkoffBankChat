@@ -17,12 +17,6 @@ class ChatAssembly {
         return chatVC
     }
     
-//    func assembly(_ chatViewController: ChatViewController, chatID: String) {
-//        let model = chatModel(withChatID: chatID)
-////        model.delegate = chatViewController
-////        chatViewController.setDependencies(model)
-//    }
-    
     private func chatModel(withChat chat: Chat) -> ChatModel {
         return ChatModel(communicationService: RootAssembly.communicationService,
                          chatDataService: RootAssembly.chatDataService,

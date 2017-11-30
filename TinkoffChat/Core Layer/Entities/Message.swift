@@ -25,7 +25,11 @@ extension Message {
         return message
     }
     
-    static func fetchRequestMessageByChatID(ID: String, model: NSManagedObjectModel) -> NSFetchRequest<Message> {
+    static func fetchRequestMessageByChatID(ID: String, context: NSManagedObjectContext) -> NSFetchRequest<Message> {
+        guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
+            preconditionFailure("Model is not available in context")
+        }
+        
         let requestName = "MessagesByChatID"
         guard let fetchRequest = model.fetchRequestFromTemplate(withName: requestName, substitutionVariables: ["id" : ID]) as? NSFetchRequest<Message> else {
             assert(false, "No fetch request template with name \(requestName)")

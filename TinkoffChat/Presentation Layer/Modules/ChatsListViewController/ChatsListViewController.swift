@@ -61,5 +61,9 @@ class ChatsListViewController: UIViewController, IChatsListDelegate {
     }
     
     private let sectionName = ["Online", "History"]
+    
+    
+    
+    
 }
 
