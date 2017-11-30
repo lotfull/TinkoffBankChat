@@ -27,13 +27,14 @@
 		915D24EB1FCECFFF00D4F262 /* IRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915D24EA1FCECFFF00D4F262 /* IRequest.swift */; };
 		915D24ED1FCED05100D4F262 /* ProfileImageLoaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915D24EC1FCED05100D4F262 /* ProfileImageLoaderService.swift */; };
 		915D24F01FCED0D200D4F262 /* ProfileImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915D24EF1FCED0D200D4F262 /* ProfileImagePickerController.swift */; };
-		915D24F21FCED0DF00D4F262 /* ProfileImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915D24F11FCED0DF00D4F262 /* ProfileImageCell.swift */; };
+		915D24F21FCED0DF00D4F262 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915D24F11FCED0DF00D4F262 /* ImageCell.swift */; };
 		915D24F41FCED0F000D4F262 /* ProfileImagePickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915D24F31FCED0F000D4F262 /* ProfileImagePickerModel.swift */; };
 		915D24F61FCED0FC00D4F262 /* ProfileImagePickerAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915D24F51FCED0FC00D4F262 /* ProfileImagePickerAssembly.swift */; };
 		915D24F81FCED11000D4F262 /* ProfileImagePicker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 915D24F71FCED11000D4F262 /* ProfileImagePicker.storyboard */; };
 		915D24FA1FCF1D7400D4F262 /* PowerCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915D24F91FCF1D7400D4F262 /* PowerCalculator.swift */; };
 		915D25021FCF1E0700D4F262 /* TinkoffChatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915D25011FCF1E0700D4F262 /* TinkoffChatTests.swift */; };
 		915D250A1FCF1E5200D4F262 /* PowerCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915D25091FCF1E5200D4F262 /* PowerCalculatorTests.swift */; };
+		915D253E1FCFF9AC00D4F262 /* AnimatableTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915D253D1FCFF9AC00D4F262 /* AnimatableTitleView.swift */; };
 		9166B47E1F8972660081D4A9 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9166B47D1F8972660081D4A9 /* ChatViewController.swift */; };
 		9166B4811F8975920081D4A9 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9166B47F1F8975920081D4A9 /* MessageCell.swift */; };
 		916836151F9A29650095A427 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916836141F9A29650095A427 /* Message.swift */; };
@@ -99,7 +100,7 @@
 		915D24EA1FCECFFF00D4F262 /* IRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IRequest.swift; sourceTree = "<group>"; };
 		915D24EC1FCED05100D4F262 /* ProfileImageLoaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageLoaderService.swift; sourceTree = "<group>"; };
 		915D24EF1FCED0D200D4F262 /* ProfileImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImagePickerController.swift; sourceTree = "<group>"; };
-		915D24F11FCED0DF00D4F262 /* ProfileImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageCell.swift; sourceTree = "<group>"; };
+		915D24F11FCED0DF00D4F262 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		915D24F31FCED0F000D4F262 /* ProfileImagePickerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImagePickerModel.swift; sourceTree = "<group>"; };
 		915D24F51FCED0FC00D4F262 /* ProfileImagePickerAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImagePickerAssembly.swift; sourceTree = "<group>"; };
 		915D24F71FCED11000D4F262 /* ProfileImagePicker.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ProfileImagePicker.storyboard; sourceTree = "<group>"; };
@@ -108,6 +109,7 @@
 		915D25011FCF1E0700D4F262 /* TinkoffChatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinkoffChatTests.swift; sourceTree = "<group>"; };
 		915D25031FCF1E0700D4F262 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		915D25091FCF1E5200D4F262 /* PowerCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerCalculatorTests.swift; sourceTree = "<group>"; };
+		915D253D1FCFF9AC00D4F262 /* AnimatableTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatableTitleView.swift; sourceTree = "<group>"; };
 		9166B47D1F8972660081D4A9 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		9166B47F1F8975920081D4A9 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		916836141F9A29650095A427 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -314,7 +316,7 @@
 			isa = PBXGroup;
 			children = (
 				915D24EF1FCED0D200D4F262 /* ProfileImagePickerController.swift */,
-				915D24F11FCED0DF00D4F262 /* ProfileImageCell.swift */,
+				915D24F11FCED0DF00D4F262 /* ImageCell.swift */,
 				915D24F31FCED0F000D4F262 /* ProfileImagePickerModel.swift */,
 				915D24F51FCED0FC00D4F262 /* ProfileImagePickerAssembly.swift */,
 				915D24F71FCED11000D4F262 /* ProfileImagePicker.storyboard */,
@@ -330,6 +332,14 @@
 				915D25091FCF1E5200D4F262 /* PowerCalculatorTests.swift */,
 			);
 			path = TinkoffChatTests;
+			sourceTree = "<group>";
+		};
+		915D253C1FCFF99700D4F262 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				915D253D1FCFF9AC00D4F262 /* AnimatableTitleView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		9198E48E1FA746A300A5787D /* ProfileViewController */ = {
@@ -358,6 +368,7 @@
 		9198E4AE1FA891BE00A5787D /* ChatViewController */ = {
 			isa = PBXGroup;
 			children = (
+				915D253C1FCFF99700D4F262 /* View */,
 				911928971F9F232200AA1658 /* UI */,
 				9166B47D1F8972660081D4A9 /* ChatViewController.swift */,
 				9198E4B11FA8926C00A5787D /* ChatModel.swift */,
@@ -554,6 +565,7 @@
 				919D31301FAE2E6000EF655B /* User.swift in Sources */,
 				916836191F9A2A840095A427 /* Profile.swift in Sources */,
 				915D24F61FCED0FC00D4F262 /* ProfileImagePickerAssembly.swift in Sources */,
+				915D253E1FCFF9AC00D4F262 /* AnimatableTitleView.swift in Sources */,
 				915D24E01FCEC8A900D4F262 /* PixabaImageListParser.swift in Sources */,
 				915D24E81FCECFD200D4F262 /* IRequestSender.swift in Sources */,
 				9119289A1F9F236C00AA1658 /* MultipeerConnector.swift in Sources */,
@@ -578,7 +590,7 @@
 				916836171F9A29790095A427 /* Chat.swift in Sources */,
 				9198E4B21FA8926C00A5787D /* ChatModel.swift in Sources */,
 				915D24D61FCEC7A400D4F262 /* RequestSender.swift in Sources */,
-				915D24F21FCED0DF00D4F262 /* ProfileImageCell.swift in Sources */,
+				915D24F21FCED0DF00D4F262 /* ImageCell.swift in Sources */,
 				9109668B1FA8BB9300FC63BF /* ProfileModel.swift in Sources */,
 				915D24DA1FCEC84100D4F262 /* PixabayImagesRequest.swift in Sources */,
 				91288B521FB9D4A0007C9932 /* CommunicationService.swift in Sources */,

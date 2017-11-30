@@ -35,16 +35,3 @@ class ProfileService: IProfileService {
     }
 }
 
-
-//if let appUser = CoreDataManager.getAppUser(),
-//    let user = appUser.currentUser {
-//    let image = user.image != nil ? UIImage(data: user.image!) : #imageLiteral(resourceName: "placeholder-user")
-//    let myProfile = Profile(name: user.name ?? "Unnamed User",
-//                            info: user.info ?? "No info",
-//                            image: image)
-//    completion(myProfile, nil)
-//} else {
-//    print("Core data error")
-//    completion(nil, CoreDataError.loadError)
-//}
-

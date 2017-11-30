@@ -21,18 +21,18 @@ enum Result<T> {
 class RequestSender: IRequestSender {
     private let session = URLSession.shared
     
-    func send<T>(config: RequestConfig<T>, completionHandler: @escaping (Result<T>) -> Void) {
+    func send<T>(config: RequestConfig<T>, completion: @escaping (Result<T>) -> Void) {
         let urlRequest = config.request.urlRequest
         session.dataTask(with: urlRequest) { (data, _, error) in
             switch error {
             case .some(let error):
-                completionHandler(Result.error(error.localizedDescription))
+                completion(Result.error(error.localizedDescription))
             case .none:
                 guard let data = data, let parsedModel = config.parser.parse(data: data) else {
-                    completionHandler(Result.error("Received data couldn't be parsed"))
+                    completion(Result.error("Received data couldn't be parsed"))
                     return
                 }
-                completionHandler(Result.success(parsedModel))
+                completion(Result.success(parsedModel))
             }
         }.resume()
     }

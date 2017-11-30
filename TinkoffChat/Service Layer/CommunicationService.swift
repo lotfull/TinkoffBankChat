@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 protocol ICommunicationService: class {
-    func sendMessage(text: String, to userID: String, completionHandler: ((Bool, Error?) -> Void)?)
+    func sendMessage(text: String, to userID: String, completion: ((Bool, Error?) -> Void)?)
 }
 
 class CommunicationService: NSObject, ICommunicationService, ICommunicatorDelegate {
@@ -47,7 +47,7 @@ class CommunicationService: NSObject, ICommunicationService, ICommunicatorDelega
         self.communicator.delegate = self
     }
     
-    func sendMessage(text: String, to userID: String, completionHandler: ((Bool, Error?) -> Void)?) {
+    func sendMessage(text: String, to userID: String, completion: ((Bool, Error?) -> Void)?) {
         print(#function)
         communicator.sendMessage(string: text, to: userID) { success, error in
             guard success == true else {
@@ -56,7 +56,7 @@ class CommunicationService: NSObject, ICommunicationService, ICommunicatorDelega
             }
 //            self.coreDataManager.sentMessage(with: text, toPartnerWithID: userID)
             self.coreDataManager.handleSentMessageWith(text: text, toChatWithID: userID)
-            completionHandler!(success, error)
+            completion!(success, error)
         }
     }
 }

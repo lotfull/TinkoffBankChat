@@ -17,13 +17,17 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
     @IBOutlet weak var inputTextView: UITextView!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var bottomContentConstraint: NSLayoutConstraint!
+    
+    private var animatableTitleLabel = AnimatableTitleLabel()
 
     @IBAction func sendButtonPressed(_ sender: Any) {
         guard inputTextView.text != "" else { return }
         inputTextView.text = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-//        model.send(message: inputTextView.text)
         model.sendMessage(text: inputTextView.text) { (success, error) in
-            guard success == true else { print(error?.localizedDescription ?? "ooops"); return }
+            guard success == true else {
+                assertionFailure(error?.localizedDescription ?? "ooops");
+                return
+            }
             self.tableView.reloadData()
         }
         inputTextView.text = ""
@@ -42,13 +46,14 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         model.setup(tableView)
-        configureTitle()
+        configureTitle(with: model.name)
         addKeyboardNotifications()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         model.markChatAsRead()
+        animateTitleLabel(model.isOnline)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,16 +62,22 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
         tableView.reloadData()
     }
     
+    private func configureTitle(with userName: String) {
+        animatableTitleLabel.text = userName
+        navigationItem.titleView = animatableTitleLabel
+    }
+    
+    private func animateTitleLabel(_ online: Bool) {
+        animatableTitleLabel.isOnline = online
+    }
+    
     func userBecameOnline(online: Bool) {
         sendButton.isEnabled = online
+        animateTitleLabel(online)
     }
     
     @objc private func dismissKeyboard() {
         view.endEditing(true)
-    }
-    
-    private func configureTitle() {
-        navigationItem.title = model.name
     }
 
     private func scrollToBottom() {
@@ -80,23 +91,6 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
         }
     }
     
-    //MARK: - UITableViewDataSource
-   /*
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chat.messages?.count ?? 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let message = chat.messages![indexPath.row]
-        let identifier = message.type == inbox ? CellIdentifier.inboxCellID : CellIdentifier.outboxCellID
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
-        cell.selectionStyle = .none
-        if let messageCell = cell as? MessageCellConfiguration {
-            messageCell.messageText = message.text
-        }
-        return cell
-    }
-    */
     private func enableSendButton(_ trueOrFalse: Bool) {
         sendButton.isEnabled = true
     }
@@ -104,7 +98,6 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
     
     //MARK: - UITextViewDelegate
     func textViewDidChange(_ textView: UITextView) {
-//        let ifOnlineAndNotEmpty = chat.isOnline && textView.text != ""
         enableSendButton(textView.text != "")
     }
     
@@ -115,15 +108,6 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
         }
         return true
     }
-    
-//    // MARK: - ChatMessagesDelegate
-//    func updateUI(with chat: Chat) {
-//        DispatchQueue.main.async {
-//            self.tableView.reloadData()
-//            self.scrollToBottom()
-//            self.enableSendButton(self.chat.isOnline)
-//        }
-//    }
     
     // MARK: - KeyBoard notifications
     private func addKeyboardNotifications() {
@@ -153,15 +137,6 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
                            completion: {_ in self.scrollToBottom() })
         }
     }
-//
-//    // MARK: - DataSource
-//    struct CellIdentifier {
-//        static let inboxCellID = "InboxCell"
-//        static let outboxCellID = "OutboxCell"
-//    }
-//
-//    let inboxCell = "InboxCell"
-//    let outboxCell = "OutboxCell"
 }
 
 

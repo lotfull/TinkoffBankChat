@@ -1,5 +1,5 @@
 //
-//  ProfileImageCell.swift
+//  ImageCell.swift
 //  TinkoffChat
 //
 //  Created by Kam Lotfull on 29.11.17.
@@ -8,21 +8,14 @@
 
 import UIKit
 
-class ProfileImageCell: UICollectionViewCell {
+class ImageCell: UICollectionViewCell {
     class var identifier: String {
         return String(describing: self)
     }
     
     var hasLoadedImage = false
-    
-    var image: UIImage? {
-        didSet {
-            profileImageView.image = image
-        }
-    }
-    
     var indexPath: IndexPath?
     
-    @IBOutlet private weak var profileImageView: UIImageView!
+    @IBOutlet weak var imageView: UIImageView!
 }
 

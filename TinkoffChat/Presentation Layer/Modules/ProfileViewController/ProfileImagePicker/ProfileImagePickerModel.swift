@@ -9,7 +9,7 @@
 import UIKit
 
 protocol IProfileImagePickerModel: class {
-    func fetchImages(completionHandler: @escaping ((_ success: Bool) -> Void))
+    func fetchImages(completion: @escaping ((_ success: Bool) -> Void))
     func configureWith(_ collectionView: UICollectionView)
 }
 
@@ -26,20 +26,20 @@ class ProfileImagePickerModel: NSObject, IProfileImagePickerModel {
         collectionView.dataSource = self
     }
     
-    func fetchImages(completionHandler: @escaping ((_ success: Bool) -> Void)) {
+    func fetchImages(completion: @escaping ((_ success: Bool) -> Void)) {
         DispatchQueue.global(qos: .userInitiated).async {
             self.profileImageLoaderService.loadImages { (images, error) in
                 if let loadedImages = images {
                     self.urls = loadedImages.flatMap { URL(string: $0.url) }
-                    completionHandler(true)
+                    completion(true)
                 } else {
-                    completionHandler(false)
+                    completion(false)
                 }
             }
         }
     }
     
-    func fetchImage(from url: URL, for cell: ProfileImageCell, at indexPath: IndexPath) {
+    func fetchImage(from url: URL, for cell: ImageCell, at indexPath: IndexPath) {
         DispatchQueue.global(qos: .userInitiated).async {
             self.profileImageLoaderService.loadImage(from: url) { (result, error) in
                 if let error = error {
@@ -49,7 +49,7 @@ class ProfileImagePickerModel: NSObject, IProfileImagePickerModel {
                     cell.hasLoadedImage = true
                     DispatchQueue.main.async {
                         self.imagesCache[url] = result?.image
-                        cell.image = result?.image
+                        cell.imageView.image = result?.image
                     }
                 }
             }
@@ -63,19 +63,19 @@ extension ProfileImagePickerModel: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileImageCell.identifier, for: indexPath)
-        guard let profileImageCell = cell as? ProfileImageCell else {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.identifier, for: indexPath)
+        guard let imageCell = cell as? ImageCell else {
             assertionFailure("Wrong cell type in ProfileImagePickerViewController")
             return cell
         }
-        profileImageCell.indexPath = indexPath
-        profileImageCell.image = UIImage(named: "profileImagePlaceholder")
+        imageCell.indexPath = indexPath
+        imageCell.imageView.image = UIImage(named: "profileImagePlaceholder")
         let url = urls[indexPath.row]
         if let cachedImage = imagesCache[url] {
-            profileImageCell.image = cachedImage
+            imageCell.imageView.image = cachedImage
         } else {
-            fetchImage(from: url, for: profileImageCell, at: indexPath)
+            fetchImage(from: url, for: imageCell, at: indexPath)
         }
-        return profileImageCell
+        return imageCell
     }
 }

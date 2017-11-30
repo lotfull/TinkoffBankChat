@@ -9,7 +9,7 @@
 import Foundation
 
 //protocol IMessagesService {
-//    func newMessagesFetch(completionHandler: @escaping ((Chat) -> Void))
+//    func newMessagesFetch(completion: @escaping ((Chat) -> Void))
 //}
 //
 //class MessagesService: IMessagesService {
@@ -20,15 +20,15 @@ import Foundation
 //        self.communicationManager = communicationManager
 //    }
 //
-//    func newMessagesFetch(completionHandler: @escaping ((Chat) -> Void)) {
+//    func newMessagesFetch(completion: @escaping ((Chat) -> Void)) {
 //        communicationManager.newMessagesUpdate = {
 //            (chat: Chat) in
-//            completionHandler(chat)
+//            completion(chat)
 //        }
 //    }
 //
-//    func sendMessage(string: String, to chat: Chat, completionHandler: ((Bool, Error?) -> Void)?) {
-//        communicationManager.sendMessage(string: string, to: chat, completionHandler: completionHandler)
+//    func sendMessage(string: String, to chat: Chat, completion: ((Bool, Error?) -> Void)?) {
+//        communicationManager.sendMessage(string: string, to: chat, completion: completion)
 //    }
 //}
 

@@ -13,7 +13,7 @@ protocol IChatModel: class {
     weak var delegate: IChatModelDelegate? { get set }
     var isOnline: Bool { get }
     var name: String { get }
-    func sendMessage(text: String, completionHandler: ((Bool, Error?) -> Void)?)
+    func sendMessage(text: String, completion: ((Bool, Error?) -> Void)?)
     func markChatAsRead()
     func setup(_ tableView: UITableView)
 }
@@ -90,8 +90,8 @@ class ChatModel: NSObject, IChatModel, UITableViewDelegate, UITableViewDataSourc
 //            print("Error fetching: \(error)")
 //        }
     }
-    func sendMessage(text: String, completionHandler: ((Bool, Error?) -> Void)?) {
-        communicationService.sendMessage(text: text, to: chatID, completionHandler: completionHandler)
+    func sendMessage(text: String, completion: ((Bool, Error?) -> Void)?) {
+        communicationService.sendMessage(text: text, to: chatID, completion: completion)
     }
     
     private var shouldScrollToBottom = false

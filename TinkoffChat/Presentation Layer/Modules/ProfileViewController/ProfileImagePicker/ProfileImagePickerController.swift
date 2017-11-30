@@ -69,11 +69,12 @@ class ProfileImagePickerViewController: UIViewController {
 extension ProfileImagePickerViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath)
-        guard let profileImageCell = cell as? ProfileImageCell else {
+        guard let imageCell = cell as? ImageCell else {
             assertionFailure("Wrong cell type was selected")
             return
         }
-        if profileImageCell.hasLoadedImage, let image = profileImageCell.image {
+        if imageCell.hasLoadedImage,
+            let image = imageCell.imageView.image {
             guard let onSelectProfileImageCompletion = onSelectProfileImage else {
                 assertionFailure("onSelectProfileImage completion is nil")
                 return

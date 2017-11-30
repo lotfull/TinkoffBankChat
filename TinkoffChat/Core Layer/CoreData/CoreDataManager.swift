@@ -52,9 +52,10 @@ class CoreDataManager: ICoreDataManager {
             let user = User.findOrInsertUser(withID: id, in: saveContext)
             user.name = userName
             user.isOnline = true
+            chat.isOnline = true
             user.chat = chat
             chat.user = user
-            self.coreDataStack.performSave(in: saveContext, completionHandler: nil)
+            self.coreDataStack.performSave(in: saveContext, completion: nil)
         }
     }
     
@@ -66,7 +67,7 @@ class CoreDataManager: ICoreDataManager {
             user.isOnline = false
             let chat = Chat.findOrInsertChat(withID: id, in: saveContext)
             chat.isOnline = false
-            self.coreDataStack.performSave(in: saveContext, completionHandler: nil)
+            self.coreDataStack.performSave(in: saveContext, completion: nil)
         }
     }
     
@@ -81,7 +82,7 @@ class CoreDataManager: ICoreDataManager {
             message.chat = chat
             chat.addToMessages(message)
             chat.lastMessage = message
-            self.coreDataStack.performSave(in: saveContext, completionHandler: nil)
+            self.coreDataStack.performSave(in: saveContext, completion: nil)
         }
     }
     
@@ -96,7 +97,7 @@ class CoreDataManager: ICoreDataManager {
             chat.hasUnreadMessages = true
             chat.addToMessages(message)
             print("*** message", message)
-            self.coreDataStack.performSave(in: saveContext, completionHandler: nil)
+            self.coreDataStack.performSave(in: saveContext, completion: nil)
         }
     }
     
@@ -134,7 +135,7 @@ class CoreDataManager: ICoreDataManager {
             user.chat = chat
             print(#function, chat)
             print(#function, user)
-            self.coreDataStack.performSave(in: self.saveContext, completionHandler: nil)
+            self.coreDataStack.performSave(in: self.saveContext, completion: nil)
         }
     }
     
@@ -169,8 +170,8 @@ class CoreDataManager: ICoreDataManager {
         if let appUser = getAppUser(),
             let user = appUser.currentUser {
             let image = user.image != nil ? UIImage(data: user.image!) : #imageLiteral(resourceName: "placeholder-user")
-            let myProfile = Profile(name: user.name ?? "Unnamed User",
-                                    info: user.info ?? "No info",
+            let myProfile = Profile(name: user.name,
+                                    info: user.info,
                                     image: image)
             completion(myProfile, nil)
         } else {
@@ -250,7 +251,7 @@ class CoreDataManager: ICoreDataManager {
                 return
         }
         chat.hasUnreadMessages = type == inbox
-        coreDataStack.performSave(in: self.saveContext, completionHandler: nil)
+        coreDataStack.performSave(in: self.saveContext, completion: nil)
     }
     
     func getAppUser() -> AppUser? {
@@ -271,24 +272,6 @@ class CoreDataManager: ICoreDataManager {
         }
         coreDataStack.performSave(context: self.saveContext, completion: completion)
     }
-    
-    private var myID: String {
-        get {
-            guard let appUser = AppUser.findOrInsertAppUser(in: saveContext),
-                let currentUserID = appUser.currentUser?.id else {
-                    print("App User Not Found in myID")
-                    return "ABC" + UUID().uuidString
-            }
-            return currentUserID
-        }
-    }
-
-//    guard let appUser = AppUser.findOrInsertAppUser(in: stack.saveContext),
-//            let currentUserID = appUser.currentUser?.id else {
-//                assertionFailure()
-//                return UUID().uuidString
-//        }
-//        return currentUserID
 }
 
 

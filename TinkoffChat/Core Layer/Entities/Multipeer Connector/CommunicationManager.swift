@@ -13,7 +13,7 @@ import Foundation
 protocol ICommunicationManager: class {
     var newChatsUpdate: ((_ chats: [Chat]) -> ())? { get set }
     var newMessagesUpdate: ((_ chats: Chat) -> ())? { get set }
-    func sendMessage(string: String, to chat: Chat, completionHandler: ((_ success: Bool, _ error: Error?) -> Void)?)
+    func sendMessage(string: String, to chat: Chat, completion: ((_ success: Bool, _ error: Error?) -> Void)?)
     weak var delegate: ICommunicationManagerDelegate
     weak var 
 }
@@ -28,7 +28,7 @@ class CommunicationManager: ICommunicatorDelegate, ICommunicationManager {
     
 //    var dataManager: CoreDataManager
     
-    func sendMessage(string: String, to chat: Chat, completionHandler: ((Bool, Error?) -> Void)?) {
+    func sendMessage(string: String, to chat: Chat, completion: ((Bool, Error?) -> Void)?) {
         let message = Message(text: string, date: Date(), type: outbox)
         message.makeReaded()
         chat.messages.append(message)
@@ -36,9 +36,9 @@ class CommunicationManager: ICommunicatorDelegate, ICommunicationManager {
             if success {
                 self?.newMessagesUpdate?(chat)
                 self?.newChatsUpdate?((self?.chats)!)
-                completionHandler!(success, nil)
+                completion!(success, nil)
             } else {
-                completionHandler!(false, error)
+                completion!(false, error)
             }
         }
     }
