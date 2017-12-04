@@ -13,15 +13,41 @@ protocol ICommunicationService: class {
     func sendMessage(text: String, to userID: String, completion: ((Bool, Error?) -> Void)?)
 }
 
-class CommunicationService: NSObject, ICommunicationService, ICommunicatorDelegate {
+class CommunicationService: NSObject, ICommunicationService {
+    
+    let coreDataManager: ICoreDataManager
+    var communicator: ICommunicator
+    
+    override init() {
+        self.coreDataManager = RootAssembly.coreDataManager
+        self.communicator = RootAssembly.multipeerCommunicator
+        super.init()
+        self.communicator.delegate = self
+        self.coreDataManager.turnChatsOffline()
+    }
+}
+
+extension CommunicationService: ICommunicatorDelegate {
+    
     func didFindUser(userID: String, userName: String?) {
-//        coreDataManager.handleDidFindUser(userID: userID, userName: userName)
-        coreDataManager.handleFoundUserWith(id: userID, userName: userName)
+        coreDataManager.handleDidFindUser(userID: userID, userName: userName)
     }
     
     func didLoseUser(userID: String) {
-//        coreDataManager.handleDidLoseUser(userID: userID)
-        coreDataManager.handleLostUserWith(id: userID)
+        coreDataManager.handleDidLostUser(userID: userID)
+    }
+    
+    func didReceiveMessage(text: String, fromUser: String, toUser: String) {
+        coreDataManager.handleDidReceiveMessage(text: text, fromUser: fromUser, toUser: toUser)
+    }
+    
+    func sendMessage(text: String, to userID: String, completion: ((Bool, Error?) -> Void)?) {
+        print(#function)
+        communicator.sendMessage(string: text, to: userID) { success, error in
+            if !success { completion!(success, error) }
+            self.coreDataManager.sentMessage(with: text, toUserWithID: userID)
+            completion!(success, error)
+        }
     }
     
     func failedToStartBrowsingForUsers(error: Error) {
@@ -30,33 +56,5 @@ class CommunicationService: NSObject, ICommunicationService, ICommunicatorDelega
     
     func failedToStartAdvertising(error: Error) {
         coreDataManager.handleFailedToStartAdvertising(error: error)
-    }
-    
-    func didReceiveMessage(text: String, fromUser: String, toUser: String) {
-//        coreDataManager.handleDidReceiveMessage(text: text, fromUser: fromUser, toUser: toUser)
-        coreDataManager.handleReceivedMessageWith(text: text, fromUserID: fromUser)
-    }
-    
-    let coreDataManager: ICoreDataManager// = RootAssembly.coreDataManager
-    var communicator: ICommunicator/// = RootAssembly.multipeerCommunicator
-    
-    override init() {
-        self.coreDataManager = RootAssembly.coreDataManager
-        self.communicator = RootAssembly.multipeerCommunicator
-        super.init()
-        self.communicator.delegate = self
-    }
-    
-    func sendMessage(text: String, to userID: String, completion: ((Bool, Error?) -> Void)?) {
-        print(#function)
-        communicator.sendMessage(string: text, to: userID) { success, error in
-            guard success == true else {
-                print("CommunicationService sendMessage fall")
-                return
-            }
-//            self.coreDataManager.sentMessage(with: text, toPartnerWithID: userID)
-            self.coreDataManager.handleSentMessageWith(text: text, toChatWithID: userID)
-            completion!(success, error)
-        }
     }
 }

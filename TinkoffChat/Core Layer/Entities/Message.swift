@@ -10,19 +10,19 @@ import Foundation
 import CoreData
 
 extension Message {
-    static func insertMessage(withText text: String, type: Bool, toChat chat: Chat, inContext context: NSManagedObjectContext) -> Message? {
+    static func insertMessage(withText text: String, type: Bool, toChat chat: Chat, inContext context: NSManagedObjectContext) {
         guard let message = NSEntityDescription.insertNewObject(forEntityName: "Message", into: context) as? Message else {
-            print("Failed insertNewObject(forEntityName: Message")
-            return nil
+            assertionFailure("Failed insertNewObject(forEntityName: Message")
+            return
         }
-        let messageID = chat.id! + "\(Date.timeIntervalSinceReferenceDate)" + "\(arc4random_uniform(1000000))"
+        let messageID = chat.id! + "\(Date.timeIntervalSinceReferenceDate)" + "\(arc4random_uniform(1000))"
         message.id = messageID
         message.text = text
         message.type = type
         message.date = Date()
         message.chat = chat
         message.lastInChat = chat
-        return message
+        chat.hasUnreadMessages = type == inbox
     }
     
     static func fetchRequestMessageByChatID(ID: String, context: NSManagedObjectContext) -> NSFetchRequest<Message> {

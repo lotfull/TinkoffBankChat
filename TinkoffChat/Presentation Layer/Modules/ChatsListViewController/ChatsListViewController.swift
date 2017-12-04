@@ -25,7 +25,7 @@ class ChatsListViewController: UIViewController, IChatsListDelegate {
     static func initWith(model: IChatsListModel) -> ChatsListViewController {
         let chatsListVC = UIStoryboard(name: "ChatsList", bundle: nil).instantiateViewController(withIdentifier: "ChatsListViewController") as! ChatsListViewController
         chatsListVC.model = model
-        model.delegate = chatsListVC//.delegate = chatsListVC
+        model.delegate = chatsListVC
         return chatsListVC
     }
     
@@ -37,7 +37,7 @@ class ChatsListViewController: UIViewController, IChatsListDelegate {
         let nib = UINib(nibName: chatsTableViewCellName, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: chatsTableViewCellID)
         model.setup(tableView)
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
+        navigationItem.rightBarButtonItem?.tintColor = UIColor(white: 0.5, alpha: 1)
     }
     
     override func viewWillAppear(_ animated: Bool) {

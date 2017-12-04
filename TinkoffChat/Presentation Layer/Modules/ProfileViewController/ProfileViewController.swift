@@ -111,8 +111,6 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
     }
     private func enableButtonsIf(_ bool: Bool) {
-//        saveProfileButton.isEnabled = bool
-//        saveProfileButton.backgroundColor = bool ? .white : .black
         saveProfileButton.isHidden = !bool
     }
     private func UIinSaveMode(_ yes: Bool) {

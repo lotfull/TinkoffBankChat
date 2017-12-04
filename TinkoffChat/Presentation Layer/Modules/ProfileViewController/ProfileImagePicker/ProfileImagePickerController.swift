@@ -40,7 +40,6 @@ class ProfileImagePickerViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    
     // MARK: - Private methods
     
     private func fetchImages() {

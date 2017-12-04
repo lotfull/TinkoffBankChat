@@ -15,10 +15,10 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var inputTextView: UITextView!
-    @IBOutlet weak var sendButton: UIButton!
+    @IBOutlet weak var sendButton: SendButton!
     @IBOutlet weak var bottomContentConstraint: NSLayoutConstraint!
     
-    private var animatableTitleLabel = AnimatableTitleLabel()
+    private var animatableTitleLabel: AnimatableTitleLabel!
 
     @IBAction func sendButtonPressed(_ sender: Any) {
         guard inputTextView.text != "" else { return }
@@ -36,6 +36,7 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
     static func initWith(model: IChatModel) -> ChatViewController {
         let chatVC = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
         chatVC.model = model
+        chatVC.animatableTitleLabel = AnimatableTitleLabel(isOnline: model.isOnline)
         return chatVC
     }
     
@@ -47,6 +48,7 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
         super.viewDidLoad()
         model.setup(tableView)
         configureTitle(with: model.name)
+        configureInputView()
         addKeyboardNotifications()
     }
     
@@ -54,6 +56,7 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
         super.viewDidAppear(animated)
         model.markChatAsRead()
         animateTitleLabel(model.isOnline)
+        sendButton.isEnabled = model.isOnline
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,6 +68,12 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
     private func configureTitle(with userName: String) {
         animatableTitleLabel.text = userName
         navigationItem.titleView = animatableTitleLabel
+    }
+    
+    private func configureInputView() {
+        inputView?.addLine(to: .top, color: .blue)
+        inputTextView?.layer.borderWidth = 0.5
+        inputTextView?.layer.borderColor = UIColor.blue.cgColor
     }
     
     private func animateTitleLabel(_ online: Bool) {
@@ -91,14 +100,9 @@ class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelega
         }
     }
     
-    private func enableSendButton(_ trueOrFalse: Bool) {
-        sendButton.isEnabled = true
-    }
-    
-    
-    //MARK: - UITextViewDelegate
+    // MARK: - UITextViewDelegate
     func textViewDidChange(_ textView: UITextView) {
-        enableSendButton(textView.text != "")
+        sendButton.isEnabled = textView.text != ""
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

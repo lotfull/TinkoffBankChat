@@ -12,23 +12,18 @@ import CoreData
 protocol ICoreDataManager {
     func loadProfile(completion: @escaping (Profile?, Error?) -> Void)
     func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void)
-    func sentMessage(with text: String, toPartnerWithID partnerID: String)
     func readChat(withID chatID: String)
     func getUserNameForChat(withID chatID: String) -> String
     func isOnlineChat(withID chatID: String) -> Bool
     func turnChatsOffline()
     var mainContext: NSManagedObjectContext { get }
-    func handleFoundUserWith(id: String, userName: String?)
-    func handleLostUserWith(id: String)
-    func handleSentMessageWith(text: String, toChatWithID conversationID: String)
-    func handleReceivedMessageWith(text: String, fromUserID: String)
     func handleDidFindUser(userID: String, userName: String?)
-    func handleDidLoseUser(userID: String)
+    func handleDidLostUser(userID: String)
+    func handleDidReceiveMessage(text: String, fromUser ID: String, toUser: String)
+    func sentMessage(with text: String, toUserWithID ID: String)
     func handleFailedToStartBrowsingForUsers(error: Error)
     func handleFailedToStartAdvertising(error: Error)
-    func handleDidReceiveMessage(text: String, fromUser: String, toUser: String)
 }
-
 
 class CoreDataManager: ICoreDataManager {
     
@@ -39,35 +34,6 @@ class CoreDataManager: ICoreDataManager {
                 _coreDataStack = CoreDataStack.init()
             }
             return _coreDataStack!
-        }
-    }
-    
-    
-    func handleFoundUserWith(id: String, userName: String?) {
-        print("Handling found user!")
-        let saveContext = self.coreDataStack.saveContext
-        saveContext.perform {
-            let chat = Chat.findOrInsertChat(withID: id, in: saveContext)
-            chat.isOnline = true
-            let user = User.findOrInsertUser(withID: id, in: saveContext)
-            user.name = userName
-            user.isOnline = true
-            chat.isOnline = true
-            user.chat = chat
-            chat.user = user
-            self.coreDataStack.performSave(in: saveContext, completion: nil)
-        }
-    }
-    
-    func handleLostUserWith(id: String) {
-        print("Handling lost user!")
-        let saveContext = coreDataStack.saveContext
-        saveContext.perform {
-            let user = User.findOrInsertUser(withID: id, in: saveContext)
-            user.isOnline = false
-            let chat = Chat.findOrInsertChat(withID: id, in: saveContext)
-            chat.isOnline = false
-            self.coreDataStack.performSave(in: saveContext, completion: nil)
         }
     }
     
@@ -109,47 +75,46 @@ class CoreDataManager: ICoreDataManager {
         return message
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    /////////////////////////////////////////////
-    
-    
-    
-    
-    
-    
     func handleDidFindUser(userID: String, userName: String?) {
-        print(#function)
         saveContext.perform {
             let chat = Chat.findOrInsertChat(withID: userID, in: self.saveContext)
-            let user = User.findOrInsertUser(withID: userID, in: self.saveContext)
+            guard let user = chat.user else { assertionFailure("no chat.user"); return }
+//            let user = User.findOrInsertUser(withID: userID, in: self.saveContext)
             user.isOnline = true
             chat.isOnline = true
             user.name = userName
             user.chat = chat
-            print(#function, chat)
-            print(#function, user)
             self.coreDataStack.performSave(in: self.saveContext, completion: nil)
         }
     }
     
-    func handleDidLoseUser(userID: String) {
-        print(#function)
-        let chat = Chat.findOrInsertChat(withID: userID, in: saveContext)
-        let user = chat.user!
-        user.isOnline = false
-        chat.isOnline = false
-        coreDataStack.performSave(context: saveContext, completion: { (success, error) in
-            if !success {
-                print("deleteChat coreDataStack?.performSave() error \(error!)")
-            }
-        })
+    func handleDidLostUser(userID: String) {
+        saveContext.perform {
+            let chat = Chat.findOrInsertChat(withID: userID, in: self.saveContext)
+            let user = chat.user!
+            user.isOnline = false
+            chat.isOnline = false
+            self.coreDataStack.performSave(context: self.saveContext, completion: { _, _ in })
+        }
+    }
+
+    func handleDidReceiveMessage(text: String, fromUser ID: String, toUser: String) {
+        saveMessage(withText: text, userID: ID, type: inbox)
+    }
+    
+    func sentMessage(with text: String, toUserWithID ID: String) {
+        saveMessage(withText: text, userID: ID, type: outbox)
+    }
+
+    func saveMessage(withText text: String, userID: String, type: Bool) {
+        saveContext.perform {
+            let chat = Chat.findOrInsertChat(withID: userID, in: self.saveContext)
+            Message.insertMessage(withText: text,
+                                  type: type,
+                                  toChat: chat,
+                                  inContext: self.saveContext)
+            self.coreDataStack.performSave(in: self.saveContext, completion: nil)
+        }
     }
     
     func handleFailedToStartBrowsingForUsers(error: Error) {
@@ -159,12 +124,6 @@ class CoreDataManager: ICoreDataManager {
     func handleFailedToStartAdvertising(error: Error) {
         print(#function)
     }
-    
-    func handleDidReceiveMessage(text: String, fromUser: String, toUser: String) {
-        print(#function)
-        saveMessage(withText: text, partnerID: fromUser, type: inbox)
-    }
-    
     
     func loadProfile(completion: @escaping (Profile?, Error?) -> Void) {
         if let appUser = getAppUser(),
@@ -218,11 +177,6 @@ class CoreDataManager: ICoreDataManager {
         return self.coreDataStack.masterContext
     }
     
-    func sentMessage(with text: String, toPartnerWithID partnerID: String) {
-        print(#function)
-        saveMessage(withText: text, partnerID: partnerID, type: outbox)
-    }
-    
     func readChat(withID chatID: String) {
         let chat = Chat.findOrInsertChat(withID: chatID, in: self.saveContext)
         chat.hasUnreadMessages = false
@@ -237,21 +191,6 @@ class CoreDataManager: ICoreDataManager {
     func isOnlineChat(withID chatID: String) -> Bool {
         let chat = Chat.findOrInsertChat(withID: chatID, in: self.saveContext)
         return chat.isOnline
-    }
-    
-    func saveMessage(withText text: String, partnerID: String, type: Bool) {
-        print(#function)
-        let chat = Chat.findOrInsertChat(withID: partnerID, in: self.saveContext)
-        guard let _ = Message.insertMessage(withText: text,
-                                          type: type,
-                                          toChat: chat,
-                                          inContext: self.saveContext)
-            else {
-                print("saveMessage guard error")
-                return
-        }
-        chat.hasUnreadMessages = type == inbox
-        coreDataStack.performSave(in: self.saveContext, completion: nil)
     }
     
     func getAppUser() -> AppUser? {

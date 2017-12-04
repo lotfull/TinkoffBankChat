@@ -84,11 +84,6 @@ class ChatModel: NSObject, IChatModel, UITableViewDelegate, UITableViewDataSourc
         } catch {
             print("Error fetching: \(error)")
         }
-//        do {
-//            try self.fetchedResultsController.performFetch()
-//        } catch {
-//            print("Error fetching: \(error)")
-//        }
     }
     func sendMessage(text: String, completion: ((Bool, Error?) -> Void)?) {
         communicationService.sendMessage(text: text, to: chatID, completion: completion)
@@ -124,6 +119,7 @@ extension ChatModel {
             return cell
         }
         messageCell.messageText = message.text
+        messageCell.messageDate = message.date
         return messageCell
     }
     
@@ -169,20 +165,4 @@ extension ChatModel {
             tableView.insertRows(at: [indexPath], with: .none)
         }
     }
-}
-
-// MARK: - UITableViewDelegate
-
-extension ChatModel {
-//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        guard let messageCell = cell as? MessageCellConfiguration & UITableViewCell else {
-//            assertionFailure("Wrong cell type")
-//            return
-//        }
-//        let message = fetchedResultsController.object(at: indexPath)
-//        cell.layoutIfNeeded()
-////        let messageCellIdentifier = message.type == inbox ?
-////            MessageCellID.inbox.rawValue :
-////            MessageCellID.outbox.rawValue
-//    }
 }

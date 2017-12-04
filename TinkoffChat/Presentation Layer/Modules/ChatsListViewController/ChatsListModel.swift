@@ -50,9 +50,6 @@ class ChatsListModel: NSObject, IChatsListModel, UITableViewDelegate, UITableVie
         }
     }
     
-    
-    ///////////// ---- ////////////
-    
     func chatID(for indexPath: IndexPath) -> String {
         guard let chatID = fetchedResultsController.object(at: indexPath).id else {
             preconditionFailure("No conversation found for passed index path")
@@ -84,7 +81,6 @@ class ChatsListModel: NSObject, IChatsListModel, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let chatCell = tableView.dequeueReusableCell(withIdentifier: ChatCell.identifier, for: indexPath) as! ChatCell
-        
         let chat = fetchedResultsController.object(at: indexPath)
         chatCell.nameLabel.text = chat.user?.name
         chatCell.message = chat.lastMessage?.text
@@ -94,9 +90,12 @@ class ChatsListModel: NSObject, IChatsListModel, UITableViewDelegate, UITableVie
         return chatCell
     }
     
-    
-    // NSFRCD
-    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.addLine(to: .bottom,
+                     insets: UIEdgeInsetsMake(0, 12, 0, 12),
+                     color: UIColor(red: 183, green: 183, blue: 183, alpha: 1))
+    }
+        
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print(#function)
         tableView.beginUpdates()

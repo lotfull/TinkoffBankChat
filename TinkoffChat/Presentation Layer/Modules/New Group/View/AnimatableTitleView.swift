@@ -12,11 +12,19 @@ class AnimatableTitleLabel: UILabel {
     private let animationDuration: TimeInterval = 1
     private let onlineScale: CGFloat = 1.1
     private let onlineColor = UIColor.green
-    private let offlineColor = UIColor.black
+    private let offlineColor = UIColor.lightGray
+    
+    convenience init(isOnline: Bool) {
+        self.init()
+        self.isOnline = isOnline
+        self.textColor = isOnline ? onlineColor : offlineColor
+        self.shadowColor = .black
+        self.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        translatesAutoresizingMaskIntoConstraints = false
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        translatesAutoresizingMaskIntoConstraints = false
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -29,10 +37,11 @@ class AnimatableTitleLabel: UILabel {
         }
     }
     
-    var isOnline: Bool = false {
+    var isOnline: Bool? = nil {
         didSet {
+            guard let oldValue = oldValue else { return }
             if isOnline != oldValue {
-                animateStateTo(online: isOnline)
+                animateStateTo(online: isOnline!)
             }
         }
     }
@@ -44,8 +53,12 @@ class AnimatableTitleLabel: UILabel {
     }
     
     private func animateStateTo(online: Bool) {
-        let transform = online ? CGAffineTransform(scaleX: onlineScale, y: onlineScale) : .identity
-        let color = online ? onlineColor : offlineColor
+        let transform = online ?
+            CGAffineTransform(scaleX: onlineScale, y: onlineScale) :
+            .identity
+        let color = online ?
+            onlineColor :
+            offlineColor
         UIView.transition(with: self,
                           duration: animationDuration,
                           options: [.transitionCrossDissolve],
