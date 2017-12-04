@@ -72,9 +72,9 @@ class ChatCell: UITableViewCell, ChatCellConfiguration {
     }
     
     func configure(with chat: Chat) {
-        name = chat.name
-        message = chat.messages.last?.text
-        date = chat.lastMessageDate
+        name = chat.user?.name
+        message = chat.lastMessage?.text
+        date = chat.lastMessage?.date
         online = chat.isOnline
         hasUnreadMessages = chat.hasUnreadMessages
     }

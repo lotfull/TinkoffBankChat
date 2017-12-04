@@ -21,6 +21,6 @@ class ProfileAssembly {
     }
     
     func profileService() -> ProfileService {
-        return ProfileService()
+        return ProfileService(coreDataManager: RootAssembly.coreDataManager)
     }
 }

@@ -11,8 +11,10 @@ import Foundation
 class RootAssembly {
     
     var ChatsListModule: ChatsListAssembly = ChatsListAssembly()
-    
-    static let connectionManager: ConnectionManagerProtocol = ConnectionManager()
-    
     static let coreDataManager: CoreDataManager = CoreDataManager()
+    static let multipeerCommunicator: ICommunicator = MultipeerCommunicator()
+    static let communicationService: ICommunicationService = CommunicationService()
+    static let chatDataService: IChatDataService = ChatDataService()
+    static let profileImagePickerAssembly = ProfileImagePickerAssembly()
+
 }

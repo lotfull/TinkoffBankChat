@@ -12,7 +12,7 @@ import UIKit
 
 class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
-    // MARK: - Vars and Lets
+    var model: IProfileModel!
     private var profile: Profile!
     private var changedProfile: Profile! {
         didSet {
@@ -20,7 +20,6 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
             updateUI(firstTime: false)
         }
     }
-//    private let managerGCD = GCDDataManager()
     
     var filePath: String {
         let manager = FileManager.default
@@ -46,19 +45,6 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var contentTopConstraint: NSLayoutConstraint!
     
-    // MARK: - ProfileDelegate methods
-    func updateUI(firstTime: Bool) {
-        if firstTime {
-            imageImageView.clipsToBounds = true
-            saveProfileButton.layer.borderWidth = 1.0
-            saveProfileButton.layer.cornerRadius = 12.0
-        }
-        imageImageView.image = changedProfile.image ?? #imageLiteral(resourceName: "placeholder-user")
-        nameTextField.text = changedProfile.name ?? "Без Имени"
-        infoTextField.text = changedProfile.info ?? "Без Описания"
-    }
-    
-    var model: IProfileModel!
     static func initWith(model: IProfileModel) -> ProfileViewController {
         let profileVC = UIStoryboard(name: "Profile", bundle: nil).instantiateViewController(withIdentifier: "ProfileViewController") as! ProfileViewController
         profileVC.model = model
@@ -69,7 +55,6 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
         super.init(coder: aDecoder)
     }
     
-    // MARK: - Main funcs
     override func viewDidLoad() {
         super.viewDidLoad()
         nameTextField.delegate = self
@@ -82,6 +67,36 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
     override func viewWillAppear(_ animated: Bool) {
         setCornerRadius()
     }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    
+    // MARK: - ProfileDelegate methods
+    func updateUI(firstTime: Bool) {
+        if firstTime {
+            imageImageView.clipsToBounds = true
+            saveProfileButton.layer.borderWidth = 1.0
+            saveProfileButton.layer.cornerRadius = 12.0
+        }
+        imageImageView.image = changedProfile.image ?? #imageLiteral(resourceName: "placeholder-user")
+        nameTextField.text = changedProfile.name ?? "Без Имени"
+        infoTextField.text = changedProfile.info ?? "Без Описания"
+    }
+
+    // MARK: - Main funcs
+    lazy var imagePickerController: UIImagePickerController = {
+        let imagePC = UIImagePickerController()
+        imagePC.delegate = self
+        imagePC.allowsEditing = false
+        return imagePC
+    }()
+    
+    
     
     // MARK: - UI
     private func setCornerRadius() {
@@ -96,19 +111,18 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
     }
     private func enableButtonsIf(_ bool: Bool) {
-        saveProfileButton.isEnabled = bool
-        saveProfileButton.backgroundColor = bool ? .white : .black
+        saveProfileButton.isHidden = !bool
     }
     private func UIinSaveMode(_ yes: Bool) {
         if yes {
             self.nameTextField.endEditing(true)
             self.infoTextField.endEditing(true)
             self.activityIndicator.startAnimating()
-            self.enableButtonsIf(false)
+            enableButtonsIf(false)
         } else {
             self.activityIndicator.stopAnimating()
             self.activityIndicator.isHidden = true
-            self.enableButtonsIf(true)
+//            self.enableButtonsIf(true)
         }
     }
     
@@ -149,34 +163,36 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
     
     // MARK: - Alerts
     private var chooseActionSheet: UIAlertController {
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
-        imagePickerController.allowsEditing = false
         let chooseActionSheet = UIAlertController(title: "Library or Camera?", message: "Choose a image from Library or take new image", preferredStyle: .actionSheet)
-        chooseActionSheet.addAction(UIAlertAction(title: "Image Library", style: .default, handler: { (action: UIAlertAction) in
+        chooseActionSheet.addAction(UIAlertAction(title: "Выбрать из галереи", style: .default, handler: { _ in
             if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-                imagePickerController.sourceType = .photoLibrary
-                self.present(imagePickerController, animated: true, completion: nil)
+                self.imagePickerController.sourceType = .photoLibrary
+                self.present(self.imagePickerController, animated: true, completion: nil)
             } else {
                 print("Image Library not available")
             }
         }))
-        chooseActionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action: UIAlertAction) in
+        chooseActionSheet.addAction(UIAlertAction(title: "Сфотографировать", style: .default, handler: { _ in
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                imagePickerController.sourceType = .camera
-                self.present(imagePickerController, animated: true, completion: nil)
+                self.imagePickerController.sourceType = .camera
+                self.present(self.imagePickerController, animated: true, completion: nil)
             } else {
                 print("Camera not available")
             }
         }))
+        chooseActionSheet.addAction(UIAlertAction(title: "Из интернета", style: .default, handler: { _ in
+            self.performSegue(withIdentifier: "ProfileImagePickerViewController", sender: nil)
+        }))
         chooseActionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         return chooseActionSheet
     }
+    
     private var successAlert: UIAlertController {
         let alert = UIAlertController(title: "Данные сохранены", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         return alert
     }
+    
     private var failAlert: UIAlertController {
         let alert = UIAlertController(title: "Ошибка", message: "Не удалось сохранить данные", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
@@ -187,6 +203,27 @@ class ProfileViewController: UIViewController, ProfileDelegate, UIImagePickerCon
             self.saveProfileButtonPressed(nil)
         }))
         return alert
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ProfileImagePickerViewController" {
+            guard let containerViewController = segue.destination as? UINavigationController,
+                let profileImagePickerViewController = containerViewController.topViewController as? ProfileImagePickerViewController else {
+                    assertionFailure("Unknown segue destination")
+                    return
+            }
+            RootAssembly.profileImagePickerAssembly.assembly(profileImagePickerViewController)
+            profileImagePickerViewController.onSelectProfileImage = { [weak self] selectedImage in
+                self?.updateUserProfile(with: selectedImage)
+            }
+        } else if segue.identifier == "unwindSegueToConversationsList" {
+            return
+        }
+    }
+    
+    private func updateUserProfile(with image: UIImage?) {
+        imageImageView.image = image
+        changedProfile = profile?.copyWithChanged(image: image)
     }
     
 // MARK: - UITextFieldDelegate

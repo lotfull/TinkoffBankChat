@@ -9,36 +9,34 @@
 import UIKit
 import CoreData
 
-class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDelegate, ChatMessagesDelegate {
+class ChatViewController: UIViewController, UITextViewDelegate, IChatModelDelegate {
     
+    var model: IChatModel!
+
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var inputTextView: UITextView!
-    @IBOutlet weak var sendButton: UIButton! {
-        didSet {
-            sendButton.isEnabled = true
-        }
-    }
-    
+    @IBOutlet weak var sendButton: SendButton!
     @IBOutlet weak var bottomContentConstraint: NSLayoutConstraint!
     
-    var chat: Chat!
-    
+    private var animatableTitleLabel: AnimatableTitleLabel!
+
     @IBAction func sendButtonPressed(_ sender: Any) {
         guard inputTextView.text != "" else { return }
         inputTextView.text = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        model.sendMessage(string: inputTextView.text, to: chat) { (success, error) in
-            guard success == true else { print(error?.localizedDescription ?? "ooops"); return }
+        model.sendMessage(text: inputTextView.text) { (success, error) in
+            guard success == true else {
+                assertionFailure(error?.localizedDescription ?? "ooops");
+                return
+            }
             self.tableView.reloadData()
         }
         inputTextView.text = ""
-        sendButton.isEnabled = true
     }
-    
-    var model: IChatModel!
-    
+
     static func initWith(model: IChatModel) -> ChatViewController {
         let chatVC = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
         chatVC.model = model
+        chatVC.animatableTitleLabel = AnimatableTitleLabel(isOnline: model.isOnline)
         return chatVC
     }
     
@@ -48,27 +46,47 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = chat.name
-        tableView.dataSource = self
-//        tableView.delegate = self
-        addNotifications()
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
+        model.setup(tableView)
+        configureTitle(with: model.name)
+        configureInputView()
+        addKeyboardNotifications()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        model.markChatAsRead()
+        animateTitleLabel(model.isOnline)
+        sendButton.isEnabled = model.isOnline
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         scrollToBottom()
-        model.newMessagesFetch()
+        tableView.reloadData()
+    }
+    
+    private func configureTitle(with userName: String) {
+        animatableTitleLabel.text = userName
+        navigationItem.titleView = animatableTitleLabel
+    }
+    
+    private func configureInputView() {
+        inputView?.addLine(to: .top, color: .blue)
+        inputTextView?.layer.borderWidth = 0.5
+        inputTextView?.layer.borderColor = UIColor.blue.cgColor
+    }
+    
+    private func animateTitleLabel(_ online: Bool) {
+        animatableTitleLabel.isOnline = online
+    }
+    
+    func userBecameOnline(online: Bool) {
+        sendButton.isEnabled = online
+        animateTitleLabel(online)
     }
     
     @objc private func dismissKeyboard() {
         view.endEditing(true)
-    }
-    
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
     }
 
     private func scrollToBottom() {
@@ -82,30 +100,9 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDel
         }
     }
     
-    private func enableSendButton(_ trueOrFalse: Bool) {
-        sendButton.isEnabled = true
-    }
-    
-    //MARK: - UITableViewDataSource
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chat.messages.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let message = chat.messages[indexPath.row]
-        let identifier = message.type == .inbox ? CellIdentifier.inboxCellID : CellIdentifier.outboxCellID
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
-        cell.selectionStyle = .none
-        if let messageCell = cell as? MessageCellConfiguration {
-            messageCell.messageText = message.text
-        }
-        return cell
-    }
-    
-    //MARK: - UITextViewDelegate
+    // MARK: - UITextViewDelegate
     func textViewDidChange(_ textView: UITextView) {
-        let ifOnlineAndNotEmpty = chat.isOnline && textView.text != ""
-        enableSendButton(ifOnlineAndNotEmpty)
+        sendButton.isEnabled = textView.text != ""
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -116,18 +113,11 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDel
         return true
     }
     
-    // MARK: - ChatMessagesDelegate
-    func updateUI(with chat: Chat) {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            self.scrollToBottom()
-            self.enableSendButton(self.chat.isOnline)
-        }
-    }
-    
     // MARK: - KeyBoard notifications
-    private func addNotifications() {
+    private func addKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
     }
     
     @objc private func keyboardNotification(notification: Notification) {
@@ -151,15 +141,6 @@ class ChatViewController: UIViewController, UITableViewDataSource, UITextViewDel
                            completion: {_ in self.scrollToBottom() })
         }
     }
-    
-    // MARK: - DataSource
-    struct CellIdentifier {
-        static let inboxCellID = "InboxCell"
-        static let outboxCellID = "OutboxCell"
-    }
-    
-    let inboxCell = "InboxCell"
-    let outboxCell = "OutboxCell"
 }
 
 

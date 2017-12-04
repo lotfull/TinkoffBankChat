@@ -9,18 +9,18 @@
 import Foundation
 
 class ChatAssembly {
-    func chatViewController() -> ChatViewController {
-        let model = chatModel()
+    
+    func chatViewController(withChat chat: Chat) -> ChatViewController {
+        let model = chatModel(withChat: chat)
         let chatVC = ChatViewController.initWith(model: model)
         model.delegate = chatVC
         return chatVC
     }
     
-    private func chatModel() -> IChatModel {
-        return ChatModel(messagesService: messagesService())
+    private func chatModel(withChat chat: Chat) -> ChatModel {
+        return ChatModel(communicationService: RootAssembly.communicationService,
+                         chatDataService: RootAssembly.chatDataService,
+                         chat: chat)
     }
-    
-    private func messagesService() -> MessagesService {
-        return MessagesService(connectionManager: RootAssembly.connectionManager)
-    }
+
 }

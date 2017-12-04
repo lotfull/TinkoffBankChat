@@ -10,23 +10,14 @@ import UIKit
 
 class ChatsListAssembly {
     
+    private func chatsListModel() -> IChatsListModel {
+        return ChatsListModel(chatDataService: RootAssembly.chatDataService, communicationService: RootAssembly.communicationService)
+    }
+    
     func chatsListViewController() -> ChatsListViewController {
         let model = chatsListModel()
         let chatsListVC = ChatsListViewController.initWith(model: model)
-        model.delegate = chatsListVC
         return chatsListVC
-    }
-    
-    private func chatsListModel() -> IChatsListModel {
-        return ChatsListModel(peersService: peersService())
-    }
-    
-    private func peersService() -> PeersService {
-        return PeersService(connectionManager: connectionManager())
-    }
-    
-    private func connectionManager() -> ConnectionManagerProtocol {
-        return RootAssembly.connectionManager
     }
     
 }

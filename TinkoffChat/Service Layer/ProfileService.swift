@@ -9,32 +9,29 @@
 import UIKit
 import CoreData
 
-protocol DataManager {
-    func loadProfile(completion: @escaping (Profile?, Error?) -> Void)
-    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void)
-}
-
 enum CoreDataError: Error {
     case loadError
     case saveError
 }
+protocol IProfileService: class {
+    func loadProfile(completion: @escaping (Profile?, Error?) -> Void)
+    func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void)
+}
 
-class ProfileService: DataManager {
+class ProfileService: IProfileService {
+    
+    let coreDataManager: CoreDataManager
     
     func loadProfile(completion: @escaping (Profile?, Error?) -> Void) {
-        if let appUser = CoreDataManager.getAppUser() {
-            let image = appUser.image != nil ? UIImage(data: appUser.image!) : #imageLiteral(resourceName: "placeholder-user")
-            let myProfile = Profile(name: appUser.name ?? "Unnamed User",
-                                    info: appUser.info ?? "No info",
-                                    image: image)
-            completion(myProfile, nil)
-        } else {
-            print("Core data error")
-            completion(nil, CoreDataError.loadError)
-        }
+        coreDataManager.loadProfile(completion: completion)
     }
     
     func saveProfile(_ profile: Profile, completion: @escaping (Bool, Error?) -> Void) {
-        CoreDataManager.saveProfile(profile, completion: completion)
+        coreDataManager.saveProfile(profile, completion: completion)
+    }
+    
+    init(coreDataManager: CoreDataManager) {
+        self.coreDataManager = coreDataManager
     }
 }
+

@@ -1,21 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13240" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13533" systemVersion="16G1036" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AppUser" representedClassName="AppUser" syncable="YES" codeGenerationType="class">
-        <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="info" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="currentUser" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="appUser" inverseEntity="User" syncable="YES"/>
     </entity>
+    <entity name="Chat" representedClassName="Chat" syncable="YES" codeGenerationType="class">
+        <attribute name="hasUnreadMessages" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="isOnline" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="lastMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Message" inverseName="lastInChat" inverseEntity="Message" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Message" inverseName="chat" inverseEntity="Message" syncable="YES"/>
+        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="chat" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="Message" representedClassName="Message" syncable="YES" codeGenerationType="class">
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="text" attributeType="String" syncable="YES"/>
+        <attribute name="type" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="chat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Chat" inverseName="messages" inverseEntity="Chat" syncable="YES"/>
+        <relationship name="lastInChat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Chat" inverseName="lastMessage" inverseEntity="Chat" syncable="YES"/>
+    </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
-        <attribute name="isOnline" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="info" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isOnline" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="userID" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="appUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AppUser" inverseName="currentUser" inverseEntity="AppUser" syncable="YES"/>
+        <relationship name="chat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Chat" inverseName="user" inverseEntity="Chat" syncable="YES"/>
     </entity>
     <fetchRequest name="AppUser" entity="AppUser"/>
-    <fetchRequest name="UserByID" entity="User" predicateString="userID == &quot;$id&quot;"/>
+    <fetchRequest name="ChatByID" entity="Chat" predicateString="id == $id"/>
+    <fetchRequest name="ChatByOnlineUserID" entity="Chat" predicateString="member.isOnline == 1 AND messages != nil"/>
+    <fetchRequest name="MessagesByChatID" entity="Message" predicateString="chat.id == $id"/>
+    <fetchRequest name="UserByID" entity="User" predicateString="id == $id"/>
+    <fetchRequest name="UsersOnline" entity="Message" predicateString="isOnline == 1"/>
     <elements>
-        <element name="AppUser" positionX="-414" positionY="-162" width="128" height="105"/>
-        <element name="User" positionX="-414" positionY="-6" width="128" height="105"/>
+        <element name="AppUser" positionX="-414" positionY="-162" width="128" height="60"/>
+        <element name="Chat" positionX="-387" positionY="-18" width="128" height="135"/>
+        <element name="Message" positionX="-369" positionY="-9" width="128" height="135"/>
+        <element name="User" positionX="-414" positionY="-6" width="128" height="150"/>
     </elements>
 </model>

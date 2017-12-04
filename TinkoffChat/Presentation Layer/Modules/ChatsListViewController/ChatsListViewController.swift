@@ -9,23 +9,15 @@
 import UIKit
 import CoreData
 
-class ChatsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ChatsListDelegate {
-    
-    var coreDataStack: CoreDataStack!
-    
-    // MARK: - ChatsListDelegate
-    func updateUI(with chats: [[Chat]]) {
-        DispatchQueue.main.async {
-            self.chats = chats
-            self.updateChatsList()
-        }
-    }
-    
+protocol IChatsListDelegate: class {
+    func pushVC(_ viewController: UIViewController)
+}
+
+class ChatsListViewController: UIViewController, IChatsListDelegate {
     @IBOutlet weak var tableView: UITableView!
     
     private var model: IChatsListModel!
-    var chats = [[Chat]]()
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -33,6 +25,7 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
     static func initWith(model: IChatsListModel) -> ChatsListViewController {
         let chatsListVC = UIStoryboard(name: "ChatsList", bundle: nil).instantiateViewController(withIdentifier: "ChatsListViewController") as! ChatsListViewController
         chatsListVC.model = model
+        model.delegate = chatsListVC
         return chatsListVC
     }
     
@@ -43,66 +36,34 @@ class ChatsListViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
         let nib = UINib(nibName: chatsTableViewCellName, bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: chatsTableViewCellID)
-        tableView.dataSource = self
-        tableView.delegate = self
+        model.setup(tableView)
+        navigationItem.rightBarButtonItem?.tintColor = UIColor(white: 0.5, alpha: 1)
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print(#function)
         super.viewWillAppear(animated)
-        model.newChatsFetch()
+        tableView.reloadData()
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let chat = chats[indexPath.section][indexPath.row]
-        tableView.deselectRow(at: indexPath, animated: true)
-        let chatVC = ChatAssembly().chatViewController()
-        chatVC.chat = chat
-        self.navigationController?.pushViewController(chatVC, animated: true)
-    }
-    
-
     @IBAction func presentProfile(_ sender: Any) {
         let profileVC = ProfileAssembly().profileViewController()
         let navigationController = UINavigationController.init(rootViewController: profileVC)
         self.present(navigationController, animated: true, completion: nil)
     }
     
-    
-    
     private func updateChatsList() {
         tableView.reloadData()
     }
     
+    func pushVC(_ viewController: UIViewController) {
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     private let sectionName = ["Online", "History"]
+    
+    
+    
+    
 }
 
-extension ChatsListViewController {
-    
-    func chat(for indexPath: IndexPath) -> Chat {
-        return chats[indexPath.section][indexPath.row]
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return chats.count
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionName[section]
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return chats[section].count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let chatCell = tableView.dequeueReusableCell(withIdentifier: ChatCell.identifier, for: indexPath) as! ChatCell
-        
-        let chat = self.chat(for: indexPath)
-        chatCell.nameLabel.text = chat.name
-        chatCell.message = chat.messages.last?.text
-        chatCell.date = chat.lastMessageDate
-        chatCell.online = chat.isOnline
-        chatCell.hasUnreadMessages = chat.hasUnreadMessages
-        return chatCell
-    }
-}
